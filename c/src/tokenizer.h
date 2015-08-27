@@ -1,4 +1,5 @@
 #include "document.h"
+#include "mem_manager.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -13,4 +14,14 @@ typedef struct NL_PTBTokConfig {
        splitAssimilations;
 } NL_PTBTokConfig;
 
-void NLPC_tokenize_document(NLPC_document *d, NL_PTBTokConfig *config);
+
+typedef struct __token_list {
+    struct __token_list *next;
+    NL_span **tokens;
+} __token_list;
+
+
+
+NL_span **NL_tokenize_buf(
+    unsigned char *buf, size_t buf_len, size_t *num_tokens, 
+    NL_PTBTokConfig *cfg, NL_v_memmgr *mgr);

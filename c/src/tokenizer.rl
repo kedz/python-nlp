@@ -1,5 +1,6 @@
 #include "tokenizer.h"
 #include "stdio.h"
+#include <string.h>
 
 
 %%{
@@ -10,20 +11,20 @@
     include WChar "unicode.rl";
 
 
-#    SGML = "<" (
-#          ("!"| "?") [A-Za-z\-] [^>\r\n]*
-#        | [A-Za-z] [A-Za-z0-9_:.\-]*
-#          ([ ]+ (
-#              [A-Za-z][A-Za-z0-9_:.\-]*
-#            |
-#              [A-Za-z][A-Za-z0-9_:.\-]*[ ]*"="[ ]*
-#              (   "'" (!"'")* "'" 
-#                | "\"" (!'"')* "\"" 
-#                | [A-Za-z][A-Za-z0-9_:.\-]*
-#              )
-#          ))* 
-#          [ ]* "/"? | "/"[A-Za-z][A-Za-z0-9_:.\-]*
-#        )[ ]*">";
+    SGML = "<" (
+          ("!"| "?") [A-Za-z\-] [^>\r\n]*
+        | [A-Za-z] [A-Za-z0-9_:.\-]*
+          ([ ]+ (
+              [A-Za-z][A-Za-z0-9_:.\-]*
+            |
+              [A-Za-z][A-Za-z0-9_:.\-]*[ ]*"="[ ]*
+              (   "'" (!"'")* "'" 
+                | "\"" (!'"')* "\"" 
+                | [A-Za-z][A-Za-z0-9_:.\-]*
+              )
+          ))* 
+          [ ]* "/"? | "/"[A-Za-z][A-Za-z0-9_:.\-]*
+        )[ ]*">";
 
 
     SPMDASH = 
@@ -493,316 +494,326 @@
     | 0xEF 0xBD 0x9B..0xA5 ; # u+FF5B .. u+FF65
 
 action NextToken {
-    if (span_pos == max_span_pos) {
-        max_span_pos = max_span_pos * 2;
-        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-        if (tokens == NULL) {
-            return;
-        }
-        //printf("%d spans allocated\n", max_span_pos);
+    if (span_pos == BUFSIZE) {
+        __token_list *next_slab = NL_allocate_mem_size(mgr, sizeof(__token_list));
+        next_slab->next = NULL;  
+        next_slab->tokens = NL_allocate_mem_size(mgr, sizeof(NL_span *) * BUFSIZE);
+        tail->next = next_slab;
+        tail = tail->next;
+        num_lists++;
+        span_pos = 0;
+        tokens = next_slab->tokens;
     }
-    tokens[span_pos++] = NLPC_new_span(ts, te);
+    tokens[span_pos++] = NL_new_span(ts, te - ts, mgr);
 }
-
-action NormalizedAmpNext {
-    if (span_pos == max_span_pos) {
-        max_span_pos = max_span_pos * 2;
-        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-        if (tokens == NULL) {
-            return;
-        }
-        //printf("%d spans allocated\n", max_span_pos);
-    }
-    tokens[span_pos] = NLPC_new_span(ts, te);
-    if (config->normalizeAmpersandEntity) {
-        NL_add_label(
-            tokens[span_pos], (unsigned char*)"NORM", (unsigned char *) "&");
-    } 
-    span_pos++;
-}
-
-action NormalizedLRBNext {
-    if (span_pos == max_span_pos) {
-        max_span_pos = max_span_pos * 2;
-        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-        if (tokens == NULL) {
-            return;
-        }
-        //printf("%d spans allocated\n", max_span_pos);
-    }
-    tokens[span_pos] = NLPC_new_span(ts, te);
-    if (config->normalizeParentheses) {
-        NL_add_label(
-            tokens[span_pos], (unsigned char*)"NORM", (unsigned char *) "-LRB-");
-    } 
-    span_pos++;
-}
-
-action NormalizedRRBNext {
-    if (span_pos == max_span_pos) {
-        max_span_pos = max_span_pos * 2;
-        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-        if (tokens == NULL) {
-            return;
-        }
-        //printf("%d spans allocated\n", max_span_pos);
-    }
-    tokens[span_pos] = NLPC_new_span(ts, te);
-    if (config->normalizeParentheses) {
-        NL_add_label(
-            tokens[span_pos], (unsigned char*)"NORM", (unsigned char *) "-RRB-");
-    } 
-    span_pos++;
-}
-
-
-action MarkIntermediate1 {
-    //printf("marking1!\n");
-    ti1 = fpc;    
-}
-
-action NextIntermediate1 {
-    if (span_pos == max_span_pos) {
-        max_span_pos = max_span_pos * 2;
-        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-        //printf("%d spans allocated\n", max_span_pos);
-    }
-    tokens[span_pos++] = NLPC_new_span(ts, ti1);
-    ts = ti1;
-    fpc = ti1 - 1;
-    te = '\0';
-}
-
-action MarkIntermediate2 {
-    //printf("marking2!\n");
-    ti2 = fpc;    
-}
-
-action NextIntermediate2 {
-    if (span_pos == max_span_pos) {
-        max_span_pos = max_span_pos * 2;
-        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-        //printf("%d spans allocated\n", max_span_pos);
-    }
-    tokens[span_pos++] = NLPC_new_span(ts, ti2);
-    ts = ti2;
-    fpc = ti2 - 1;
-    te = '\0';
-}
-
-
-action NextTwoTokens {
-    if (span_pos == max_span_pos) {
-        max_span_pos = max_span_pos * 2;
-        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-        //printf("%d spans allocated\n", max_span_pos);
-    }
-    tokens[span_pos++] = NLPC_new_span(ts, ti);
-
-    if (span_pos == max_span_pos) {
-        max_span_pos = max_span_pos * 2;
-        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-        //printf("%d spans allocated\n", max_span_pos);
-    }
-    tokens[span_pos++] = NLPC_new_span(ti, te);
-
-}
-
-action SplitAssimilation3 {
-
-    if (config->splitAssimilations) {
-        if (span_pos == max_span_pos) {
-            max_span_pos = max_span_pos * 2;
-            tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-            //printf("%d spans allocated\n", max_span_pos);
-        }
-
-        tokens[span_pos++] = NLPC_new_span(ts, ts + 3);
-        if (span_pos == max_span_pos) {
-            max_span_pos = max_span_pos * 2;
-            tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-            //printf("%d spans allocated\n", max_span_pos);
-        }
-
-        tokens[span_pos++] = NLPC_new_span(ts + 3, te);
-        
-    } else {
-        if (span_pos == max_span_pos) {
-            max_span_pos = max_span_pos * 2;
-            tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-            //printf("%d spans allocated\n", max_span_pos);
-        }
-
-        tokens[span_pos++] = NLPC_new_span(ts, te);
-    }
-
-}
-
-action SplitAssimilation2 {
-
-    if (config->splitAssimilations) {
-        if (span_pos == max_span_pos) {
-            max_span_pos = max_span_pos * 2;
-            tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-            //printf("%d spans allocated\n", max_span_pos);
-        }
-
-        tokens[span_pos++] = NLPC_new_span(ts, ts + 2);
-        if (span_pos == max_span_pos) {
-            max_span_pos = max_span_pos * 2;
-            tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-            //printf("%d spans allocated\n", max_span_pos);
-        }
-
-        tokens[span_pos++] = NLPC_new_span(ts + 2, te);
-        
-    } else {
-        if (span_pos == max_span_pos) {
-            max_span_pos = max_span_pos * 2;
-            tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-            //printf("%d spans allocated\n", max_span_pos);
-        }
-
-        tokens[span_pos++] = NLPC_new_span(ts, te);
-    }
-
-}
+#
+#action NormalizedAmpNext {
+#    if (span_pos == max_span_pos) {
+#        max_span_pos = max_span_pos * 2;
+#        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
+#        if (tokens == NULL) {
+#            return;
+#        }
+#        //printf("%d spans allocated\n", max_span_pos);
+#    }
+#    tokens[span_pos] = NLPC_new_span(ts, te);
+#    if (config->normalizeAmpersandEntity) {
+#        NL_add_label(
+#            tokens[span_pos], (unsigned char*)"NORM", (unsigned char *) "&");
+#    } 
+#    span_pos++;
+#}
+#
+#action NormalizedLRBNext {
+#    if (span_pos == max_span_pos) {
+#        max_span_pos = max_span_pos * 2;
+#        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
+#        if (tokens == NULL) {
+#            return;
+#        }
+#        //printf("%d spans allocated\n", max_span_pos);
+#    }
+#    tokens[span_pos] = NLPC_new_span(ts, te);
+#    if (config->normalizeParentheses) {
+#        NL_add_label(
+#            tokens[span_pos], (unsigned char*)"NORM", (unsigned char *) "-LRB-");
+#    } 
+#    span_pos++;
+#}
+#
+#action NormalizedRRBNext {
+#    if (span_pos == max_span_pos) {
+#        max_span_pos = max_span_pos * 2;
+#        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
+#        if (tokens == NULL) {
+#            return;
+#        }
+#        //printf("%d spans allocated\n", max_span_pos);
+#    }
+#    tokens[span_pos] = NLPC_new_span(ts, te);
+#    if (config->normalizeParentheses) {
+#        NL_add_label(
+#            tokens[span_pos], (unsigned char*)"NORM", (unsigned char *) "-RRB-");
+#    } 
+#    span_pos++;
+#}
+#
+#
+#action MarkIntermediate1 {
+#    //printf("marking1!\n");
+#    ti1 = fpc;    
+#}
+#
+#action NextIntermediate1 {
+#    if (span_pos == max_span_pos) {
+#        max_span_pos = max_span_pos * 2;
+#        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
+#        //printf("%d spans allocated\n", max_span_pos);
+#    }
+#    tokens[span_pos++] = NLPC_new_span(ts, ti1);
+#    ts = ti1;
+#    fpc = ti1 - 1;
+#    te = '\0';
+#}
+#
+#action MarkIntermediate2 {
+#    //printf("marking2!\n");
+#    ti2 = fpc;    
+#}
+#
+#action NextIntermediate2 {
+#    if (span_pos == max_span_pos) {
+#        max_span_pos = max_span_pos * 2;
+#        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
+#        //printf("%d spans allocated\n", max_span_pos);
+#    }
+#    tokens[span_pos++] = NLPC_new_span(ts, ti2);
+#    ts = ti2;
+#    fpc = ti2 - 1;
+#    te = '\0';
+#}
+#
+#
+#action NextTwoTokens {
+#    if (span_pos == max_span_pos) {
+#        max_span_pos = max_span_pos * 2;
+#        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
+#        //printf("%d spans allocated\n", max_span_pos);
+#    }
+#    tokens[span_pos++] = NLPC_new_span(ts, ti);
+#
+#    if (span_pos == max_span_pos) {
+#        max_span_pos = max_span_pos * 2;
+#        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
+#        //printf("%d spans allocated\n", max_span_pos);
+#    }
+#    tokens[span_pos++] = NLPC_new_span(ti, te);
+#
+#}
+#
+#action SplitAssimilation3 {
+#
+#    if (config->splitAssimilations) {
+#        if (span_pos == max_span_pos) {
+#            max_span_pos = max_span_pos * 2;
+#            tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
+#            //printf("%d spans allocated\n", max_span_pos);
+#        }
+#
+#        tokens[span_pos++] = NLPC_new_span(ts, ts + 3);
+#        if (span_pos == max_span_pos) {
+#            max_span_pos = max_span_pos * 2;
+#            tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
+#            //printf("%d spans allocated\n", max_span_pos);
+#        }
+#
+#        tokens[span_pos++] = NLPC_new_span(ts + 3, te);
+#        
+#    } else {
+#        if (span_pos == max_span_pos) {
+#            max_span_pos = max_span_pos * 2;
+#            tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
+#            //printf("%d spans allocated\n", max_span_pos);
+#        }
+#
+#        tokens[span_pos++] = NLPC_new_span(ts, te);
+#    }
+#
+#}
+#
+#action SplitAssimilation2 {
+#
+#    if (config->splitAssimilations) {
+#        if (span_pos == max_span_pos) {
+#            max_span_pos = max_span_pos * 2;
+#            tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
+#            //printf("%d spans allocated\n", max_span_pos);
+#        }
+#
+#        tokens[span_pos++] = NLPC_new_span(ts, ts + 2);
+#        if (span_pos == max_span_pos) {
+#            max_span_pos = max_span_pos * 2;
+#            tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
+#            //printf("%d spans allocated\n", max_span_pos);
+#        }
+#
+#        tokens[span_pos++] = NLPC_new_span(ts + 2, te);
+#        
+#    } else {
+#        if (span_pos == max_span_pos) {
+#            max_span_pos = max_span_pos * 2;
+#            tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
+#            //printf("%d spans allocated\n", max_span_pos);
+#        }
+#
+#        tokens[span_pos++] = NLPC_new_span(ts, te);
+#    }
+#
+#}
 
     main := |*
         [cC]"++" => NextToken;
         ([cC] | [fF] ) "#" => NextToken;
 
-        (/cannot/i | /gonna/i | /gotta/i 
-            | /lemme/i | /gimme/i | /wanna/i)  => SplitAssimilation3;
-
-        (/'twas/i 
-            | /'tis/i) => SplitAssimilation2;                   
-
-        #SGML => NextToken;
-        "cont'd" => NextToken; # needed to break a weird tie between word 
-                               # and apoword
-
-        SPMDASH => NextToken;
-        SPAMP =>  NormalizedAmpNext; #  NextToken; # missing transform
-
-        WORD %MarkIntermediate2 REDAUX => NextIntermediate2;
-        SWORD %MarkIntermediate1 SREDAUX => NextIntermediate1;
-
-        WORD =>NextToken;
-
-        APOWORD => NextToken;
-        APOWORD2 %MarkIntermediate2 ualpha => NextIntermediate2;
-
-        TWITTER => NextToken;
-        REDAUX %MarkIntermediate2 [^A-Za-z] => NextIntermediate2;
-        SREDAUX %MarkIntermediate1 [^A-Za-z] => NextIntermediate1;
-
-        DATE => NextToken;
-
-        NUMBER => NextToken;
-        SUBSUPNUM => NextToken;
-
-        FRAC => NextToken;
-        FRAC2 => NextToken;
-
-        TBSPEC => NextToken;
-        BANGWORDS => NextToken;
-
-        THING3 => NextToken;
-
-        DOLSIGN => NextToken;
-        DOLSIGN2 => NextToken;
-
-
-        ABBREV3 %MarkIntermediate1 SPACENL? udigit => NextIntermediate1;
-        (/pt/i [eyEY] | /co/i)"." 
-            %MarkIntermediate1 SPACE (/ltd/i|/lim/i) => NextIntermediate1; 
-
-        #ABBREV1 /SENTEND 
-        ABBREV1 %MarkIntermediate2 any any => NextIntermediate2;        
-        ABBREV1 => NextToken;
-        ABBREV2 => NextToken;
-
-        ABBREV4 %MarkIntermediate2 SPACE => NextIntermediate2;
-
-        ACRO %MarkIntermediate2 SPACENL => NextIntermediate2;
-
-        TBSPEC2 %MarkIntermediate2 SPACENL => NextIntermediate2;
-
-        FILENAME %MarkIntermediate2 (SPACENL|[.?!,]) => NextIntermediate2;
-        WORD "." %MarkIntermediate2 INSENTP => NextIntermediate2;
-        PHONE => NextToken;
-        
-        DBLQUOT => NextToken;
-        
-
-        GREATERTHAN => NextToken;
-        LESSTHAN => NextToken;
-
-
-
-
-
-        "{" => NextToken;
-        "}" => NextToken;
-        "[" => NextToken;
-        "]" => NextToken;
-        "(" => NormalizedLRBNext;
-        ")" => NormalizedRRBNext;
-
-        HYPHENS => NextToken;
-        #LDOTS => NextToken;
-        #FNMARKS => NextToken;         
-        #ASTS => NextToken;
-
-        INSENTP => NextToken;
-        [?!]+ => NextToken;
-
-        "." => NextToken; # add other sentence final punc and add a test.
-
-        "="+ => NextToken;
-
-        "/" => NextToken;
-
-        REDAUX => NextToken;
-        SREDAUX => NextToken;
-
-
-#        WORD => NextToken;
-#        FILENAME => NextToken;
-        #test THINGs ?
-#        APOWORD2 => NextToken;
-#        FULLURL => NextToken;
-#        LIKELYURL => NextToken;
+#        (/cannot/i | /gonna/i | /gotta/i 
+#            | /lemme/i | /gimme/i | /wanna/i)  => SplitAssimilation3;
+#
+#        (/'twas/i 
+#            | /'tis/i) => SplitAssimilation2;                   
+#
+        SGML => NextToken;
+#        "cont'd" => NextToken; # needed to break a weird tie between word 
+#                               # and apoword
+#
+#        SPMDASH => NextToken;
+#        SPAMP =>  NormalizedAmpNext; #  NextToken; # missing transform
+#
+#        WORD %MarkIntermediate2 REDAUX => NextIntermediate2;
+#        SWORD %MarkIntermediate1 SREDAUX => NextIntermediate1;
+#
+        WORD => NextToken;
+#
+#        APOWORD => NextToken;
+#        APOWORD2 %MarkIntermediate2 ualpha => NextIntermediate2;
+#
 #        TWITTER => NextToken;
+#        REDAUX %MarkIntermediate2 [^A-Za-z] => NextIntermediate2;
+#        SREDAUX %MarkIntermediate1 [^A-Za-z] => NextIntermediate1;
+#
+#        DATE => NextToken;
+#
+#        NUMBER => NextToken;
+#        SUBSUPNUM => NextToken;
+#
+#        FRAC => NextToken;
+#        FRAC2 => NextToken;
+#
+#        TBSPEC => NextToken;
+#        BANGWORDS => NextToken;
+#
+#        THING3 => NextToken;
+#
+#        DOLSIGN => NextToken;
+#        DOLSIGN2 => NextToken;
+#
+#
+#        ABBREV3 %MarkIntermediate1 SPACENL? udigit => NextIntermediate1;
+#        (/pt/i [eyEY] | /co/i)"." 
+#            %MarkIntermediate1 SPACE (/ltd/i|/lim/i) => NextIntermediate1; 
+#
+#        #ABBREV1 /SENTEND 
+#        ABBREV1 %MarkIntermediate2 any any => NextIntermediate2;        
 #        ABBREV1 => NextToken;
 #        ABBREV2 => NextToken;
-#        ACRONYM => NextToken;
- #       EMAIL => NextToken;
-     #   all_word => NextToken;
-
-#        MISCSYMBOL => NextToken;
-#        SMILEY => NextToken;
-        #LDOTS => NextToken;
+#
+#        ABBREV4 %MarkIntermediate2 SPACE => NextIntermediate2;
+#
+#        ACRO %MarkIntermediate2 SPACENL => NextIntermediate2;
+#
+#        TBSPEC2 %MarkIntermediate2 SPACENL => NextIntermediate2;
+#
+#        FILENAME %MarkIntermediate2 (SPACENL|[.?!,]) => NextIntermediate2;
+#        WORD "." %MarkIntermediate2 INSENTP => NextIntermediate2;
+#        PHONE => NextToken;
+#        
+#        DBLQUOT => NextToken;
+#        
+#
+#        GREATERTHAN => NextToken;
+#        LESSTHAN => NextToken;
+#
+#
+#
+#
+#
+#        "{" => NextToken;
+#        "}" => NextToken;
+#        "[" => NextToken;
+#        "]" => NextToken;
+#        "(" => NormalizedLRBNext;
+#        ")" => NormalizedRRBNext;
+#
+#        HYPHENS => NextToken;
+#        #LDOTS => NextToken;
+#        #FNMARKS => NextToken;         
+#        #ASTS => NextToken;
+#
+#        INSENTP => NextToken;
+#        [?!]+ => NextToken;
+#
+        "." => NextToken; # add other sentence final punc and add a test.
+#
+#        "="+ => NextToken;
+#
+#        "/" => NextToken;
+#
+#        REDAUX => NextToken;
+#        SREDAUX => NextToken;
+#
+#
+##        WORD => NextToken;
+##        FILENAME => NextToken;
+#        #test THINGs ?
+##        APOWORD2 => NextToken;
+##        FULLURL => NextToken;
+##        LIKELYURL => NextToken;
+##        TWITTER => NextToken;
+##        ABBREV1 => NextToken;
+##        ABBREV2 => NextToken;
+##        ACRONYM => NextToken;
+# #       EMAIL => NextToken;
+#     #   all_word => NextToken;
+#
+##        MISCSYMBOL => NextToken;
+##        SMILEY => NextToken;
+#        #LDOTS => NextToken;
         SPACES;
         SPACENLS;
-        #0xEF 0xBB 0xBF => {printf("I found a byte order mark!\n");};
+        0xEF 0xBB 0xBF => {printf("I found a byte order mark!\n");};
         any; # => { printf("the uncola: 0x%02X\n", (unsigned int)  *ts); };
     *|;
 
+#main := |*
+#    [^ \n]+ => NextToken; 
+#    any;
+#    *|;
 }%%
 
 %% write data nofinal;
 
-#define BUFSIZE 4096
+#define BUFSIZE 4
 
 
+NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len, 
+        size_t *num_tokens, NL_PTBTokConfig *cfg, NL_v_memmgr *mgr) {
 
+    __token_list *head = NL_allocate_mem_size(mgr, sizeof(__token_list));
+    __token_list *tail = head;
+    size_t num_lists = 1;
 
-void NLPC_tokenize_document(NLPC_document *d, NL_PTBTokConfig *config) {
+    NL_span **tokens = NL_allocate_mem_size(mgr, sizeof(NL_span *) * BUFSIZE);
+    head->tokens = tokens;
 
-
-    NLPC_span **tokens = malloc(sizeof(NLPC_span *) * BUFSIZE);
     int span_pos = 0;
     int max_span_pos = BUFSIZE;
 
@@ -810,14 +821,35 @@ void NLPC_tokenize_document(NLPC_document *d, NL_PTBTokConfig *config) {
     unsigned char *ts, *te = 0;
     unsigned char *ti1 = 0;
     unsigned char *ti2 = 0;
-    unsigned char *p = NLPC_get_document_buffer(d);
-    unsigned char *pe = p + strlen((char *)p); 
+    unsigned char *p = buf;  
+    unsigned char *pe = p + buf_len; 
     unsigned char *eof = pe;
     %% write init;
 
     %% write exec;
 
-    NLPC_add_span_annotations(d, tokens, span_pos);
+    *num_tokens = BUFSIZE * (num_lists - 1) + span_pos;
+    NL_span **out_tokens = NL_allocate_mem_size(
+        mgr, sizeof(NL_span *) * (*num_tokens));
+    NL_span **current_out = out_tokens;
+    
+    __token_list *next;
 
+    for (;head; head=next) {
+        if (head->next == NULL) {
+            memcpy(current_out, head->tokens, span_pos * sizeof(NL_span*));
+        } else {
+            memcpy(current_out, head->tokens, BUFSIZE * sizeof(NL_span*));
+            current_out = &current_out[BUFSIZE] ;
+        }
+
+        NL_deallocate_v_mem(mgr, head->tokens);
+        next = head->next;
+        NL_deallocate_v_mem(mgr, head);
+
+    }
+
+
+    return out_tokens;
 
 }

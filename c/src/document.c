@@ -1,18 +1,75 @@
 #include "document.h"
+#include "mem_manager.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-#define BASE_ANNOTATION_SIZE 8
 
-// TODO add buffer length
-struct NLPC_document {
-    unsigned char *buffer;
-    NLPC_span_seq **span_seqs;
-    unsigned int num_span_seqs;
-    //unsigned int *span_seq_lengths;
-    unsigned int max_span_seqs;
-};
+_Static_assert ((size_t) NL_SPAN_SIZE == sizeof(NL_span), 
+        "NL_SPAN_SIZE should reflect actual size of NL_span struct.");
 
+
+
+#define VMEM_OBJECTS(size) NL_allocate_ ## size ## _mem
+#define VMEM_OBJ_FUNC(obj_size) VMEM_OBJECTS(obj_size)
+
+
+NL_span *NL_new_span(
+    unsigned char *buf_start, 
+    size_t length, 
+    NL_v_memmgr *manager) 
+{
+    NL_span *span;
+    if (manager == NULL) {
+        if ((span = malloc(sizeof(NL_span))) != NULL) {
+            span->start = buf_start;
+            span->length = length;
+            //span->num_labels = 0;
+        }
+    } else {
+
+        span = VMEM_OBJ_FUNC( NL_SPAN_SIZE )(manager);
+        if (span != NULL) {
+            span->start = buf_start;
+            span->length = length;
+        }
+
+    }
+
+    return span;
+}
+
+void NL_free_span(NL_span **span, NL_v_memmgr *manager) {
+    if (manager == NULL) {
+        if ((*span) != NULL) {
+            
+            free(*span);
+            *span = NULL;
+        }
+    } else {
+        if ((*span) != NULL) {
+            NL_deallocate_v_mem(manager, (void *) *span);
+            *span = NULL;
+        }
+    }
+}
+
+NL_document *NL_doc_from_buffer_length(
+    unsigned char *buffer, 
+    size_t buffer_length, 
+    NL_v_memmgr *manager) 
+{
+    NL_document *doc;
+    doc = VMEM_OBJ_FUNC( NL_DOC_SIZE )(manager);
+    if (doc != NULL) {
+        doc->buffer = buffer;
+        doc->buffer_length = buffer_length;
+        doc->tokens = NULL;
+        doc->num_tokens = 0;
+    }
+
+    return doc;
+}
+/*
 struct NL_label {
     unsigned char *name;
     void *data; 
@@ -21,15 +78,6 @@ struct NL_label {
 
 
 
-struct NLPC_span {
-    unsigned char *start;
-    unsigned char *stop;
-    unsigned int length;
-    NL_label**labels;
-    unsigned int num_labels;
-    //NLPC_span **spans;
-    //int num_spans; 
-};
 
 struct NLPC_span_seq {
     NLPC_span **spans;
@@ -78,26 +126,7 @@ void NLPC_dbg_doc(NLPC_document *d) {
 
 }
 
-NLPC_span *NLPC_new_span(unsigned char *buf_start, unsigned char *buf_end) {
-    NLPC_span *span;
-    if ((span = malloc(sizeof *span)) != NULL) {
-        span->start = buf_start;
-        span->stop = buf_end;
-        span->length = buf_end - buf_start;
-        span->num_labels = 0;
-        
-    }
-    
-    return span;
-}
 
-void NLPC_free_span(NLPC_span **s, int recursive) {
-    if ((*s) != NULL) {
-        
-        free(*s);
-        *s = NULL;
-    }
-}
 
 void NLPC_add_span_annotations(
     NLPC_document *d, 
@@ -291,4 +320,4 @@ void* NL_get_label_data(NLPC_span *span, unsigned char *name) {
     }
     return NULL; 
 }
-
+*/
