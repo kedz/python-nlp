@@ -1,0 +1,27 @@
+CC = gcc
+CFLAGS = -g -Wall -std=c11 -O9
+INCLUDE = -I../../include
+LIBS = -L../../lib -lnlp
+
+#all: test sizes var_alloc_test
+all: var_alloc_test sizes test_span test_tokenizer
+
+sizes: sizes.c
+	$(CC) $(CFLAGS) sizes.c -o sizes $(INCLUDE) $(LIBS)
+
+var_alloc_test:
+	$(CC) $(CFLAGS) var_allocation_timings.c -o var_alloc_test \
+		$(INCLUDE) $(LIBS)
+
+test_span: test_span.c
+	$(CC) $(CFLAGS) test_span.c -o test_span $(INCLUDE) $(LIBS)
+
+test_tokenizer: test_tokenizer.c
+	$(CC) $(CFLAGS) test_tokenizer.c -o test_tokenizer $(INCLUDE) $(LIBS)
+
+
+
+#test: memmgr_test.c
+#	$(CC) $(CFLAGS) memmgr_test.c -o test $(INCLUDE) $(LIBS)
+clean:
+	rm -f test var_alloc_test sizes test_span test_tokenizer
