@@ -25,8 +25,6 @@ def build_extension():
 
     sources_nlp, include_nlp = find_nlp_sources()
 
-    sources_cyt = [os.path.join('nlp', 'ez{}'.format(ext)),]
-#              #]
 #    libraries = ["fnlp"]#['oolm', 'dstruct', 'misc', 'z', 'gomp']
 #
 #    _mem_mgr = Extension(
@@ -46,19 +44,32 @@ def build_extension():
 #        extra_link_args=["-L/home/kedz/projects2015/fnlp/fnlp-c/lib"],
 #        language="c")
 #       
+    libnlp = Extension(
+        "nlp.libnlp",
+        sources=[os.path.join("nlp", "libnlp{}".format(ext)),
+            #"nlp/libnlp.pxd"
+            ] + sources_nlp,
+        include_dirs=["."],
+        extra_compile_args=["-I{}".format(include_nlp), "-O9", "-std=c11" ],
+        extra_link_args=["-O9"],
+        language="c")
+#
     ez = Extension(
         "nlp.ez",
-        sources=[os.path.join('nlp', 'ez{}'.format(ext))] + sources_nlp,
-#        libraries=libraries,
+        sources=[os.path.join('nlp', 'ez{}'.format(ext)), 
+            "nlp/libnlp.pyx",
+            #"nlp/libnlp.pxd"
+            ] + sources_nlp,
+        include_dirs=["."],
         extra_compile_args=["-I{}".format(include_nlp), "-O9", "-std=c11" ],
         extra_link_args=["-O9"],
         language="c")
 #
 
     if use_cython is True:
-        return cythonize([ez])
+        return cythonize([libnlp, ez])
     else:
-        return [ez]
+        return [libnlp, ez]
 
 
     if use_cython is True:
