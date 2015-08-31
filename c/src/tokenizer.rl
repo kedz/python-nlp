@@ -494,19 +494,32 @@
     | 0xEF 0xBD 0x9B..0xA5 ; # u+FF5B .. u+FF65
 
 action NextToken {
-    if (span_pos == BUFSIZE) {
-        __token_list *next_slab = NL_allocate_mem_size(mgr, sizeof(__token_list));
-        next_slab->next = NULL;  
-        next_slab->tokens = NL_allocate_mem_size(mgr, sizeof(NL_span *) * BUFSIZE);
-        tail->next = next_slab;
-        tail = tail->next;
-        num_lists++;
-        span_pos = 0;
-        tokens = next_slab->tokens;
-    }
-    tokens[span_pos++] = NL_new_span(ts, te - ts, mgr);
+    NEXT_TOKEN    
 }
-#
+
+action SplitAssimilation3 {
+    if (split_assimilations == 1) {
+        SPLIT_ASSIM(3)
+    } else {
+        NEXT_TOKEN
+    }
+}
+
+action SplitAssimilation2 {
+    if (split_assimilations == 1) {
+        SPLIT_ASSIM(2)
+    } else {
+        NEXT_TOKEN
+    }
+}
+action NormalizePTB3MDash {
+    NEXT_TOKEN
+    if (normalize_ptb3_dashes == 1) {
+        NL_set_span_label(tokens[span_pos-1], ptb3dash, PTB3DASH_LEN);     
+    }
+
+}
+
 #action NormalizedAmpNext {
 #    if (span_pos == max_span_pos) {
 #        max_span_pos = max_span_pos * 2;
@@ -611,35 +624,6 @@ action NextToken {
 #
 #}
 #
-#action SplitAssimilation3 {
-#
-#    if (config->splitAssimilations) {
-#        if (span_pos == max_span_pos) {
-#            max_span_pos = max_span_pos * 2;
-#            tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-#            //printf("%d spans allocated\n", max_span_pos);
-#        }
-#
-#        tokens[span_pos++] = NLPC_new_span(ts, ts + 3);
-#        if (span_pos == max_span_pos) {
-#            max_span_pos = max_span_pos * 2;
-#            tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-#            //printf("%d spans allocated\n", max_span_pos);
-#        }
-#
-#        tokens[span_pos++] = NLPC_new_span(ts + 3, te);
-#        
-#    } else {
-#        if (span_pos == max_span_pos) {
-#            max_span_pos = max_span_pos * 2;
-#            tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-#            //printf("%d spans allocated\n", max_span_pos);
-#        }
-#
-#        tokens[span_pos++] = NLPC_new_span(ts, te);
-#    }
-#
-#}
 #
 #action SplitAssimilation2 {
 #
@@ -675,17 +659,18 @@ action NextToken {
         [cC]"++" => NextToken;
         ([cC] | [fF] ) "#" => NextToken;
 
-#        (/cannot/i | /gonna/i | /gotta/i 
-#            | /lemme/i | /gimme/i | /wanna/i)  => SplitAssimilation3;
-#
-#        (/'twas/i 
-#            | /'tis/i) => SplitAssimilation2;                   
-#
-        SGML => NextToken;
+        (/cannot/i | /gonna/i | /gotta/i 
+            | /lemme/i | /gimme/i | /wanna/i)  => SplitAssimilation3;
+
+        (/'twas/i 
+            | /'tis/i) => SplitAssimilation2;                   
+
+        SGML => NextToken; #TODO test this
+
 #        "cont'd" => NextToken; # needed to break a weird tie between word 
 #                               # and apoword
 #
-#        SPMDASH => NextToken;
+        SPMDASH => NormalizePTB3MDash;
 #        SPAMP =>  NormalizedAmpNext; #  NextToken; # missing transform
 #
 #        WORD %MarkIntermediate2 REDAUX => NextIntermediate2;
@@ -801,13 +786,60 @@ action NextToken {
 
 %% write data nofinal;
 
-#define BUFSIZE 4
+#define BUFSIZE 32
+
+#define NEXT_TOKEN                                       \
+    if (span_pos == BUFSIZE) {                           \
+        __token_list *next_slab = NL_allocate_mem_size(  \
+            mgr, sizeof(__token_list));                  \
+        next_slab->next = NULL;                          \
+        next_slab->tokens = NL_allocate_mem_size(        \
+            mgr, sizeof(NL_span *) * BUFSIZE);           \
+        tail->next = next_slab;                          \
+        tail = tail->next;                               \
+        num_lists++;                                     \
+        span_pos = 0;                                    \
+        tokens = next_slab->tokens;                      \
+    }                                                    \
+    tokens[span_pos++] = NL_new_span(ts, te - ts, mgr);  \
+
+#define SPLIT_ASSIM(PREFIX)                              \
+    if (span_pos == BUFSIZE) {                           \
+        __token_list *next_slab = NL_allocate_mem_size(  \
+            mgr, sizeof(__token_list));                  \
+        next_slab->next = NULL;                          \
+        next_slab->tokens = NL_allocate_mem_size(        \
+            mgr, sizeof(NL_span *) * BUFSIZE);           \
+        tail->next = next_slab;                          \
+        tail = tail->next;                               \
+        num_lists++;                                     \
+        span_pos = 0;                                    \
+        tokens = next_slab->tokens;                      \
+    }                                                    \
+    tokens[span_pos++] = NL_new_span(ts, PREFIX, mgr);   \
+    if (span_pos == BUFSIZE) {                           \
+        __token_list *next_slab = NL_allocate_mem_size(  \
+            mgr, sizeof(__token_list));                  \
+        next_slab->next = NULL;                          \
+        next_slab->tokens = NL_allocate_mem_size(        \
+            mgr, sizeof(NL_span *) * BUFSIZE);           \
+        tail->next = next_slab;                          \
+        tail = tail->next;                               \
+        num_lists++;                                     \
+        span_pos = 0;                                    \
+        tokens = next_slab->tokens;                      \
+    }                                                    \
+    tokens[span_pos++] = NL_new_span(ts + PREFIX, te - (ts + PREFIX), mgr);  \
+
+const static NL_label ptb3dash = (NL_label) "--\x00";
+#define PTB3DASH_LEN 2
 
 
 NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len, 
         size_t *num_tokens, NL_PTBTokConfig *cfg, NL_v_memmgr *mgr) {
 
     __token_list *head = NL_allocate_mem_size(mgr, sizeof(__token_list));
+    head->next = NULL;
     __token_list *tail = head;
     size_t num_lists = 1;
 
@@ -824,6 +856,18 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
     unsigned char *p = buf;  
     unsigned char *pe = p + buf_len; 
     unsigned char *eof = pe;
+
+    int split_assimilations = 1;
+    if (cfg != NULL) {
+        split_assimilations = cfg->split_assimilations;
+    }
+
+    int normalize_ptb3_dashes = 1;
+    if (cfg != NULL) {
+        normalize_ptb3_dashes = cfg->normalize_dashes;
+    }
+
+
     %% write init;
 
     %% write exec;
@@ -832,7 +876,6 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
     NL_span **out_tokens = NL_allocate_mem_size(
         mgr, sizeof(NL_span *) * (*num_tokens));
     NL_span **current_out = out_tokens;
-    
     __token_list *next;
 
     for (;head; head=next) {
@@ -842,13 +885,12 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
             memcpy(current_out, head->tokens, BUFSIZE * sizeof(NL_span*));
             current_out = &current_out[BUFSIZE] ;
         }
-
+         
         NL_deallocate_v_mem(mgr, head->tokens);
         next = head->next;
         NL_deallocate_v_mem(mgr, head);
 
     }
-
 
     return out_tokens;
 

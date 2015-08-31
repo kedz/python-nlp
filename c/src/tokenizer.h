@@ -5,13 +5,15 @@
 #include <string.h>
 
 typedef struct NL_PTBTokConfig {
-    short int tokenizeNLs, americanize, normalizeSpace,
-       normalizeAmpersandEntity, normalizeCurrency, normalizeFractions,
-       normalizeParentheses, normalizeOtherBrackets,
-       quotes_latex, quotes_unicode, quotes_ascii,
-       ellipsis_ptb3, ellipsis_unicode,
-       ptb3Dashes, escapeForwardSlashAsterisk, strictTreebank3,
-       splitAssimilations;
+    int split_assimilations; // "cannot" => "can" "not"
+    int normalize_dashes; 
+    //    short int tokenizeNLs, americanize, normalizeSpace,
+//       normalizeAmpersandEntity, normalizeCurrency, normalizeFractions,
+//       normalizeParentheses, normalizeOtherBrackets,
+//       quotes_latex, quotes_unicode, quotes_ascii,
+//       ellipsis_ptb3, ellipsis_unicode,
+//       ptb3Dashes, escapeForwardSlashAsterisk, strictTreebank3,
+//       splitAssimilations;
 } NL_PTBTokConfig;
 
 
