@@ -2,10 +2,13 @@
 #include "mem_manager.h"
 #include <stdlib.h>
 #include <stdio.h>
-
+#include <string.h>
 
 _Static_assert ((size_t) NL_SPAN_SIZE == sizeof(NL_span), 
         "NL_SPAN_SIZE should reflect actual size of NL_span struct.");
+
+_Static_assert ((size_t) NL_DOC_SIZE == sizeof(NL_document), 
+        "NL_DOCUMENT_SIZE should reflect actual size of NL_document struct.");
 
 
 
@@ -23,14 +26,16 @@ NL_span *NL_new_span(
         if ((span = malloc(sizeof(NL_span))) != NULL) {
             span->start = buf_start;
             span->length = length;
-            //span->num_labels = 0;
+            span->label = NULL;
+            span->label_length = 0;
         }
     } else {
-
         span = VMEM_OBJ_FUNC( NL_SPAN_SIZE )(manager);
         if (span != NULL) {
             span->start = buf_start;
             span->length = length;
+            span->label = NULL;
+            span->label_length = 0;
         }
 
     }
@@ -38,19 +43,47 @@ NL_span *NL_new_span(
     return span;
 }
 
+NL_label NL_create_label(unsigned char *label_str, size_t length, 
+        NL_v_memmgr *mgr) {
+    
+    NL_label label= NL_allocate_mem_size(mgr, length + 1);
+    label[length] = 0x01;
+    label = memcpy(label, label_str, length);
+    return label;
+}
+
+
 void NL_free_span(NL_span **span, NL_v_memmgr *manager) {
     if (manager == NULL) {
         if ((*span) != NULL) {
-            
+            if ((*span)->label != NULL) {
+                size_t label_len = (*span)->label_length;
+                if ((*span)->label[label_len] == 1) {
+                    free((*span)->label);
+                }
+            }
+
             free(*span);
             *span = NULL;
         }
     } else {
         if ((*span) != NULL) {
+            if ((*span)->label != NULL) {
+                size_t label_len = (*span)->label_length;
+                if ((*span)->label[label_len] == 1) {
+                    NL_deallocate_v_mem(manager, (*span)->label);
+                }
+            }
+
             NL_deallocate_v_mem(manager, (void *) *span);
             *span = NULL;
         }
     }
+}
+
+void NL_set_span_label(NL_span *span, NL_label label, size_t length) {
+    span->label = label;
+    span->label_length = length;
 }
 
 NL_document *NL_doc_from_buffer_length(

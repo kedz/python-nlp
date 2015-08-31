@@ -3,13 +3,18 @@
 
 #include "mem_manager.h"
 
+typedef unsigned char *NL_label;
+
 typedef struct NL_span {
     unsigned char *start;
     size_t length;
+    NL_label label;
+    size_t label_length;
     //NL_label**labels;
     //unsigned int num_labels;
     //NLPC_span **spans;
     //int num_spans; 
+
 } NL_span;
 
 typedef struct NL_document {
@@ -20,7 +25,8 @@ typedef struct NL_document {
 
 } NL_document;
 
-#define NL_SPAN_SIZE 16
+
+#define NL_SPAN_SIZE 32
 #define NL_DOC_SIZE 32
 
 NL_span *NL_new_span(unsigned char *buf_start, size_t length,
@@ -28,8 +34,15 @@ NL_span *NL_new_span(unsigned char *buf_start, size_t length,
 NL_span **NL_new_spans(size_t num_spans, NL_v_memmgr *manager);
 void NL_free_span(NL_span **span, NL_v_memmgr *manager);
 
+NL_label NL_create_label(unsigned char *label_str, size_t length,
+        NL_v_memmgr *mgr);
+
+void NL_set_span_label(NL_span *span, NL_label label, size_t length);
+
+
 NL_document *NL_doc_from_buffer_length(
     unsigned char *buffer, size_t buffer_length, NL_v_memmgr *manager);
+
 
 
 /*typedef struct NLPC_document NLPC_document;
