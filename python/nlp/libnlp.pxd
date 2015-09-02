@@ -22,10 +22,14 @@ cdef extern from "document.h":
 
 
 cdef extern from "tokenizer.h":
+    ctypedef enum NL_normalize_quotes:
+        QUOTES_NONE, QUOTES_LATEX, QUOTES_UNICODE, QUOTES_ASCII
 
     ctypedef struct NL_PTBTokConfig:
         int split_assimilations
         int normalize_dashes
+        int normalize_amp
+        NL_normalize_quotes normalize_quotes
 
     cdef NL_span **NL_tokenize_buf(
         unsigned char *buf, size_t buf_len, size_t *num_tokens, 

@@ -51,9 +51,58 @@ cdef class PTBTokenizerConfigWrapper(object):
             else:
                 self._cfg.normalize_dashes = 0
 
+    property normalize_amp:
+        u"""When true, tokenizer normalizes tokens like "&amp;" to "&"."""
+
+        def __get__(self):
+            if self._cfg.normalize_amp == 1:
+                return True
+            else:
+                return False
+
+        def __set__(self, value):
+            if bool(value):
+                self._cfg.normalize_amp = 1
+            else:
+                self._cfg.normalize_amp = 0
+
+    property normalize_quotes:
+        u"""String or None. Accepts ["unicode"|"ascii"|"latex"|None]."""
+
+        def __get__(self):
+            
+            if self._cfg.normalize_quotes == QUOTES_UNICODE:
+                return u"unicode"
+            elif self._cfg.normalize_quotes == QUOTES_ASCII:
+                return u"ascii"
+            elif self._cfg.normalize_quotes == QUOTES_LATEX:
+                return u"latex"
+            elif self._cfg.normalize_quotes == QUOTES_NONE:
+                return None
+
+        def __set__(self, value):
+            if value == None:
+                self._cfg.normalize_quotes = QUOTES_NONE
+            elif value == u"unicode":
+                self._cfg.normalize_quotes = QUOTES_UNICODE
+            elif value == u"ascii":
+                self._cfg.normalize_quotes = QUOTES_ASCII
+            elif value == u"latex":
+                self._cfg.normalize_quotes = QUOTES_LATEX
+            else:
+                raise ValueError(
+                    u"Property 'normalize_quotes' takes 1 of 4 values: " \
+                    + u"'unicode', 'ascii', 'latex', or None.")
 
     def __str__(self):
-        return "PTBTokenizerConfigWrapper object (don't mess with me!)"
+        return "PTBTokenizerConfigWrapper\n" \
+            + " ::    normalize dashes: {}\n".format(
+                    self.normalize_dashes) \
+            + " ::       normalize amp: {}\n".format(
+                    self.normalize_amp) \
+            + " :: split assimilations: {}\n".format(
+                    self.split_assimilations) \
+            + " ::    normalize quotes: {}".format(self.normalize_quotes)
 
     def __dealloc__(self):
         print "PTBTokenizerConfigWrapper.__dealloc__()"
