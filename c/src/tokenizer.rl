@@ -8,8 +8,9 @@
     machine tok;
     alphtype unsigned char;
 
-    include WChar "unicode.rl";
 
+
+    include WChar "unicode.rl";
 
     SGML = "<" (
           ("!"| "?") [A-Za-z\-] [^>\r\n]*
@@ -519,7 +520,13 @@ action NormalizePTB3MDash {
     }
 
 }
+action NormalizeAmp {
+    NEXT_TOKEN
+    if (normalize_amp == 1) {
+        NL_set_span_label(tokens[span_pos-1], amp, AMP_LEN);     
+    }
 
+}
 #action NormalizedAmpNext {
 #    if (span_pos == max_span_pos) {
 #        max_span_pos = max_span_pos * 2;
@@ -588,13 +595,47 @@ action NormalizePTB3MDash {
 #    fpc = ti1 - 1;
 #    te = '\0';
 #}
-#
-#action MarkIntermediate2 {
-#    //printf("marking2!\n");
-#    ti2 = fpc;    
-#}
-#
-#action NextIntermediate2 {
+
+
+action MarkIntermediate2 {
+    ti2 = fpc;    
+}
+
+action NextIntermediate2 {
+    if (span_pos == BUFSIZE) {                           
+        __token_list *next_slab = NL_allocate_mem_size(  
+            mgr, sizeof(__token_list));                  
+        next_slab->next = NULL;                          
+        next_slab->tokens = NL_allocate_mem_size(        
+            mgr, sizeof(NL_span *) * BUFSIZE);           
+        tail->next = next_slab;                          
+        tail = tail->next;                               
+        num_lists++;                                     
+        span_pos = 0;                                    
+        tokens = next_slab->tokens;                      
+    }                                                    
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    ts = ti2;                                            
+    fpc = ti2 - 1;                                       
+    te = '\0';                                           
+}
+
+action HandleQuotesProbablyRight {
+    NEXT_TOKEN
+    if (normalize_quotes == QUOTES_UNICODE) {
+        size_t label_length = te - ts + 3; // label length is string length
+                                           // plus 2 for unicode and 1 for
+                                           // label ownership bit.    
+    
+        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
+        uni_right_quote(ts, te - ts, label_str);
+        label_str[label_length - 1] = 0x01;
+        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+
+    }
+
+}
+
 #    if (span_pos == max_span_pos) {
 #        max_span_pos = max_span_pos * 2;
 #        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
@@ -671,9 +712,9 @@ action NormalizePTB3MDash {
 #                               # and apoword
 #
         SPMDASH => NormalizePTB3MDash;
-#        SPAMP =>  NormalizedAmpNext; #  NextToken; # missing transform
-#
-#        WORD %MarkIntermediate2 REDAUX => NextIntermediate2;
+        SPAMP =>  NormalizeAmp; 
+        SPPUNC => NextToken;
+        WORD %MarkIntermediate2 REDAUX => NextIntermediate2;
 #        SWORD %MarkIntermediate1 SREDAUX => NextIntermediate1;
 #
         WORD => NextToken;
@@ -752,7 +793,7 @@ action NormalizePTB3MDash {
 #
 #        "/" => NextToken;
 #
-#        REDAUX => NextToken;
+        REDAUX => HandleQuotesProbablyRight;
 #        SREDAUX => NextToken;
 #
 #
@@ -787,6 +828,8 @@ action NormalizePTB3MDash {
 %% write data nofinal;
 
 #define BUFSIZE 32
+
+
 
 #define NEXT_TOKEN                                       \
     if (span_pos == BUFSIZE) {                           \
@@ -834,6 +877,8 @@ action NormalizePTB3MDash {
 const static NL_label ptb3dash = (NL_label) "--\x00";
 #define PTB3DASH_LEN 2
 
+const static NL_label amp = (NL_label) "&\x00";
+#define AMP_LEN 1
 
 NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len, 
         size_t *num_tokens, NL_PTBTokConfig *cfg, NL_v_memmgr *mgr) {
@@ -848,6 +893,13 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
 
     int span_pos = 0;
     int max_span_pos = BUFSIZE;
+
+    unsigned char *pe_tmp;
+    int count = 0;
+    unsigned char *copy_pos = NULL;
+
+    int stack[2];
+    int top;
 
     int cs, act;
     unsigned char *ts, *te = 0;
@@ -867,6 +919,15 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
         normalize_ptb3_dashes = cfg->normalize_dashes;
     }
 
+    int normalize_amp = 1;
+    if (cfg != NULL) {
+        normalize_amp = cfg->normalize_amp;
+    }
+
+    NL_normalize_quotes normalize_quotes = QUOTES_NONE;
+    if (cfg != NULL) {
+        normalize_quotes = cfg->normalize_quotes;
+    }
 
     %% write init;
 
@@ -895,3 +956,46 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
     return out_tokens;
 
 }
+
+%%{
+
+    machine qt;
+    alphtype unsigned char;
+
+    NON_UNI_QUOTE = "'" | 0xC2 0x92 | "&apos;" ;
+
+    action CopyUniQuote {
+        *cpy = 0xE2;
+        cpy++;
+        *cpy = 0x80;
+        cpy++;
+        *cpy = 0x99;
+        cpy++;
+
+    }
+
+    action CopyChar {
+        *cpy = *fpc;
+        cpy++;
+    }
+
+    main := |* 
+        NON_UNI_QUOTE => CopyUniQuote;
+        any => CopyChar;
+    *|;
+
+}%%
+
+%% write data nofinal;
+
+void uni_right_quote(unsigned char *p, size_t buf_length, unsigned char *cpy) {
+    int cs, act;
+    unsigned char *ts, *te = 0;
+    unsigned char *pe = p + buf_length; 
+    unsigned char *eof = pe;
+
+    %% write init;
+
+    %% write exec;
+}
+
