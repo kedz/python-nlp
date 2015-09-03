@@ -125,8 +125,8 @@ def sppunc_test():
 def word_redaux_test_NO_normalize_quotes():
 
     nlp.get_global_PTB_config().normalize_quotes = None
-    string = u"Ma'm you're I'll Chris's I'd you're"
-    gold = [u"Ma", u"'m", u"you", u"'re", u"I", u"'ll", u"Chris", u"'s", u"I",
+    string = u"Ma\u0092m you\u2019re I&apos;ll Chris's I'd you're"
+    gold = [u"Ma", u"\u0092m", u"you", u"\u2019re", u"I", u"&apos;ll", u"Chris", u"'s", u"I",
             u"'d", u"you", u"'re"]
     tokens = nlp.tokenize(string)
     print tokens
