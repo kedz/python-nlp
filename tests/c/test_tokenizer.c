@@ -1,4 +1,5 @@
 #include "nlp/tokenizer.h"
+#include "nlp/tokenizer_utils.h"
 #include "nlp/mem_manager.h"
 #include <string.h>
 
@@ -160,9 +161,100 @@ int ptbtest() {
     return err;
 }
 
+int unicode_quotes_count() {
+
+    int errors = 0;
+    unsigned char *buf = (unsigned char *)
+        "' \" &quot; &apos; \xC2\x91 \xC2\x92 \xC2\x93 \xC2\x94";
+    size_t buf_size = strlen((char *)buf);
+
+    if (buf_size != NL_get_size_unicode_quotes(buf, buf_size))
+        errors = 1;
+
+    return errors;
+
+}
+
+int left_unicode_quotes_transform() {
+
+    int errors = 0;
+    unsigned char *buf = (unsigned char *)
+        "' \" &quot; &apos; \xC2\x91 \xC2\x92 \xC2\x93 \xC2\x94";
+    size_t buf_size = strlen((char *)buf);
+    
+    size_t trans_size = NL_get_size_unicode_quotes(buf, buf_size);
+    unsigned char *trans = malloc(sizeof(unsigned char) * trans_size);
+
+    unsigned char *gold = (unsigned char *)
+        "\xE2\x80\x98 \xE2\x80\x9C \xE2\x80\x9C \xE2\x80\x98"
+        " \xE2\x80\x98 \xE2\x80\x99 \xE2\x80\x9C \xE2\x80\x9D";
+
+    NL_unicode_quotes_probably_left(buf, buf_size, trans);
+
+    printf("GOLD       : %s\n", gold);
+    printf("TRANSFORMED: %s\n", trans);
+    if (strcmp((char *) trans, (char *)gold) != 0)
+        errors = 1;
+
+
+    free(trans);
+
+    return errors;
+
+}
+
+int right_unicode_quotes_transform() {
+
+    int errors = 0;
+    unsigned char *buf = (unsigned char *)
+        "' \" &quot; &apos; \xC2\x91 \xC2\x92 \xC2\x93 \xC2\x94";
+    size_t buf_size = strlen((char *)buf);
+    
+    size_t trans_size = NL_get_size_unicode_quotes(buf, buf_size);
+    unsigned char *trans = malloc(sizeof(unsigned char) * trans_size);
+
+    unsigned char *gold = (unsigned char *)
+        "\xE2\x80\x99 \xE2\x80\x9D \xE2\x80\x9D \xE2\x80\x99"
+        " \xE2\x80\x98 \xE2\x80\x99 \xE2\x80\x9C \xE2\x80\x9D";
+
+    NL_unicode_quotes_probably_right(buf, buf_size, trans);
+
+    printf("GOLD       : %s\n", gold);
+    printf("TRANSFORMED: %s\n", trans);
+    if (strcmp((char *) trans, (char *)gold) != 0)
+        errors = 1;
+
+
+    free(trans);
+
+    return errors;
+
+}
 
 
 int main() {
+
+    if (unicode_quotes_count() !=0) {
+        printf("unicode quotes counter test failed!\n");
+
+    } else {
+        printf("unicode quotes counter test success!\n");
+    }   
+
+    if (left_unicode_quotes_transform() !=0) {
+        printf("left unicode quotes transform test failed!\n");
+
+    } else {
+        printf("left unicode quotes transform test success!\n");
+    }  
+
+    if (right_unicode_quotes_transform() !=0) {
+        printf("right unicode quotes transform test failed!\n");
+
+    } else {
+        printf("right unicode quotes transform test success!\n");
+    }  
+
     if (test_token1() != 0) {
         printf("token test1 failed!\n");
 
@@ -170,11 +262,12 @@ int main() {
         printf("token test1 passed!\n");
     }
 
+
     if (ptbtest() !=0) {
         printf("ptb test failed!\n");
 
     } else {
-        printf("ptb test succes!\n");
+        printf("ptb test success!\n");
 
     }   
 
