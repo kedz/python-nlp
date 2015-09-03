@@ -3,10 +3,10 @@
 #include "tokenizer.h"
 #include "stdio.h"
 #include <string.h>
+#include "tokenizer_utils.h"
 
 
-
-#line 826 "tokenizer.rl"
+#line 824 "tokenizer.rl"
 
 
 
@@ -77,7 +77,7 @@ static const unsigned char _tok_trans_keys[] = {
 	97u, 122u, 196u, 218u, 229u, 236u, 65u, 69u, 
 	73u, 79u, 85u, 97u, 101u, 105u, 111u, 117u, 
 	170u, 173u, 181u, 186u, 128u, 150u, 152u, 182u, 
-	184u, 255u, 192u, 255u, 128u, 255u, 128u, 191u, 
+	184u, 255u, 192u, 255u, 0u, 127u, 128u, 191u, 
 	128u, 189u, 140u, 132u, 134u, 136u, 138u, 142u, 
 	161u, 163u, 255u, 130u, 136u, 137u, 166u, 176u, 
 	160u, 151u, 152u, 190u, 136u, 144u, 192u, 255u, 
@@ -528,7 +528,7 @@ static const short _tok_indicies[] = {
 	49, 50, 19, 19, 23, 45, 11, 51, 
 	51, 51, 51, 51, 51, 51, 51, 51, 
 	51, 11, 19, 19, 19, 19, 11, 19, 
-	19, 19, 11, 19, 11, 19, 19, 11, 
+	19, 19, 11, 19, 11, 19, 11, 19, 
 	19, 11, 19, 11, 19, 19, 19, 19, 
 	19, 11, 11, 11, 19, 11, 19, 11, 
 	11, 19, 11, 11, 11, 19, 19, 19, 
@@ -1033,7 +1033,7 @@ static const int tok_error = -1;
 static const int tok_en_main = 265;
 
 
-#line 829 "tokenizer.rl"
+#line 827 "tokenizer.rl"
 
 #define BUFSIZE 32
 
@@ -1146,7 +1146,7 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
 	act = 0;
 	}
 
-#line 933 "tokenizer.rl"
+#line 931 "tokenizer.rl"
 
     
 #line 1153 "tokenizer.c"
@@ -1253,7 +1253,7 @@ _eof_trans:
 	{act = 10;}
 	break;
 	case 6:
-#line 819 "tokenizer.rl"
+#line 817 "tokenizer.rl"
 	{act = 16;}
 	break;
 	case 7:
@@ -1342,12 +1342,10 @@ _eof_trans:
 	{te = p+1;{
     NEXT_TOKEN
     if (normalize_quotes == QUOTES_UNICODE) {
-        size_t label_length = te - ts + 3; // label length is string length
-                                           // plus 2 for unicode and 1 for
-                                           // label ownership bit.    
+        size_t label_length = 1 + NL_get_size_unicode_quotes(ts, te - ts);
     
         unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
-        uni_right_quote(ts, te - ts, label_str);
+        NL_unicode_quotes_probably_right(ts, te - ts, label_str);
         label_str[label_length - 1] = 0x01;
         NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
 
@@ -1356,11 +1354,11 @@ _eof_trans:
 }}
 	break;
 	case 17:
-#line 818 "tokenizer.rl"
+#line 816 "tokenizer.rl"
 	{te = p+1;{printf("I found a byte order mark!\n");}}
 	break;
 	case 18:
-#line 819 "tokenizer.rl"
+#line 817 "tokenizer.rl"
 	{te = p+1;}
 	break;
 	case 19:
@@ -1370,15 +1368,15 @@ _eof_trans:
 }}
 	break;
 	case 20:
-#line 816 "tokenizer.rl"
+#line 814 "tokenizer.rl"
 	{te = p;p--;}
 	break;
 	case 21:
-#line 817 "tokenizer.rl"
+#line 815 "tokenizer.rl"
 	{te = p;p--;}
 	break;
 	case 22:
-#line 819 "tokenizer.rl"
+#line 817 "tokenizer.rl"
 	{te = p;p--;}
 	break;
 	case 23:
@@ -1388,15 +1386,15 @@ _eof_trans:
 }}
 	break;
 	case 24:
-#line 816 "tokenizer.rl"
+#line 814 "tokenizer.rl"
 	{{p = ((te))-1;}}
 	break;
 	case 25:
-#line 817 "tokenizer.rl"
+#line 815 "tokenizer.rl"
 	{{p = ((te))-1;}}
 	break;
 	case 26:
-#line 819 "tokenizer.rl"
+#line 817 "tokenizer.rl"
 	{{p = ((te))-1;}}
 	break;
 	case 27:
@@ -1422,7 +1420,7 @@ _eof_trans:
 	}
 	}
 	break;
-#line 1426 "tokenizer.c"
+#line 1424 "tokenizer.c"
 		}
 	}
 
@@ -1435,7 +1433,7 @@ _again:
 #line 1 "NONE"
 	{ts = 0;}
 	break;
-#line 1439 "tokenizer.c"
+#line 1437 "tokenizer.c"
 		}
 	}
 
@@ -1452,7 +1450,7 @@ _again:
 
 	}
 
-#line 935 "tokenizer.rl"
+#line 933 "tokenizer.rl"
 
     *num_tokens = BUFSIZE * (num_lists - 1) + span_pos;
     NL_span **out_tokens = NL_allocate_mem_size(
@@ -1477,240 +1475,3 @@ _again:
     return out_tokens;
 
 }
-
-
-#line 987 "tokenizer.rl"
-
-
-
-#line 1487 "tokenizer.c"
-static const char _qt_actions[] = {
-	0, 1, 0, 1, 1, 1, 2, 1, 
-	3, 1, 4, 1, 5, 1, 6
-};
-
-static const char _qt_key_offsets[] = {
-	0, 1, 2, 3, 4, 7, 8
-};
-
-static const unsigned char _qt_trans_keys[] = {
-	112u, 111u, 115u, 59u, 38u, 39u, 194u, 97u, 
-	146u, 0
-};
-
-static const char _qt_single_lengths[] = {
-	1, 1, 1, 1, 3, 1, 1
-};
-
-static const char _qt_range_lengths[] = {
-	0, 0, 0, 0, 0, 0, 0
-};
-
-static const char _qt_index_offsets[] = {
-	0, 2, 4, 6, 8, 12, 14
-};
-
-static const char _qt_trans_targs[] = {
-	1, 4, 2, 4, 3, 4, 4, 4, 
-	5, 4, 6, 4, 0, 4, 4, 4, 
-	4, 4, 4, 4, 4, 4, 0
-};
-
-static const char _qt_trans_actions[] = {
-	0, 13, 0, 13, 0, 13, 7, 13, 
-	5, 7, 0, 9, 0, 11, 7, 11, 
-	13, 13, 13, 13, 11, 11, 0
-};
-
-static const char _qt_to_state_actions[] = {
-	0, 0, 0, 0, 1, 0, 0
-};
-
-static const char _qt_from_state_actions[] = {
-	0, 0, 0, 0, 3, 0, 0
-};
-
-static const char _qt_eof_trans[] = {
-	20, 20, 20, 20, 0, 22, 22
-};
-
-static const int qt_start = 4;
-static const int qt_error = -1;
-
-static const int qt_en_main = 4;
-
-
-#line 990 "tokenizer.rl"
-
-void uni_right_quote(unsigned char *p, size_t buf_length, unsigned char *cpy) {
-    int cs, act;
-    unsigned char *ts, *te = 0;
-    unsigned char *pe = p + buf_length; 
-    unsigned char *eof = pe;
-
-    
-#line 1553 "tokenizer.c"
-	{
-	cs = qt_start;
-	ts = 0;
-	te = 0;
-	act = 0;
-	}
-
-#line 998 "tokenizer.rl"
-
-    
-#line 1564 "tokenizer.c"
-	{
-	int _klen;
-	unsigned int _trans;
-	const char *_acts;
-	unsigned int _nacts;
-	const unsigned char *_keys;
-
-	if ( p == pe )
-		goto _test_eof;
-_resume:
-	_acts = _qt_actions + _qt_from_state_actions[cs];
-	_nacts = (unsigned int) *_acts++;
-	while ( _nacts-- > 0 ) {
-		switch ( *_acts++ ) {
-	case 1:
-#line 1 "NONE"
-	{ts = p;}
-	break;
-#line 1583 "tokenizer.c"
-		}
-	}
-
-	_keys = _qt_trans_keys + _qt_key_offsets[cs];
-	_trans = _qt_index_offsets[cs];
-
-	_klen = _qt_single_lengths[cs];
-	if ( _klen > 0 ) {
-		const unsigned char *_lower = _keys;
-		const unsigned char *_mid;
-		const unsigned char *_upper = _keys + _klen - 1;
-		while (1) {
-			if ( _upper < _lower )
-				break;
-
-			_mid = _lower + ((_upper-_lower) >> 1);
-			if ( (*p) < *_mid )
-				_upper = _mid - 1;
-			else if ( (*p) > *_mid )
-				_lower = _mid + 1;
-			else {
-				_trans += (unsigned int)(_mid - _keys);
-				goto _match;
-			}
-		}
-		_keys += _klen;
-		_trans += _klen;
-	}
-
-	_klen = _qt_range_lengths[cs];
-	if ( _klen > 0 ) {
-		const unsigned char *_lower = _keys;
-		const unsigned char *_mid;
-		const unsigned char *_upper = _keys + (_klen<<1) - 2;
-		while (1) {
-			if ( _upper < _lower )
-				break;
-
-			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
-			if ( (*p) < _mid[0] )
-				_upper = _mid - 2;
-			else if ( (*p) > _mid[1] )
-				_lower = _mid + 2;
-			else {
-				_trans += (unsigned int)((_mid - _keys)>>1);
-				goto _match;
-			}
-		}
-		_trans += _klen;
-	}
-
-_match:
-_eof_trans:
-	cs = _qt_trans_targs[_trans];
-
-	if ( _qt_trans_actions[_trans] == 0 )
-		goto _again;
-
-	_acts = _qt_actions + _qt_trans_actions[_trans];
-	_nacts = (unsigned int) *_acts++;
-	while ( _nacts-- > 0 )
-	{
-		switch ( *_acts++ )
-		{
-	case 2:
-#line 1 "NONE"
-	{te = p+1;}
-	break;
-	case 3:
-#line 967 "tokenizer.rl"
-	{te = p+1;{
-        *cpy = 0xE2;
-        cpy++;
-        *cpy = 0x80;
-        cpy++;
-        *cpy = 0x99;
-        cpy++;
-
-    }}
-	break;
-	case 4:
-#line 977 "tokenizer.rl"
-	{te = p+1;{
-        *cpy = *p;
-        cpy++;
-    }}
-	break;
-	case 5:
-#line 977 "tokenizer.rl"
-	{te = p;p--;{
-        *cpy = *p;
-        cpy++;
-    }}
-	break;
-	case 6:
-#line 977 "tokenizer.rl"
-	{{p = ((te))-1;}{
-        *cpy = *p;
-        cpy++;
-    }}
-	break;
-#line 1685 "tokenizer.c"
-		}
-	}
-
-_again:
-	_acts = _qt_actions + _qt_to_state_actions[cs];
-	_nacts = (unsigned int) *_acts++;
-	while ( _nacts-- > 0 ) {
-		switch ( *_acts++ ) {
-	case 0:
-#line 1 "NONE"
-	{ts = 0;}
-	break;
-#line 1698 "tokenizer.c"
-		}
-	}
-
-	if ( ++p != pe )
-		goto _resume;
-	_test_eof: {}
-	if ( p == eof )
-	{
-	if ( _qt_eof_trans[cs] > 0 ) {
-		_trans = _qt_eof_trans[cs] - 1;
-		goto _eof_trans;
-	}
-	}
-
-	}
-
-#line 1000 "tokenizer.rl"
-}
-

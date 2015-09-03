@@ -1,7 +1,7 @@
 #include "tokenizer.h"
 #include "stdio.h"
 #include <string.h>
-
+#include "tokenizer_utils.h"
 
 %%{
 
@@ -623,12 +623,10 @@ action NextIntermediate2 {
 action HandleQuotesProbablyRight {
     NEXT_TOKEN
     if (normalize_quotes == QUOTES_UNICODE) {
-        size_t label_length = te - ts + 3; // label length is string length
-                                           // plus 2 for unicode and 1 for
-                                           // label ownership bit.    
+        size_t label_length = 1 + NL_get_size_unicode_quotes(ts, te - ts);
     
         unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
-        uni_right_quote(ts, te - ts, label_str);
+        NL_unicode_quotes_probably_right(ts, te - ts, label_str);
         label_str[label_length - 1] = 0x01;
         NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
 
@@ -956,46 +954,3 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
     return out_tokens;
 
 }
-
-%%{
-
-    machine qt;
-    alphtype unsigned char;
-
-    NON_UNI_QUOTE = "'" | 0xC2 0x92 | "&apos;" ;
-
-    action CopyUniQuote {
-        *cpy = 0xE2;
-        cpy++;
-        *cpy = 0x80;
-        cpy++;
-        *cpy = 0x99;
-        cpy++;
-
-    }
-
-    action CopyChar {
-        *cpy = *fpc;
-        cpy++;
-    }
-
-    main := |* 
-        NON_UNI_QUOTE => CopyUniQuote;
-        any => CopyChar;
-    *|;
-
-}%%
-
-%% write data nofinal;
-
-void uni_right_quote(unsigned char *p, size_t buf_length, unsigned char *cpy) {
-    int cs, act;
-    unsigned char *ts, *te = 0;
-    unsigned char *pe = p + buf_length; 
-    unsigned char *eof = pe;
-
-    %% write init;
-
-    %% write exec;
-}
-
