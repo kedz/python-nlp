@@ -178,3 +178,30 @@ def word_redaux_test_ASCII_normalize_quotes():
     for token, gold_token in zip(tokens, gold):
         assert token == gold_token.encode("utf-8")
     assert len(tokens) == len(gold)
+
+def word_sredaux_test_ASCII_normalize_quotes():
+    nlp.get_global_PTB_config().normalize_quotes = u"ascii"
+    string = u"this shouldn't work"
+    gold = [u"this", u"should", u"n't", u"work"]
+    tokens = nlp.tokenize(string)
+    print tokens
+    for token in tokens:
+        print token.decode("utf-8")
+    print
+    for token, gold_token in zip(tokens, gold):
+        assert token == gold_token.encode("utf-8")
+    assert len(tokens) == len(gold)
+
+def soft_hyphen_remove_test():
+
+    string = u"ya\u00AD'll should\u00ADn't de\u00ADstroy\u00ADed bro\u00ADken \u00AD \u00AD'll"
+    gold = [u"ya", u"'ll", u"should", u"n't", u"destroyed", u"broken", u"-", u"-", u"'ll"]
+    tokens = nlp.tokenize(string)
+    for token in tokens:
+        print token.decode("utf-8"),
+    print
+    for token, gold_token in zip(tokens, gold):
+        assert token == gold_token.encode("utf-8")
+    assert len(tokens) == len(gold)
+
+   

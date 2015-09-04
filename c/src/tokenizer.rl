@@ -8,9 +8,11 @@
     machine tok;
     alphtype unsigned char;
 
-
-
     include WChar "unicode.rl";
+
+    action AlertSoftHyphen {
+        alert_soft_hyphen++;
+    }
 
     SGML = "<" (
           ("!"| "?") [A-Za-z\-] [^>\r\n]*
@@ -119,7 +121,7 @@
                 ;
 
     LETTER = ualpha | SPLET  # TODO Make sure this matches stanford
-        | 0xC2 0xAD # u+00AD
+        | 0xC2 0xAD %AlertSoftHyphen # u+00AD
         | 0xC8 0xB7..0xBF # u+0237 .. u+024F
         | 0xC9 0x80..0xBF
         | 0xCB 0x82..0x85 # u+02C2 .. u+02C5
@@ -498,6 +500,8 @@ action NextToken {
     NEXT_TOKEN    
 }
 
+
+
 action SplitAssimilation3 {
     if (split_assimilations == 1) {
         SPLIT_ASSIM(3)
@@ -579,26 +583,50 @@ action NormalizeAmp {
 #}
 #
 #
-#action MarkIntermediate1 {
-#    //printf("marking1!\n");
-#    ti1 = fpc;    
-#}
-#
-#action NextIntermediate1 {
-#    if (span_pos == max_span_pos) {
-#        max_span_pos = max_span_pos * 2;
-#        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-#        //printf("%d spans allocated\n", max_span_pos);
-#    }
-#    tokens[span_pos++] = NLPC_new_span(ts, ti1);
-#    ts = ti1;
-#    fpc = ti1 - 1;
-#    te = '\0';
-#}
 
+action MarkIntermediate1 {
+    ti1 = fpc;    
+}
 
 action MarkIntermediate2 {
     ti2 = fpc;    
+}
+
+action NextIntermediate1 {
+    if (span_pos == BUFSIZE) {                           
+        __token_list *next_slab = NL_allocate_mem_size(  
+            mgr, sizeof(__token_list));                  
+        next_slab->next = NULL;                          
+        next_slab->tokens = NL_allocate_mem_size(        
+            mgr, sizeof(NL_span *) * BUFSIZE);           
+        tail->next = next_slab;                          
+        tail = tail->next;                               
+        num_lists++;                                     
+        span_pos = 0;                                    
+        tokens = next_slab->tokens;                      
+    }                                                    
+    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, mgr); 
+
+    if (alert_soft_hyphen > 0) {                                            
+        size_t size_label = ti1 - ts - alert_soft_hyphen * 2 + 1;             
+        unsigned char *label_str = NULL;                                    
+                                                                            
+        if (size_label > 1) {                                               
+            label_str = NL_allocate_mem_size(mgr, size_label);              
+            NL_copy_no_softhyphen(ts, ti1 - ts, label_str);                  
+        } else {                                                            
+            size_label = 2;                                                 
+            label_str = NL_allocate_mem_size(mgr, size_label);              
+            label_str[0] = '-';                                             
+        }                                                                   
+        label_str[size_label - 1] = 0x01;                                   
+        NL_set_span_label(tokens[span_pos-1], label_str, size_label - 1);     
+    }
+
+    alert_soft_hyphen = 0;
+    ts = ti1;                                            
+    fpc = ti1 - 1;                                       
+    te = '\0';                                           
 }
 
 action NextIntermediate2 {
@@ -615,6 +643,24 @@ action NextIntermediate2 {
         tokens = next_slab->tokens;                      
     }                                                    
     tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+
+    if (alert_soft_hyphen > 0) {                                            
+        size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
+        unsigned char *label_str = NULL;                                    
+                                                                            
+        if (size_label > 1) {                                               
+            label_str = NL_allocate_mem_size(mgr, size_label);              
+            NL_copy_no_softhyphen(ts, ti2 - ts, label_str);                 
+        } else {                                                            
+            size_label = 2;                                                 
+            label_str = NL_allocate_mem_size(mgr, size_label);              
+            label_str[0] = '-';                                             
+        }                                                                   
+        label_str[size_label - 1] = 0x01;                                   
+        NL_set_span_label(tokens[span_pos-1], label_str, size_label - 1);     
+    }
+
+    alert_soft_hyphen = 0;
     ts = ti2;                                            
     fpc = ti2 - 1;                                       
     te = '\0';                                           
@@ -644,18 +690,6 @@ action HandleQuotesProbablyRight {
     }
 }
 
-#    if (span_pos == max_span_pos) {
-#        max_span_pos = max_span_pos * 2;
-#        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-#        //printf("%d spans allocated\n", max_span_pos);
-#    }
-#    tokens[span_pos++] = NLPC_new_span(ts, ti2);
-#    ts = ti2;
-#    fpc = ti2 - 1;
-#    te = '\0';
-#}
-#
-#
 #action NextTwoTokens {
 #    if (span_pos == max_span_pos) {
 #        max_span_pos = max_span_pos * 2;
@@ -674,35 +708,7 @@ action HandleQuotesProbablyRight {
 #}
 #
 #
-#action SplitAssimilation2 {
-#
-#    if (config->splitAssimilations) {
-#        if (span_pos == max_span_pos) {
-#            max_span_pos = max_span_pos * 2;
-#            tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-#            //printf("%d spans allocated\n", max_span_pos);
-#        }
-#
-#        tokens[span_pos++] = NLPC_new_span(ts, ts + 2);
-#        if (span_pos == max_span_pos) {
-#            max_span_pos = max_span_pos * 2;
-#            tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-#            //printf("%d spans allocated\n", max_span_pos);
-#        }
-#
-#        tokens[span_pos++] = NLPC_new_span(ts + 2, te);
-#        
-#    } else {
-#        if (span_pos == max_span_pos) {
-#            max_span_pos = max_span_pos * 2;
-#            tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-#            //printf("%d spans allocated\n", max_span_pos);
-#        }
-#
-#        tokens[span_pos++] = NLPC_new_span(ts, te);
-#    }
-#
-#}
+
 
     main := |*
         [cC]"++" => NextToken;
@@ -723,8 +729,7 @@ action HandleQuotesProbablyRight {
         SPAMP =>  NormalizeAmp; 
         SPPUNC => NextToken;
         WORD %MarkIntermediate2 REDAUX => NextIntermediate2;
-#        SWORD %MarkIntermediate1 SREDAUX => NextIntermediate1;
-#
+        SWORD %MarkIntermediate1 SREDAUX => NextIntermediate1;
         WORD => NextToken;
 #
 #        APOWORD => NextToken;
@@ -802,7 +807,7 @@ action HandleQuotesProbablyRight {
 #        "/" => NextToken;
 #
         REDAUX => HandleQuotesProbablyRight;
-#        SREDAUX => NextToken;
+        SREDAUX => HandleQuotesProbablyRight;
 #
 #
 ##        WORD => NextToken;
@@ -838,21 +843,37 @@ action HandleQuotesProbablyRight {
 #define BUFSIZE 32
 
 
-
-#define NEXT_TOKEN                                       \
-    if (span_pos == BUFSIZE) {                           \
-        __token_list *next_slab = NL_allocate_mem_size(  \
-            mgr, sizeof(__token_list));                  \
-        next_slab->next = NULL;                          \
-        next_slab->tokens = NL_allocate_mem_size(        \
-            mgr, sizeof(NL_span *) * BUFSIZE);           \
-        tail->next = next_slab;                          \
-        tail = tail->next;                               \
-        num_lists++;                                     \
-        span_pos = 0;                                    \
-        tokens = next_slab->tokens;                      \
-    }                                                    \
-    tokens[span_pos++] = NL_new_span(ts, te - ts, mgr);  \
+#define NEXT_TOKEN                                                          \
+    if (span_pos == BUFSIZE) {                                              \
+        __token_list *next_slab = NL_allocate_mem_size(                     \
+            mgr, sizeof(__token_list));                                     \
+        next_slab->next = NULL;                                             \
+        next_slab->tokens = NL_allocate_mem_size(                           \
+            mgr, sizeof(NL_span *) * BUFSIZE);                              \
+        tail->next = next_slab;                                             \
+        tail = tail->next;                                                  \
+        num_lists++;                                                        \
+        span_pos = 0;                                                       \
+        tokens = next_slab->tokens;                                         \
+    }                                                                       \
+    tokens[span_pos++] = NL_new_span(ts, te - ts, mgr);                     \
+                                                                            \
+    if (alert_soft_hyphen > 0) {                                            \
+        size_t size_label = te - ts - alert_soft_hyphen * 2 + 1;            \ 
+        unsigned char *label_str = NULL;                                    \
+                                                                            \
+        if (size_label > 1) {                                               \
+            label_str = NL_allocate_mem_size(mgr, size_label);              \
+            NL_copy_no_softhyphen(ts, te - ts, label_str);                  \
+        } else {                                                            \
+            size_label = 2;                                                 \
+            label_str = NL_allocate_mem_size(mgr, size_label);              \
+            label_str[0] = '-';                                             \
+        }                                                                   \
+        label_str[size_label - 1] = 0x01;                                   \
+        NL_set_span_label(tokens[span_pos-1], label_str, size_label - 1);   \  
+    }                                                                       \
+    alert_soft_hyphen = 0;                                                  \
 
 #define SPLIT_ASSIM(PREFIX)                              \
     if (span_pos == BUFSIZE) {                           \
@@ -905,6 +926,8 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
     unsigned char *pe_tmp;
     int count = 0;
     unsigned char *copy_pos = NULL;
+
+    int alert_soft_hyphen = 0;
 
     int stack[2];
     int top;
