@@ -825,3 +825,239 @@ _again:
 
 }
 
+
+#line 276 "tokenizer_utils.rl"
+
+
+
+#line 834 "tokenizer_utils.c"
+static const char _NonAsciiQuoteCounter_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1, 
+	3, 1, 4, 1, 5, 1, 6
+};
+
+static const char _NonAsciiQuoteCounter_key_offsets[] = {
+	0, 1, 2, 3, 4, 5, 6, 7, 
+	9, 13, 16, 18, 23
+};
+
+static const unsigned char _NonAsciiQuoteCounter_trans_keys[] = {
+	112u, 111u, 115u, 59u, 117u, 111u, 116u, 153u, 
+	158u, 152u, 155u, 185u, 186u, 38u, 194u, 226u, 
+	97u, 113u, 128u, 171u, 187u, 145u, 148u, 128u, 
+	0
+};
+
+static const char _NonAsciiQuoteCounter_single_lengths[] = {
+	1, 1, 1, 1, 1, 1, 1, 2, 
+	0, 3, 2, 3, 1
+};
+
+static const char _NonAsciiQuoteCounter_range_lengths[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	2, 0, 0, 1, 0
+};
+
+static const char _NonAsciiQuoteCounter_index_offsets[] = {
+	0, 2, 4, 6, 8, 10, 12, 14, 
+	17, 20, 24, 27, 32
+};
+
+static const char _NonAsciiQuoteCounter_indicies[] = {
+	1, 0, 2, 0, 3, 0, 4, 0, 
+	5, 0, 6, 0, 3, 0, 4, 4, 
+	0, 4, 4, 0, 8, 9, 10, 7, 
+	12, 13, 11, 14, 4, 4, 4, 11, 
+	15, 11, 0
+};
+
+static const char _NonAsciiQuoteCounter_trans_targs[] = {
+	9, 1, 2, 3, 9, 5, 6, 9, 
+	10, 11, 12, 9, 0, 4, 7, 8
+};
+
+static const char _NonAsciiQuoteCounter_trans_actions[] = {
+	13, 0, 0, 0, 7, 0, 0, 9, 
+	5, 5, 5, 11, 0, 0, 0, 0
+};
+
+static const char _NonAsciiQuoteCounter_to_state_actions[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 1, 0, 0, 0
+};
+
+static const char _NonAsciiQuoteCounter_from_state_actions[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 3, 0, 0, 0
+};
+
+static const char _NonAsciiQuoteCounter_eof_trans[] = {
+	1, 1, 1, 1, 1, 1, 1, 1, 
+	1, 0, 12, 12, 12
+};
+
+static const int NonAsciiQuoteCounter_start = 9;
+static const int NonAsciiQuoteCounter_error = -1;
+
+static const int NonAsciiQuoteCounter_en_main = 9;
+
+
+#line 279 "tokenizer_utils.rl"
+
+size_t NL_get_size_ascii_quotes(unsigned char *p, size_t buf_length) {
+    int cs, act;
+    unsigned char *ts, *te = 0;
+    unsigned char *pe = p + buf_length; 
+    unsigned char *eof = pe;
+    size_t size = 0;
+
+    
+#line 916 "tokenizer_utils.c"
+	{
+	cs = NonAsciiQuoteCounter_start;
+	ts = 0;
+	te = 0;
+	act = 0;
+	}
+
+#line 288 "tokenizer_utils.rl"
+    
+#line 926 "tokenizer_utils.c"
+	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
+	if ( p == pe )
+		goto _test_eof;
+_resume:
+	_acts = _NonAsciiQuoteCounter_actions + _NonAsciiQuoteCounter_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
+#line 1 "NONE"
+	{ts = p;}
+	break;
+#line 945 "tokenizer_utils.c"
+		}
+	}
+
+	_keys = _NonAsciiQuoteCounter_trans_keys + _NonAsciiQuoteCounter_key_offsets[cs];
+	_trans = _NonAsciiQuoteCounter_index_offsets[cs];
+
+	_klen = _NonAsciiQuoteCounter_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _NonAsciiQuoteCounter_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+	_trans = _NonAsciiQuoteCounter_indicies[_trans];
+_eof_trans:
+	cs = _NonAsciiQuoteCounter_trans_targs[_trans];
+
+	if ( _NonAsciiQuoteCounter_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _NonAsciiQuoteCounter_actions + _NonAsciiQuoteCounter_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
+	{
+		switch ( *_acts++ )
+		{
+	case 2:
+#line 1 "NONE"
+	{te = p+1;}
+	break;
+	case 3:
+#line 272 "tokenizer_utils.rl"
+	{te = p+1;{size++;}}
+	break;
+	case 4:
+#line 273 "tokenizer_utils.rl"
+	{te = p+1;{size++;}}
+	break;
+	case 5:
+#line 273 "tokenizer_utils.rl"
+	{te = p;p--;{size++;}}
+	break;
+	case 6:
+#line 273 "tokenizer_utils.rl"
+	{{p = ((te))-1;}{size++;}}
+	break;
+#line 1031 "tokenizer_utils.c"
+		}
+	}
+
+_again:
+	_acts = _NonAsciiQuoteCounter_actions + _NonAsciiQuoteCounter_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 0:
+#line 1 "NONE"
+	{ts = 0;}
+	break;
+#line 1044 "tokenizer_utils.c"
+		}
+	}
+
+	if ( ++p != pe )
+		goto _resume;
+	_test_eof: {}
+	if ( p == eof )
+	{
+	if ( _NonAsciiQuoteCounter_eof_trans[cs] > 0 ) {
+		_trans = _NonAsciiQuoteCounter_eof_trans[cs] - 1;
+		goto _eof_trans;
+	}
+	}
+
+	}
+
+#line 289 "tokenizer_utils.rl"
+
+    return size;
+}
