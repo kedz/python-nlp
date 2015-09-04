@@ -161,49 +161,32 @@ int ptbtest() {
     return err;
 }
 
+
+
+
+
 int unicode_quotes_count() {
 
     int errors = 0;
     unsigned char *buf = (unsigned char *)
         "' \" &quot; &apos; \xC2\x91 \xC2\x92 \xC2\x93 \xC2\x94";
     size_t buf_size = strlen((char *)buf);
-
-    if (buf_size != NL_get_size_unicode_quotes(buf, buf_size))
-        errors = 1;
-
-    return errors;
-
-}
-
-int ascii_quotes_count() {
-    int errors = 0;
-    unsigned char *buf = (unsigned char *)
-        "' &apos; \xC2\x91 \xE2\x80\x98 \xC2\x92 \xE2\x80\x99 \xE2\x80\x9A "
-        "\xE2\x80\x9B \xE2\x80\xB9 \xE2\x80\xBA "
-        "\" &quot; \xC2\x93 \xE2\x80\x98 \xC2\x94 \xC2\x80\x99 \xC2\x80\x9E "
-        "\xC2\xAB \xC2\xBB";
-
     unsigned char *gold = (unsigned char *)
-        "' ' ' ' ' ' ' ' ' ' \" \" \" \" \" \" \" \" \"";
+        "\xE2\x80\x98 \xE2\x80\x9C \xE2\x80\x9C \xE2\x80\x98"
+        " \xE2\x80\x98 \xE2\x80\x99 \xE2\x80\x9C \xE2\x80\x9D";
 
-    size_t before_size = strlen((char *) buf);
-    size_t after_size = strlen((char *) gold);
-    size_t pred_size = NL_get_size_ascii_quotes(buf, strlen((char *) buf));   
+    size_t trans_size = strlen((char *) gold);
 
-    printf("UNICODE: %s\n", buf);
-    printf("ASCII: %s\n", gold);
-    printf("BEFORE SIZE: %lu\n", before_size);
-    printf("AFTER SIZE: %lu\n", after_size);
-    printf("PRED SIZE: %lu\n", pred_size);
-
-    if (after_size != pred_size) {
+    if (trans_size != NL_get_size_unicode_quotes(buf, buf_size))
         errors = 1;
 
-    }
-    
     return errors;
 
 }
+
+
+
+
 
 int left_unicode_quotes_transform() {
 
@@ -261,15 +244,173 @@ int right_unicode_quotes_transform() {
 
 }
 
+int ascii_quotes_count() {
+    int errors = 0;
+    unsigned char *buf = (unsigned char *)
+        "' &apos; \xC2\x91 \xE2\x80\x98 \xC2\x92 \xE2\x80\x99 \xE2\x80\x9A "
+        "\xE2\x80\x9B \xE2\x80\xB9 \xE2\x80\xBA "
+        "\" &quot; \xC2\x93 \xE2\x80\x9C \xC2\x94 \xC2\x80\x9D \xC2\x80\x9E "
+        "\xC2\xAB \xC2\xBB";
+
+    unsigned char *gold = (unsigned char *)
+        "' ' ' ' ' ' ' ' ' ' \" \" \" \" \" \" \" \" \"";
+
+    size_t before_size = strlen((char *) buf);
+    size_t after_size = strlen((char *) gold);
+    size_t pred_size = NL_get_size_ascii_quotes(buf, strlen((char *) buf));   
+
+    printf("UNICODE: %s\n", buf);
+    printf("ASCII: %s\n", gold);
+    printf("BEFORE SIZE: %lu\n", before_size);
+    printf("AFTER SIZE: %lu\n", after_size);
+    printf("PRED SIZE: %lu\n", pred_size);
+
+    if (after_size != pred_size) {
+        errors = 1;
+
+    }
+    
+    return errors;
+
+}
+
+int ascii_quotes_transform() {
+    int errors = 0;
+    unsigned char *buf = (unsigned char *)
+        "' &apos; \xC2\x91 \xE2\x80\x98 \xC2\x92 \xE2\x80\x99 \xE2\x80\x9A "
+        "\xE2\x80\x9B \xE2\x80\xB9 \xE2\x80\xBA "
+        "\" &quot; \xC2\x93 \xE2\x80\x9C \xC2\x94 \xC2\x80\x9D \xC2\x80\x9E "
+        "\xC2\xAB \xC2\xBB";
+
+    unsigned char *gold = (unsigned char *)
+        "' ' ' ' ' ' ' ' ' ' \" \" \" \" \" \" \" \" \"";
+    size_t buf_size = strlen((char *) buf);
+    size_t trans_size = NL_get_size_ascii_quotes(buf, buf_size);   
+    unsigned char *trans = malloc(sizeof(unsigned char) * trans_size);
+    
+    NL_ascii_quotes(buf, buf_size, trans);
+    printf("BEFORE: %s\n", buf);
+    printf("AFTER : %s\n", gold);    
+    printf("TRANS : %s\n", trans);    
+
+    if (strcmp((char *) gold, (char *) trans) != 0) {
+        errors = 1;
+    }
+    free(trans); 
+    return errors;
+
+}
+
+int latex_quotes_count() {
+    int errors = 0;
+    unsigned char *buf = (unsigned char *)
+        "' &apos; \xC2\x91 \xE2\x80\x98 \xC2\x92 \xE2\x80\x99 \xE2\x80\x9A "
+        "\xE2\x80\x9B \xE2\x80\xB9 \xE2\x80\xBA "
+        "\" &quot; \xC2\x93 \xE2\x80\x9C \xC2\x94 \xC2\x80\x9D "
+        "\xC2\xAB \xC2\xBB";
+
+    unsigned char *gold = (unsigned char *)
+        "` ` ` ` ' ' ' ` ` ' `` `` `` `` '' '' `` ''";
+
+    size_t before_size = strlen((char *) buf);
+    size_t after_size = strlen((char *) gold);
+    size_t pred_size = NL_get_size_latex_quotes(buf, strlen((char *) buf));   
+
+    printf("UNICODE: %s\n", buf);
+    printf("LATEX: %s\n", gold);
+    printf("BEFORE SIZE: %lu\n", before_size);
+    printf("AFTER SIZE: %lu\n", after_size);
+    printf("PRED SIZE: %lu\n", pred_size);
+
+    if (after_size != pred_size) {
+        errors = 1;
+
+    }
+    
+    return errors;
+
+}
+
+int latex_quotes_prob_left_transform() {
+    int errors = 0;
+    unsigned char *buf = (unsigned char *)
+        "' &apos; \xC2\x91 \xE2\x80\x98 \xC2\x92 \xE2\x80\x99 \xE2\x80\x9A "
+        "\xE2\x80\x9B \xE2\x80\xB9 \xE2\x80\xBA "
+        "\" &quot; \xC2\x93 \xE2\x80\x9C \xC2\x94 \xC2\x80\x9D "
+        "\xC2\xAB \xC2\xBB";
+
+    unsigned char *gold = (unsigned char *)
+        "` ` ` ` ' ' ' ` ` ' `` `` `` `` '' '' `` ''";
+    size_t buf_size = strlen((char *) buf);
+    size_t trans_size = NL_get_size_latex_quotes(buf, buf_size);   
+    unsigned char *trans = malloc(sizeof(unsigned char) * trans_size);
+    
+    NL_latex_quotes_probably_left(buf, buf_size, trans);
+    printf("BEFORE: %s\n", buf);
+    printf("AFTER : %s\n", gold);    
+    printf("TRANS : %s\n", trans);    
+
+    if (strcmp((char *) gold, (char *) trans) != 0) {
+        errors = 1;
+    }
+    free(trans); 
+    return errors;
+
+}
+
+int latex_quotes_prob_right_transform() {
+    int errors = 0;
+    unsigned char *buf = (unsigned char *)
+        "' &apos; \xC2\x91 \xE2\x80\x98 \xC2\x92 \xE2\x80\x99 \xE2\x80\x9A "
+        "\xE2\x80\x9B \xE2\x80\xB9 \xE2\x80\xBA "
+        "\" &quot; \xC2\x93 \xE2\x80\x9C \xC2\x94 \xC2\x80\x9D "
+        "\xC2\xAB \xC2\xBB";
+
+    unsigned char *gold = (unsigned char *)
+        "' ' ` ` ' ' ' ` ` ' '' '' `` `` '' '' `` ''";
+    size_t buf_size = strlen((char *) buf);
+    size_t trans_size = NL_get_size_latex_quotes(buf, buf_size);   
+    unsigned char *trans = malloc(sizeof(unsigned char) * trans_size);
+    
+    NL_latex_quotes_probably_right(buf, buf_size, trans);
+    printf("BEFORE: %s\n", buf);
+    printf("AFTER : %s\n", gold);    
+    printf("TRANS : %s\n", trans);    
+
+    if (strcmp((char *) gold, (char *) trans) != 0) {
+        errors = 1;
+    }
+    free(trans); 
+    return errors;
+
+}
 
 int main() {
 
-    if (unicode_quotes_count() !=0) {
-        printf("unicode quotes counter test failed!\n");
+    if (latex_quotes_count() !=0) {
+        printf("latex quotes counter test failed!\n");
 
     } else {
-        printf("unicode quotes counter test success!\n");
-    }   
+        printf("latex quotes counter test success!\n");
+    } 
+
+    if (latex_quotes_prob_left_transform() !=0) {
+        printf("latex quotes prob left transform test failed!\n");
+
+    } else {
+        printf("latex quotes prob left transform test success!\n");
+    } 
+
+    if (latex_quotes_prob_right_transform() !=0) {
+        printf("latex quotes prob right transform test failed!\n");
+
+    } else {
+        printf("latex quotes prob right transform test success!\n");
+    } 
+
+
+
+
 
     if (ascii_quotes_count() !=0) {
         printf("ascii quotes counter test failed!\n");
@@ -277,6 +418,24 @@ int main() {
     } else {
         printf("ascii quotes counter test success!\n");
     } 
+
+    if (ascii_quotes_transform() !=0) {
+        printf("ascii quotes transform test failed!\n");
+
+    } else {
+        printf("ascii quotes transform test success!\n");
+    } 
+
+
+
+
+
+    if (unicode_quotes_count() !=0) {
+        printf("unicode quotes counter test failed!\n");
+
+    } else {
+        printf("unicode quotes counter test success!\n");
+    }   
 
 
     if (left_unicode_quotes_transform() !=0) {
