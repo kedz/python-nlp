@@ -515,3 +515,29 @@ void NL_latex_quotes_probably_right(unsigned char *p, size_t buf_length,
     %% write exec;
 
 }
+
+%%{
+
+    machine CopyNoSoftHypen;
+    alphtype unsigned char;
+
+    main := |* 
+        0xC2 0xAD;
+        any => {*transform = *fpc; transform++;};
+    *|;
+
+}%%
+
+%% write data nofinal;
+
+void NL_copy_no_softhyphen(unsigned char *p, size_t buf_length,
+        unsigned char *transform) {
+    int cs, act;
+    unsigned char *ts, *te = 0;
+    unsigned char *pe = p + buf_length; 
+    unsigned char *eof = pe;
+
+    %% write init;
+    %% write exec;
+
+}

@@ -385,7 +385,47 @@ int latex_quotes_prob_right_transform() {
 
 }
 
+int copy_no_softhyphen() {
+    int errors = 0;
+    
+    unsigned char *buf1 = (unsigned char *) 
+        "hy\xC2\xADphe\xC2\xADna\xC2\xADted";
+    size_t buf1_size = strlen((char *) buf1);
+    unsigned char *gold1 = (unsigned char *) "hyphenated";
+    unsigned char *trans1 = malloc(
+        sizeof(unsigned char) * strlen((char *) gold1));
+    NL_copy_no_softhyphen(buf1, buf1_size, trans1);
+
+    if (strcmp((char *) trans1, (char *) gold1) != 0) {
+        errors = 1;
+    }
+
+
+    unsigned char *buf2 = (unsigned char *) 
+        "hy\xC2\xADphen";
+    size_t buf2_size = strlen((char *) buf2);
+    unsigned char *gold2 = (unsigned char *) "hyphen";
+    unsigned char *trans2 = malloc(
+        sizeof(unsigned char) * strlen((char *) gold2));
+    NL_copy_no_softhyphen(buf2, buf2_size, trans2);
+
+    if (strcmp((char *) trans2, (char *) gold2) != 0) {
+        errors = 1;
+    }
+
+    free(trans1);
+    free(trans2);
+    return errors;
+}
+
+
 int main() {
+
+    if (copy_no_softhyphen() != 0) {
+        printf("copy no softhypen test failed!\n");
+    } else {
+        printf("copy no softhypen test success!\n");
+    }   
 
     if (latex_quotes_count() !=0) {
         printf("latex quotes counter test failed!\n");
