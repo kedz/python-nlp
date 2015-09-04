@@ -733,8 +733,7 @@ action HandleQuotesProbablyRight {
         WORD => NextToken;
 
         APOWORD => HandleQuotesProbablyRight;
-
-#        APOWORD2 %MarkIntermediate2 ualpha => NextIntermediate2;
+        APOWORD2 %MarkIntermediate2 ualpha => NextIntermediate2;
 #
 #        TWITTER => NextToken;
 #        REDAUX %MarkIntermediate2 [^A-Za-z] => NextIntermediate2;
@@ -827,8 +826,12 @@ action HandleQuotesProbablyRight {
 ##        MISCSYMBOL => NextToken;
 ##        SMILEY => NextToken;
 #        #LDOTS => NextToken;
+        QUOTES => HandleQuotesProbablyRight;
+
         SPACES;
         SPACENLS;
+
+
         0xEF 0xBB 0xBF => {printf("I found a byte order mark!\n");};
         any; # => { printf("the uncola: 0x%02X\n", (unsigned int)  *ts); };
     *|;

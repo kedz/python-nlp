@@ -285,3 +285,15 @@ def apoword_test_LATEX_normalize_quotes():
         assert token == gold_token.encode("utf-8")
     assert len(tokens) == len(gold)
 
+
+def apoword2_test():
+    string = u"y'all are nice y' "
+    gold = [u"y'", u"all", u"are", u"nice", u"y", u"'"]    
+
+    tokens = nlp.tokenize(string)
+    for token, gold_token in zip(tokens, gold):
+        print token, gold_token.encode("utf-8")
+        assert token == gold_token.encode("utf-8")
+    assert len(tokens) == len(gold)
+
+
