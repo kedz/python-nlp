@@ -722,17 +722,18 @@ action HandleQuotesProbablyRight {
 
         SGML => NextToken; #TODO test this
 
-#        "cont'd" => NextToken; # needed to break a weird tie between word 
-#                               # and apoword
-#
+        # needed to break a weird tie between word and apoword
+        "cont'd" => HandleQuotesProbablyRight; 
+
         SPMDASH => NormalizePTB3MDash;
         SPAMP =>  NormalizeAmp; 
         SPPUNC => NextToken;
         WORD %MarkIntermediate2 REDAUX => NextIntermediate2;
         SWORD %MarkIntermediate1 SREDAUX => NextIntermediate1;
         WORD => NextToken;
-#
-#        APOWORD => NextToken;
+
+        APOWORD => HandleQuotesProbablyRight;
+
 #        APOWORD2 %MarkIntermediate2 ualpha => NextIntermediate2;
 #
 #        TWITTER => NextToken;
