@@ -622,16 +622,26 @@ action NextIntermediate2 {
 
 action HandleQuotesProbablyRight {
     NEXT_TOKEN
-    if (normalize_quotes == QUOTES_UNICODE) {
+
+    if (normalize_quotes == QUOTES_LATEX) {
+        size_t label_length = 1 + NL_get_size_latex_quotes(ts, te - ts);
+        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
+        NL_latex_quotes_probably_right(ts, te - ts, label_str);
+        label_str[label_length - 1] = 0x01;
+        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+    } else if (normalize_quotes == QUOTES_UNICODE) {
         size_t label_length = 1 + NL_get_size_unicode_quotes(ts, te - ts);
-    
         unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
         NL_unicode_quotes_probably_right(ts, te - ts, label_str);
         label_str[label_length - 1] = 0x01;
         NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
-
+    } else if (normalize_quotes == QUOTES_ASCII) {
+        size_t label_length = 1 + NL_get_size_ascii_quotes(ts, te - ts);
+        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
+        NL_ascii_quotes(ts, te - ts, label_str);
+        label_str[label_length - 1] = 0x01;
+        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
     }
-
 }
 
 #    if (span_pos == max_span_pos) {

@@ -1815,7 +1815,7 @@ _again:
 }
 
 
-#line 504 "tokenizer_utils.rl"
+#line 503 "tokenizer_utils.rl"
 
 
 
@@ -1897,7 +1897,7 @@ static const int ProbablyRightLatexQuoteCounter_error = -1;
 static const int ProbablyRightLatexQuoteCounter_en_main = 10;
 
 
-#line 507 "tokenizer_utils.rl"
+#line 506 "tokenizer_utils.rl"
 
 void NL_latex_quotes_probably_right(unsigned char *p, size_t buf_length,
         unsigned char *transform) {
@@ -1915,7 +1915,7 @@ void NL_latex_quotes_probably_right(unsigned char *p, size_t buf_length,
 	act = 0;
 	}
 
-#line 516 "tokenizer_utils.rl"
+#line 515 "tokenizer_utils.rl"
     
 #line 1921 "tokenizer_utils.c"
 	{
@@ -2006,42 +2006,42 @@ _eof_trans:
 	{te = p+1;}
 	break;
 	case 3:
-#line 489 "tokenizer_utils.rl"
+#line 488 "tokenizer_utils.rl"
 	{te = p+1;{ *transform = '\''; transform++; }}
 	break;
 	case 4:
-#line 490 "tokenizer_utils.rl"
+#line 489 "tokenizer_utils.rl"
 	{te = p+1;{ *transform = '\''; transform++; 
                            *transform = '\''; transform++; }}
 	break;
 	case 5:
-#line 493 "tokenizer_utils.rl"
+#line 492 "tokenizer_utils.rl"
 	{te = p+1;{ *transform = '`'; transform++; }}
 	break;
 	case 6:
-#line 494 "tokenizer_utils.rl"
+#line 493 "tokenizer_utils.rl"
 	{te = p+1;{ *transform = '\''; transform++; }}
 	break;
 	case 7:
-#line 496 "tokenizer_utils.rl"
+#line 495 "tokenizer_utils.rl"
 	{te = p+1;{ *transform = '`'; transform++; 
                            *transform = '`'; transform++; }}
 	break;
 	case 8:
-#line 499 "tokenizer_utils.rl"
+#line 498 "tokenizer_utils.rl"
 	{te = p+1;{ *transform = '\''; transform++; 
                                  *transform = '\''; transform++; }}
 	break;
 	case 9:
-#line 501 "tokenizer_utils.rl"
+#line 500 "tokenizer_utils.rl"
 	{te = p+1;{*transform = *p; transform++;}}
 	break;
 	case 10:
-#line 501 "tokenizer_utils.rl"
+#line 500 "tokenizer_utils.rl"
 	{te = p;p--;{*transform = *p; transform++;}}
 	break;
 	case 11:
-#line 501 "tokenizer_utils.rl"
+#line 500 "tokenizer_utils.rl"
 	{{p = ((te))-1;}{*transform = *p; transform++;}}
 	break;
 #line 2048 "tokenizer_utils.c"
@@ -2074,6 +2074,6 @@ _again:
 
 	}
 
-#line 517 "tokenizer_utils.rl"
+#line 516 "tokenizer_utils.rl"
 
 }

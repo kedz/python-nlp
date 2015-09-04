@@ -6,7 +6,7 @@
 #include "tokenizer_utils.h"
 
 
-#line 824 "tokenizer.rl"
+#line 834 "tokenizer.rl"
 
 
 
@@ -77,7 +77,7 @@ static const unsigned char _tok_trans_keys[] = {
 	97u, 122u, 196u, 218u, 229u, 236u, 65u, 69u, 
 	73u, 79u, 85u, 97u, 101u, 105u, 111u, 117u, 
 	170u, 173u, 181u, 186u, 128u, 150u, 152u, 182u, 
-	184u, 255u, 192u, 255u, 0u, 127u, 128u, 191u, 
+	184u, 255u, 192u, 255u, 128u, 255u, 128u, 191u, 
 	128u, 189u, 140u, 132u, 134u, 136u, 138u, 142u, 
 	161u, 163u, 255u, 130u, 136u, 137u, 166u, 176u, 
 	160u, 151u, 152u, 190u, 136u, 144u, 192u, 255u, 
@@ -528,7 +528,7 @@ static const short _tok_indicies[] = {
 	49, 50, 19, 19, 23, 45, 11, 51, 
 	51, 51, 51, 51, 51, 51, 51, 51, 
 	51, 11, 19, 19, 19, 19, 11, 19, 
-	19, 19, 11, 19, 11, 19, 11, 19, 
+	19, 19, 11, 19, 11, 19, 19, 11, 
 	19, 11, 19, 11, 19, 19, 19, 19, 
 	19, 11, 11, 11, 19, 11, 19, 11, 
 	11, 19, 11, 11, 11, 19, 19, 19, 
@@ -1033,7 +1033,7 @@ static const int tok_error = -1;
 static const int tok_en_main = 265;
 
 
-#line 827 "tokenizer.rl"
+#line 837 "tokenizer.rl"
 
 #define BUFSIZE 32
 
@@ -1146,7 +1146,7 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
 	act = 0;
 	}
 
-#line 931 "tokenizer.rl"
+#line 941 "tokenizer.rl"
 
     
 #line 1153 "tokenizer.c"
@@ -1253,7 +1253,7 @@ _eof_trans:
 	{act = 10;}
 	break;
 	case 6:
-#line 817 "tokenizer.rl"
+#line 827 "tokenizer.rl"
 	{act = 16;}
 	break;
 	case 7:
@@ -1341,24 +1341,34 @@ _eof_trans:
 #line 623 "tokenizer.rl"
 	{te = p+1;{
     NEXT_TOKEN
-    if (normalize_quotes == QUOTES_UNICODE) {
+
+    if (normalize_quotes == QUOTES_LATEX) {
+        size_t label_length = 1 + NL_get_size_latex_quotes(ts, te - ts);
+        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
+        NL_latex_quotes_probably_right(ts, te - ts, label_str);
+        label_str[label_length - 1] = 0x01;
+        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+    } else if (normalize_quotes == QUOTES_UNICODE) {
         size_t label_length = 1 + NL_get_size_unicode_quotes(ts, te - ts);
-    
         unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
         NL_unicode_quotes_probably_right(ts, te - ts, label_str);
         label_str[label_length - 1] = 0x01;
         NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
-
+    } else if (normalize_quotes == QUOTES_ASCII) {
+        size_t label_length = 1 + NL_get_size_ascii_quotes(ts, te - ts);
+        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
+        NL_ascii_quotes(ts, te - ts, label_str);
+        label_str[label_length - 1] = 0x01;
+        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
     }
-
 }}
 	break;
 	case 17:
-#line 816 "tokenizer.rl"
+#line 826 "tokenizer.rl"
 	{te = p+1;{printf("I found a byte order mark!\n");}}
 	break;
 	case 18:
-#line 817 "tokenizer.rl"
+#line 827 "tokenizer.rl"
 	{te = p+1;}
 	break;
 	case 19:
@@ -1368,15 +1378,15 @@ _eof_trans:
 }}
 	break;
 	case 20:
-#line 814 "tokenizer.rl"
+#line 824 "tokenizer.rl"
 	{te = p;p--;}
 	break;
 	case 21:
-#line 815 "tokenizer.rl"
+#line 825 "tokenizer.rl"
 	{te = p;p--;}
 	break;
 	case 22:
-#line 817 "tokenizer.rl"
+#line 827 "tokenizer.rl"
 	{te = p;p--;}
 	break;
 	case 23:
@@ -1386,15 +1396,15 @@ _eof_trans:
 }}
 	break;
 	case 24:
-#line 814 "tokenizer.rl"
+#line 824 "tokenizer.rl"
 	{{p = ((te))-1;}}
 	break;
 	case 25:
-#line 815 "tokenizer.rl"
+#line 825 "tokenizer.rl"
 	{{p = ((te))-1;}}
 	break;
 	case 26:
-#line 817 "tokenizer.rl"
+#line 827 "tokenizer.rl"
 	{{p = ((te))-1;}}
 	break;
 	case 27:
@@ -1420,7 +1430,7 @@ _eof_trans:
 	}
 	}
 	break;
-#line 1424 "tokenizer.c"
+#line 1434 "tokenizer.c"
 		}
 	}
 
@@ -1433,7 +1443,7 @@ _again:
 #line 1 "NONE"
 	{ts = 0;}
 	break;
-#line 1437 "tokenizer.c"
+#line 1447 "tokenizer.c"
 		}
 	}
 
@@ -1450,7 +1460,7 @@ _again:
 
 	}
 
-#line 933 "tokenizer.rl"
+#line 943 "tokenizer.rl"
 
     *num_tokens = BUFSIZE * (num_lists - 1) + span_pos;
     NL_span **out_tokens = NL_allocate_mem_size(

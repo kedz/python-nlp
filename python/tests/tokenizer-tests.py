@@ -150,3 +150,31 @@ def word_redaux_test_UNICODE_normalize_quotes():
     for token, gold_token in zip(tokens, gold):
         assert token == gold_token.encode("utf-8")
     assert len(tokens) == len(gold)
+
+def word_redaux_test_LATEX_normalize_quotes():
+    nlp.get_global_PTB_config().normalize_quotes = u"latex"
+    string = u"Ma\u0092m you\u2019re I&apos;ll Chris's I'd you're"
+    gold = [u"Ma", u"'m", u"you", u"'re", u"I", u"'ll", u"Chris", u"'s", u"I",
+            u"'d", u"you", u"'re"]
+    tokens = nlp.tokenize(string)
+    print tokens
+    for token in tokens:
+        print token.decode("utf-8"),
+    print
+    for token, gold_token in zip(tokens, gold):
+        assert token == gold_token.encode("utf-8")
+    assert len(tokens) == len(gold)
+
+def word_redaux_test_ASCII_normalize_quotes():
+    nlp.get_global_PTB_config().normalize_quotes = u"ascii"
+    string = u"Ma\u0092m you\u2019re I&apos;ll Chris's I'd you're"
+    gold = [u"Ma", u"'m", u"you", u"'re", u"I", u"'ll", u"Chris", u"'s", u"I",
+            u"'d", u"you", u"'re"]
+    tokens = nlp.tokenize(string)
+    print tokens
+    for token in tokens:
+        print token.decode("utf-8"),
+    print
+    for token, gold_token in zip(tokens, gold):
+        assert token == gold_token.encode("utf-8")
+    assert len(tokens) == len(gold)

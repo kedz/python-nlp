@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
+#include "tokenizer_utils.h"
 
 
 typedef enum NL_normalize_quotes {
