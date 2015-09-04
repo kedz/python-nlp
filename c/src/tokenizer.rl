@@ -734,6 +734,9 @@ action HandleQuotesProbablyRight {
 
         APOWORD => HandleQuotesProbablyRight;
         APOWORD2 %MarkIntermediate2 ualpha => NextIntermediate2;
+
+        FULLURL => NextToken;
+        LIKELYURL => NextToken;
 #
 #        TWITTER => NextToken;
 #        REDAUX %MarkIntermediate2 [^A-Za-z] => NextIntermediate2;
@@ -808,6 +811,7 @@ action HandleQuotesProbablyRight {
 #
         REDAUX => HandleQuotesProbablyRight;
         SREDAUX => HandleQuotesProbablyRight;
+        QUOTES => HandleQuotesProbablyRight;
 #
 #
 ##        WORD => NextToken;
@@ -826,7 +830,6 @@ action HandleQuotesProbablyRight {
 ##        MISCSYMBOL => NextToken;
 ##        SMILEY => NextToken;
 #        #LDOTS => NextToken;
-        QUOTES => HandleQuotesProbablyRight;
 
         SPACES;
         SPACENLS;
@@ -863,7 +866,7 @@ action HandleQuotesProbablyRight {
     tokens[span_pos++] = NL_new_span(ts, te - ts, mgr);                     \
                                                                             \
     if (alert_soft_hyphen > 0) {                                            \
-        size_t size_label = te - ts - alert_soft_hyphen * 2 + 1;            \ 
+        size_t size_label = te - ts - alert_soft_hyphen * 2 + 1;            \
         unsigned char *label_str = NULL;                                    \
                                                                             \
         if (size_label > 1) {                                               \
@@ -875,7 +878,7 @@ action HandleQuotesProbablyRight {
             label_str[0] = '-';                                             \
         }                                                                   \
         label_str[size_label - 1] = 0x01;                                   \
-        NL_set_span_label(tokens[span_pos-1], label_str, size_label - 1);   \  
+        NL_set_span_label(tokens[span_pos-1], label_str, size_label - 1);   \
     }                                                                       \
     alert_soft_hyphen = 0;                                                  \
 
