@@ -175,6 +175,36 @@ int unicode_quotes_count() {
 
 }
 
+int ascii_quotes_count() {
+    int errors = 0;
+    unsigned char *buf = (unsigned char *)
+        "' &apos; \xC2\x91 \xE2\x80\x98 \xC2\x92 \xE2\x80\x99 \xE2\x80\x9A "
+        "\xE2\x80\x9B \xE2\x80\xB9 \xE2\x80\xBA "
+        "\" &quot; \xC2\x93 \xE2\x80\x98 \xC2\x94 \xC2\x80\x99 \xC2\x80\x9E "
+        "\xC2\xAB \xC2\xBB";
+
+    unsigned char *gold = (unsigned char *)
+        "' ' ' ' ' ' ' ' ' ' \" \" \" \" \" \" \" \" \"";
+
+    size_t before_size = strlen((char *) buf);
+    size_t after_size = strlen((char *) gold);
+    size_t pred_size = NL_get_size_ascii_quotes(buf, strlen((char *) buf));   
+
+    printf("UNICODE: %s\n", buf);
+    printf("ASCII: %s\n", gold);
+    printf("BEFORE SIZE: %lu\n", before_size);
+    printf("AFTER SIZE: %lu\n", after_size);
+    printf("PRED SIZE: %lu\n", pred_size);
+
+    if (after_size != pred_size) {
+        errors = 1;
+
+    }
+    
+    return errors;
+
+}
+
 int left_unicode_quotes_transform() {
 
     int errors = 0;
@@ -240,6 +270,14 @@ int main() {
     } else {
         printf("unicode quotes counter test success!\n");
     }   
+
+    if (ascii_quotes_count() !=0) {
+        printf("ascii quotes counter test failed!\n");
+
+    } else {
+        printf("ascii quotes counter test success!\n");
+    } 
+
 
     if (left_unicode_quotes_transform() !=0) {
         printf("left unicode quotes transform test failed!\n");
