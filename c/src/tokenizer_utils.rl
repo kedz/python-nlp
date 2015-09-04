@@ -258,9 +258,9 @@ void NL_unicode_quotes_probably_right(unsigned char *p, size_t buf_length,
 
     DOUBLE_QUOTES =   "&quot;"
                     | 0xC2 0x93         # U+0093
-                    | 0xE2 0x80 0x98    # U+201C unicode left double quote
+                    | 0xE2 0x80 0x9C    # U+201C unicode left double quote
                     | 0xC2 0x94         # U+0094
-                    | 0xC2 0x80 0x99    # U+201D unicode right double quote
+                    | 0xC2 0x80 0x9D    # U+201D unicode right double quote
                     | 0xC2 0x80 0x9E    # U+201E low double quote
                     | 0xC2 0xAB         # U+00AB left double angle
                     | 0xC2 0xBB         # U+00BB right double angle
@@ -288,4 +288,230 @@ size_t NL_get_size_ascii_quotes(unsigned char *p, size_t buf_length) {
     %% write exec;
 
     return size;
+}
+
+%%{
+
+    machine AsciiQuoteTransformer;
+    alphtype unsigned char;
+
+    SINGLE_QUOTES =   "&apos;" 
+                    | 0xC2 0x91         # U+0091 
+                    | 0xE2 0x80 0x98    # U+2018 unicode left single quote
+                    | 0xC2 0x92         # U+0092
+                    | 0xE2 0x80 0x99    # U+2019 unicode right single quote
+                    | 0xE2 0x80 0x9A    # U+201A low single quote
+                    | 0xE2 0x80 0x9B    # U+201B low single quote
+                    | 0xE2 0x80 0xB9    # U+2039 left pointing angle
+                    | 0xE2 0x80 0xBA    # U+203A right pointing angle
+                    ;
+
+    DOUBLE_QUOTES =   "&quot;"
+                    | 0xC2 0x93         # U+0093
+                    | 0xE2 0x80 0x9C    # U+201C unicode left double quote
+                    | 0xC2 0x94         # U+0094
+                    | 0xC2 0x80 0x9D    # U+201D unicode right double quote
+                    | 0xC2 0x80 0x9E    # U+201E low double quote
+                    | 0xC2 0xAB         # U+00AB left double angle
+                    | 0xC2 0xBB         # U+00BB right double angle
+                    ;
+
+    main := |* 
+        SINGLE_QUOTES => { *transform = '\''; transform++; };
+        DOUBLE_QUOTES => { *transform = '"'; transform++; };
+        any => { *transform = *fpc; transform++; };
+    *|;
+
+}%%
+
+%% write data nofinal;
+
+void NL_ascii_quotes(unsigned char *p, size_t buf_length,
+        unsigned char *transform) {
+    int cs, act;
+    unsigned char *ts, *te = 0;
+    unsigned char *pe = p + buf_length; 
+    unsigned char *eof = pe;
+
+    %% write init;
+    %% write exec;
+
+    return;
+}
+
+%%{
+
+    machine NonLatexQuoteCounter;
+    alphtype unsigned char;
+
+    SINGLE_QUOTES =   "'" 
+                    | "&apos;" 
+                    | 0xC2 0x91         # U+0091 
+                    | 0xE2 0x80 0x98    # U+2018 unicode left single quote
+                    | 0xC2 0x92         # U+0092
+                    | 0xE2 0x80 0x99    # U+2019 unicode right single quote
+                    | 0xE2 0x80 0x9A    # U+201A low single quote
+                    | 0xE2 0x80 0x9B    # U+201B low single quote
+                    | 0xE2 0x80 0xB9    # U+2039 left pointing angle
+                    | 0xE2 0x80 0xBA    # U+203A right pointing angle
+                    ;
+
+    DOUBLE_QUOTES =   "\""
+                    | "&quot;"
+                    | 0xC2 0x93         # U+0093
+                    | 0xE2 0x80 0x9C    # U+201C unicode left double quote
+                    | 0xC2 0x94         # U+0094
+                    | 0xC2 0x80 0x9D    # U+201D unicode right double quote
+                    | 0xC2 0xAB         # U+00AB left double angle
+                    | 0xC2 0xBB         # U+00BB right double angle
+                    ;
+
+    QUOTE =   SINGLE_QUOTES | DOUBLE_QUOTES;
+
+    main := |* 
+        SINGLE_QUOTES => {size++;};
+        DOUBLE_QUOTES => {size += 2;};
+        any => {size++;};
+    *|;
+
+}%%
+
+%% write data nofinal;
+
+size_t NL_get_size_latex_quotes(unsigned char *p, size_t buf_length) {
+    int cs, act;
+    unsigned char *ts, *te = 0;
+    unsigned char *pe = p + buf_length; 
+    unsigned char *eof = pe;
+    size_t size = 0;
+
+    %% write init;
+    %% write exec;
+
+    return size;
+}
+
+%%{
+
+    machine ProbablyLeftLatexQuoteCounter;
+    alphtype unsigned char;
+
+    SINGLE_QUOTES = "'" | "&apos;" ;
+    DOUBLE_QUOTES = "\"" | "&quot;" ;
+
+    LEFT_SINGLE_QUOTES =  0xC2 0x91         # U+0091 
+                        | 0xE2 0x80 0x98    # U+2018 unicode left single quote
+                        | 0xE2 0x80 0x9B    # U+201B low single quote
+                        | 0xE2 0x80 0xB9    # U+2039 left pointing angle
+                        ; 
+
+    RIGHT_SINGLE_QUOTES = 0xC2 0x92         # U+0092
+                        | 0xE2 0x80 0x99    # U+2019 unicode right single quote
+                        | 0xE2 0x80 0x9A    # U+201A low single quote
+                        | 0xE2 0x80 0xBA    # U+203A right pointing angle
+                        ;
+
+    LEFT_DOUBLE_QUOTES =  0xC2 0x93         # U+0093
+                        | 0xE2 0x80 0x9C    # U+201C unicode left double quote
+                        | 0xC2 0xAB         # U+00AB left double angle
+                        ;
+
+    RIGHT_DOUBLE_QUOTES = 0xC2 0x94         # U+0094
+                        | 0xC2 0x80 0x9D    # U+201D unicode right double quote
+                        | 0xC2 0xBB         # U+00BB right double angle
+                        ;
+
+
+    main := |* 
+        SINGLE_QUOTES => { *transform = '`'; transform++; };
+        DOUBLE_QUOTES => { *transform = '`'; transform++; 
+                           *transform = '`'; transform++; };
+
+        LEFT_SINGLE_QUOTES => { *transform = '`'; transform++; };
+        RIGHT_SINGLE_QUOTES => { *transform = '\''; transform++; };
+    
+        LEFT_DOUBLE_QUOTES => { *transform = '`'; transform++; 
+                           *transform = '`'; transform++; };
+    
+        RIGHT_DOUBLE_QUOTES => { *transform = '\''; transform++; 
+                                 *transform = '\''; transform++; };
+        any => {*transform = *fpc; transform++;};
+    *|;
+
+}%%
+
+%% write data nofinal;
+
+void NL_latex_quotes_probably_left(unsigned char *p, size_t buf_length,
+        unsigned char *transform) {
+    int cs, act;
+    unsigned char *ts, *te = 0;
+    unsigned char *pe = p + buf_length; 
+    unsigned char *eof = pe;
+
+    %% write init;
+    %% write exec;
+
+}
+
+%%{
+
+    machine ProbablyRightLatexQuoteCounter;
+    alphtype unsigned char;
+
+    SINGLE_QUOTES = "'" | "&apos;" ;
+    DOUBLE_QUOTES = "\"" | "&quot;" ;
+
+    LEFT_SINGLE_QUOTES =  0xC2 0x91         # U+0091 
+                        | 0xE2 0x80 0x98    # U+2018 unicode left single quote
+                        | 0xE2 0x80 0x9B    # U+201B low single quote
+                        | 0xE2 0x80 0xB9    # U+2039 left pointing angle
+                        ; 
+
+    RIGHT_SINGLE_QUOTES = 0xC2 0x92         # U+0092
+                        | 0xE2 0x80 0x99    # U+2019 unicode right single quote
+                        | 0xE2 0x80 0x9A    # U+201A low single quote
+                        | 0xE2 0x80 0xBA    # U+203A right pointing angle
+                        ;
+
+    LEFT_DOUBLE_QUOTES =  0xC2 0x93         # U+0093
+                        | 0xE2 0x80 0x9C    # U+201C unicode left double quote
+                        | 0xC2 0xAB         # U+00AB left double angle
+                        ;
+
+    RIGHT_DOUBLE_QUOTES = 0xC2 0x94         # U+0094
+                        | 0xC2 0x80 0x9D    # U+201D unicode right double quote
+                        | 0xC2 0xBB         # U+00BB right double angle
+                        ;
+
+    main := |* 
+        SINGLE_QUOTES => { *transform = '\''; transform++; };
+        DOUBLE_QUOTES => { *transform = '\''; transform++; 
+                           *transform = '\''; transform++; };
+
+        LEFT_SINGLE_QUOTES => { *transform = '`'; transform++; };
+        RIGHT_SINGLE_QUOTES => { *transform = '\''; transform++; };
+    
+        LEFT_DOUBLE_QUOTES => { *transform = '`'; transform++; 
+                           *transform = '`'; transform++; };
+    
+        RIGHT_DOUBLE_QUOTES => { *transform = '\''; transform++; 
+                                 *transform = '\''; transform++; };
+        any => {*transform = *fpc; transform++;};
+    *|;
+
+}%%
+
+%% write data nofinal;
+
+void NL_latex_quotes_probably_right(unsigned char *p, size_t buf_length,
+        unsigned char *transform) {
+    int cs, act;
+    unsigned char *ts, *te = 0;
+    unsigned char *pe = p + buf_length; 
+    unsigned char *eof = pe;
+
+    %% write init;
+    %% write exec;
+
 }
