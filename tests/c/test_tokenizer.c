@@ -396,19 +396,23 @@ int copy_no_softhyphen() {
         sizeof(unsigned char) * strlen((char *) gold1));
     NL_copy_no_softhyphen(buf1, buf1_size, trans1);
 
+    printf("TRANS1 : %s\n", trans1);
+    printf("GOLD1  : %s\n", gold1);
     if (strcmp((char *) trans1, (char *) gold1) != 0) {
         errors = 1;
     }
 
 
     unsigned char *buf2 = (unsigned char *) 
-        "hy\xC2\xADphen";
+        "hy\xC2\xADphen \xC2\xAE";
     size_t buf2_size = strlen((char *) buf2);
-    unsigned char *gold2 = (unsigned char *) "hyphen";
+    unsigned char *gold2 = (unsigned char *) "hyphen \xC2\xAE";
     unsigned char *trans2 = malloc(
         sizeof(unsigned char) * strlen((char *) gold2));
     NL_copy_no_softhyphen(buf2, buf2_size, trans2);
 
+    printf("TRANS2 : %s\n", trans2);
+    printf("GOLD2  : %s\n", gold2);
     if (strcmp((char *) trans2, (char *) gold2) != 0) {
         errors = 1;
     }
