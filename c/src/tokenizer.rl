@@ -735,8 +735,8 @@ action HandleQuotesProbablyRight {
         APOWORD => HandleQuotesProbablyRight;
         APOWORD2 %MarkIntermediate2 ualpha => NextIntermediate2;
 
-        FULLURL => NextToken;
-        LIKELYURL => NextToken;
+    #    FULLURL => NextToken; # TODO add escaping for these
+    #    LIKELYURL => NextToken;
 #
 #        TWITTER => NextToken;
 #        REDAUX %MarkIntermediate2 [^A-Za-z] => NextIntermediate2;
@@ -928,16 +928,8 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
     head->tokens = tokens;
 
     int span_pos = 0;
-    int max_span_pos = BUFSIZE;
-
-    unsigned char *pe_tmp;
-    int count = 0;
-    unsigned char *copy_pos = NULL;
-
     int alert_soft_hyphen = 0;
 
-    int stack[2];
-    int top;
 
     int cs, act;
     unsigned char *ts, *te = 0;
