@@ -2079,54 +2079,41 @@ _again:
 }
 
 
-#line 529 "tokenizer_utils.rl"
+#line 539 "tokenizer_utils.rl"
 
 
 
 #line 2087 "tokenizer_utils.c"
 static const char _CopyNoSoftHypen_actions[] = {
-	0, 1, 0, 1, 1, 1, 2, 1, 
-	3, 1, 4
+	0, 1, 0, 1, 1
 };
 
 static const char _CopyNoSoftHypen_key_offsets[] = {
-	0, 1
+	0, 1, 2
 };
 
 static const unsigned char _CopyNoSoftHypen_trans_keys[] = {
-	194u, 173u, 0
+	194u, 173u, 194u, 0
 };
 
 static const char _CopyNoSoftHypen_single_lengths[] = {
-	1, 1
+	1, 1, 1
 };
 
 static const char _CopyNoSoftHypen_range_lengths[] = {
-	0, 0
+	0, 0, 0
 };
 
 static const char _CopyNoSoftHypen_index_offsets[] = {
-	0, 2
+	0, 2, 4
 };
 
 static const char _CopyNoSoftHypen_trans_targs[] = {
-	1, 0, 0, 0, 0, 0
+	1, 2, 2, 2, 1, 2, 0
 };
 
 static const char _CopyNoSoftHypen_trans_actions[] = {
-	0, 7, 5, 9, 9, 0
-};
-
-static const char _CopyNoSoftHypen_to_state_actions[] = {
-	1, 0
-};
-
-static const char _CopyNoSoftHypen_from_state_actions[] = {
-	3, 0
-};
-
-static const char _CopyNoSoftHypen_eof_trans[] = {
-	0, 5
+	0, 1, 0, 3, 0, 1, 0
 };
 
 static const int CopyNoSoftHypen_start = 0;
@@ -2135,27 +2122,22 @@ static const int CopyNoSoftHypen_error = -1;
 static const int CopyNoSoftHypen_en_main = 0;
 
 
-#line 532 "tokenizer_utils.rl"
+#line 542 "tokenizer_utils.rl"
 
 void NL_copy_no_softhyphen(unsigned char *p, size_t buf_length,
         unsigned char *transform) {
-    int cs, act;
-    unsigned char *ts, *te = 0;
+    int cs;
     unsigned char *pe = p + buf_length; 
-    unsigned char *eof = pe;
 
     
-#line 2149 "tokenizer_utils.c"
+#line 2134 "tokenizer_utils.c"
 	{
 	cs = CopyNoSoftHypen_start;
-	ts = 0;
-	te = 0;
-	act = 0;
 	}
 
-#line 541 "tokenizer_utils.rl"
+#line 549 "tokenizer_utils.rl"
     
-#line 2159 "tokenizer_utils.c"
+#line 2141 "tokenizer_utils.c"
 	{
 	int _klen;
 	unsigned int _trans;
@@ -2166,18 +2148,6 @@ void NL_copy_no_softhyphen(unsigned char *p, size_t buf_length,
 	if ( p == pe )
 		goto _test_eof;
 _resume:
-	_acts = _CopyNoSoftHypen_actions + _CopyNoSoftHypen_from_state_actions[cs];
-	_nacts = (unsigned int) *_acts++;
-	while ( _nacts-- > 0 ) {
-		switch ( *_acts++ ) {
-	case 1:
-#line 1 "NONE"
-	{ts = p;}
-	break;
-#line 2178 "tokenizer_utils.c"
-		}
-	}
-
 	_keys = _CopyNoSoftHypen_trans_keys + _CopyNoSoftHypen_key_offsets[cs];
 	_trans = _CopyNoSoftHypen_index_offsets[cs];
 
@@ -2227,7 +2197,6 @@ _resume:
 	}
 
 _match:
-_eof_trans:
 	cs = _CopyNoSoftHypen_trans_targs[_trans];
 
 	if ( _CopyNoSoftHypen_trans_actions[_trans] == 0 )
@@ -2239,48 +2208,31 @@ _eof_trans:
 	{
 		switch ( *_acts++ )
 		{
-	case 2:
+	case 0:
 #line 525 "tokenizer_utils.rl"
-	{te = p+1;}
+	{
+        *transform = *(p); transform++;
+    }
 	break;
-	case 3:
-#line 526 "tokenizer_utils.rl"
-	{te = p+1;{*transform = *p; transform++;}}
+	case 1:
+#line 529 "tokenizer_utils.rl"
+	{
+        *transform = *(p - 1);
+        transform++;       
+        *transform = *p;
+        transform++;       
+    }
 	break;
-	case 4:
-#line 526 "tokenizer_utils.rl"
-	{te = p;p--;{*transform = *p; transform++;}}
-	break;
-#line 2255 "tokenizer_utils.c"
+#line 2227 "tokenizer_utils.c"
 		}
 	}
 
 _again:
-	_acts = _CopyNoSoftHypen_actions + _CopyNoSoftHypen_to_state_actions[cs];
-	_nacts = (unsigned int) *_acts++;
-	while ( _nacts-- > 0 ) {
-		switch ( *_acts++ ) {
-	case 0:
-#line 1 "NONE"
-	{ts = 0;}
-	break;
-#line 2268 "tokenizer_utils.c"
-		}
-	}
-
 	if ( ++p != pe )
 		goto _resume;
 	_test_eof: {}
-	if ( p == eof )
-	{
-	if ( _CopyNoSoftHypen_eof_trans[cs] > 0 ) {
-		_trans = _CopyNoSoftHypen_eof_trans[cs] - 1;
-		goto _eof_trans;
-	}
 	}
 
-	}
-
-#line 542 "tokenizer_utils.rl"
+#line 550 "tokenizer_utils.rl"
 
 }

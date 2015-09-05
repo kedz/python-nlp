@@ -521,10 +521,20 @@ void NL_latex_quotes_probably_right(unsigned char *p, size_t buf_length,
     machine CopyNoSoftHypen;
     alphtype unsigned char;
 
-    main := |* 
-        0xC2 0xAD;
-        any => {*transform = *fpc; transform++;};
-    *|;
+    SF = 0xC2 0xAD;
+    action Act1 {
+        *transform = *(fpc); transform++;
+    }
+
+    action Act2 {
+        *transform = *(fpc - 1);
+        transform++;       
+        *transform = *fpc;
+        transform++;       
+    }
+
+    main := ( (0xC2 (0xAD | ^0xAD >Act2) | ^0xC2 >Act1) )+ ;
+              
 
 }%%
 
@@ -532,10 +542,8 @@ void NL_latex_quotes_probably_right(unsigned char *p, size_t buf_length,
 
 void NL_copy_no_softhyphen(unsigned char *p, size_t buf_length,
         unsigned char *transform) {
-    int cs, act;
-    unsigned char *ts, *te = 0;
+    int cs;
     unsigned char *pe = p + buf_length; 
-    unsigned char *eof = pe;
 
     %% write init;
     %% write exec;
