@@ -279,8 +279,16 @@
         )("/"[^ \t\n\f\r"<>|()]+ 
              [^ \t\n\f\r"<>|.!?(){},\-])?;
 #/* &lt;,< should match &gt;,>, but that's too complicated */
-#
-#    EMAIL = ("&lt;"|"<")?[a-zA-Z0-9]
+#o
+ 
+#EMAIL = (&lt;|<)?[a-zA-Z0-9][^ \t\n\f\r\"<>|()\u00A0{}]*@([^ \t\n\f\r\"<>|(){}.\u00A0]+\.)*([^ \t\n\f\r\"<>|(){}.\u00A0]+)(&gt;|>)?
+
+
+   EMAIL = ("&lt;"|"<")? [a-zA-Z0-9] [^ \t\n\f\r"<>|(){}]* 
+        '@'
+        ([^ \t\n\f\r"<>|(){}.]+ '.')*
+        ([^ \t\n\f\r"<>|(){}.]+) ('&gt;'|'>')?
+        ;
 #        !(([\t\n\f\r"<>|(){}]|0xC2 0xA0)*)
 #        "@"
 #            ((!(([ \t\n\f\r"<>|(){}.]|0xC2 0xA0)+)) 
@@ -735,10 +743,11 @@ action HandleQuotesProbablyRight {
         APOWORD => HandleQuotesProbablyRight;
         APOWORD2 %MarkIntermediate2 ualpha => NextIntermediate2;
 
-    #    FULLURL => NextToken; # TODO add escaping for these
-    #    LIKELYURL => NextToken;
+   #     FULLURL => NextToken; # TODO add escaping for these
+   #     LIKELYURL => NextToken;
+   #     EMAIL => NextToken; # TODO: can't get this to work
 #
-#        TWITTER => NextToken;
+        TWITTER => NextToken;
 #        REDAUX %MarkIntermediate2 [^A-Za-z] => NextIntermediate2;
 #        SREDAUX %MarkIntermediate1 [^A-Za-z] => NextIntermediate1;
 #
