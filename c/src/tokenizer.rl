@@ -50,6 +50,13 @@
 
     SPACES = SPACE+;
 
+    ALL_SPACES =      SPACES 
+                    | 0xE2 0x80 0x8B  # U+200B zero width space
+                    | 0xE2 0x80 0x8E  # U+200E left-to-right mark
+                    | 0xE2 0x80 0x8F  # U+200F right-to-left mark
+                    | 0xEF 0xBB 0xBF  # U+FEFF zero width no-break space
+                    ;
+
     NEWLINE = "\r"
         | "\r" ? "\n" 
         | 0xE2 0x80 0xA8
@@ -71,7 +78,7 @@
     DATE = DIGIT {1,2} [\-\/] DIGIT {1,2} [\-\/] DIGIT {2,4};
 
     NUM = DIGIT+ 
-        | DIGIT* ( ("."|":"|","|0xC2 0xAD|0xD9 0xAB|0xD9 0xAC) DIGIT+ )+;
+        | DIGIT* ( ("."|":"|","|0xC2 0xAD %AlertSoftHyphen |0xD9 0xAB|0xD9 0xAC) DIGIT+ )+;
 
     NUMBER = [\-\+]? NUM;
 
@@ -407,12 +414,17 @@
         | /C.D.s/i 
         | /pro-/i
         | /anti-/i 
-        | [Ss] ("&" | "&amp;") [Pp]"-500"
-        | [Ss] ("&"|"&amp;") /Ls/i
+        | [Ss] "&" [Pp]"-500"
+        | [Ss] "&" /Ls/i
         | /Cap/i APOS [Nn]
         | [Cc] APOS /est/i;
+
+    TBSPEC_SampP = [Ss] "&amp;" [Pp] "-500";
+    TBSPEC_SampLs = [Ss] "&amp;" /Ls/i;
+
     TBSPEC2 = APOS [0-9][0-9];
     BANGWORDS = ("E"|/Yahoo/i|/Jeopardy/i) "!";
+    BANGMAGAZINES = /ok/i "!";
  
     all_word = SPMDASH|
           SPAMP
@@ -674,6 +686,88 @@ action NextIntermediate2 {
     te = '\0';                                           
 }
 
+action NextIntermediateHandleProbablyRightQuotes1 {
+    if (span_pos == BUFSIZE) {                           
+        __token_list *next_slab = NL_allocate_mem_size(  
+            mgr, sizeof(__token_list));                  
+        next_slab->next = NULL;                          
+        next_slab->tokens = NL_allocate_mem_size(        
+            mgr, sizeof(NL_span *) * BUFSIZE);           
+        tail->next = next_slab;                          
+        tail = tail->next;                               
+        num_lists++;                                     
+        span_pos = 0;                                    
+        tokens = next_slab->tokens;                      
+    }                                                    
+    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, mgr); 
+
+    if (normalize_quotes == QUOTES_LATEX) {
+        size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti1 - ts);
+        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
+        NL_latex_quotes_probably_right(ts, ti1 - ts, label_str);
+        label_str[label_length - 1] = 0x01;
+        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+    } else if (normalize_quotes == QUOTES_UNICODE) {
+        size_t label_length = 1 + NL_get_size_unicode_quotes(ts, ti1 - ts);
+        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
+        NL_unicode_quotes_probably_right(ts, ti1 - ts, label_str);
+        label_str[label_length - 1] = 0x01;
+        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+    } else if (normalize_quotes == QUOTES_ASCII) {
+        size_t label_length = 1 + NL_get_size_ascii_quotes(ts, ti1 - ts);
+        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
+        NL_ascii_quotes(ts, ti1 - ts, label_str);
+        label_str[label_length - 1] = 0x01;
+        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+    }
+    alert_soft_hyphen = 0;
+    ts = ti1;                                            
+    fpc = ti1 - 1;                                       
+    te = '\0';                                           
+}
+
+
+action NextIntermediateHandleProbablyRightQuotes2 {
+    if (span_pos == BUFSIZE) {                           
+        __token_list *next_slab = NL_allocate_mem_size(  
+            mgr, sizeof(__token_list));                  
+        next_slab->next = NULL;                          
+        next_slab->tokens = NL_allocate_mem_size(        
+            mgr, sizeof(NL_span *) * BUFSIZE);           
+        tail->next = next_slab;                          
+        tail = tail->next;                               
+        num_lists++;                                     
+        span_pos = 0;                                    
+        tokens = next_slab->tokens;                      
+    }                                                    
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+
+    if (normalize_quotes == QUOTES_LATEX) {
+        size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti2 - ts);
+        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
+        NL_latex_quotes_probably_right(ts, ti2 - ts, label_str);
+        label_str[label_length - 1] = 0x01;
+        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+    } else if (normalize_quotes == QUOTES_UNICODE) {
+        size_t label_length = 1 + NL_get_size_unicode_quotes(ts, ti2 - ts);
+        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
+        NL_unicode_quotes_probably_right(ts, ti2 - ts, label_str);
+        label_str[label_length - 1] = 0x01;
+        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+    } else if (normalize_quotes == QUOTES_ASCII) {
+        size_t label_length = 1 + NL_get_size_ascii_quotes(ts, ti2 - ts);
+        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
+        NL_ascii_quotes(ts, ti2 - ts, label_str);
+        label_str[label_length - 1] = 0x01;
+        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+    }
+    alert_soft_hyphen = 0;
+    ts = ti2;                                            
+    fpc = ti2 - 1;                                       
+    te = '\0';                                           
+}
+
+
 action HandleQuotesProbablyRight {
     NEXT_TOKEN
 
@@ -717,6 +811,12 @@ action HandleQuotesProbablyRight {
 #
 #
 
+    action TokenizeNewline {
+        if (tokenize_newlines == 1) {
+            NEXT_TOKEN
+            NL_set_span_label(tokens[span_pos-1], newline_token, NL_LEN);     
+        }
+    }
 
     main := |*
         [cC]"++" => NextToken;
@@ -748,24 +848,55 @@ action HandleQuotesProbablyRight {
    #     EMAIL => NextToken; # TODO: can't get this to work
 #
         TWITTER => NextToken;
-#        REDAUX %MarkIntermediate2 [^A-Za-z] => NextIntermediate2;
-#        SREDAUX %MarkIntermediate1 [^A-Za-z] => NextIntermediate1;
+        REDAUX %MarkIntermediate2 [^A-Za-z] => 
+            NextIntermediateHandleProbablyRightQuotes2;
+        SREDAUX %MarkIntermediate1 [^A-Za-z] => 
+            NextIntermediateHandleProbablyRightQuotes1;
 #
-#        DATE => NextToken;
-#
-#        NUMBER => NextToken;
-#        SUBSUPNUM => NextToken;
+        DATE => NextToken; #TODO escape slashes
+        NUMBER => NextToken;
+        SUBSUPNUM => NextToken;
 #
 #        FRAC => NextToken;
 #        FRAC2 => NextToken;
 #
-#        TBSPEC => NextToken;
-#        BANGWORDS => NextToken;
+        TBSPEC => NextToken;
+        TBSPEC_SampP => {
+            NEXT_TOKEN            
+            unsigned char *label_str = NL_allocate_mem_size(mgr, 8);
+            label_str[0] = *ts;
+            label_str[1] = '&';
+            label_str[2] = *(ts +6);                                       
+            label_str[3] = '-';
+            label_str[4] = '5';
+            label_str[5] = '0';
+            label_str[6] = '0';
+            label_str[7] = 0x01;
+            NL_set_span_label(tokens[span_pos-1], label_str, 7);
+
+        };
+
+        TBSPEC_SampLs => {
+            NEXT_TOKEN
+            
+            unsigned char *label_str = NL_allocate_mem_size(mgr, 5);
+            label_str[0] = *ts;
+            label_str[1] = '&';
+            label_str[2] = *(ts +6);                                       
+            label_str[3] = *(ts +7);            
+            label_str[4] = 0x01;
+            NL_set_span_label(tokens[span_pos-1], label_str, 4);
+
+        };
+
+        BANGWORDS => NextToken;
+        BANGMAGAZINES %MarkIntermediate1 SPACENL /magazine/i =>
+            NextIntermediate1;
 #
 #        THING3 => NextToken;
 #
-#        DOLSIGN => NextToken;
-#        DOLSIGN2 => NextToken;
+        DOLSIGN => NextToken;
+        DOLSIGN2 => NextToken;
 #
 #
 #        ABBREV3 %MarkIntermediate1 SPACENL? udigit => NextIntermediate1;
@@ -818,9 +949,6 @@ action HandleQuotesProbablyRight {
 #
 #        "/" => NextToken;
 #
-        REDAUX => HandleQuotesProbablyRight;
-        SREDAUX => HandleQuotesProbablyRight;
-        QUOTES => HandleQuotesProbablyRight;
 #
 #
 ##        WORD => NextToken;
@@ -836,13 +964,46 @@ action HandleQuotesProbablyRight {
 # #       EMAIL => NextToken;
 #     #   all_word => NextToken;
 #
-##        MISCSYMBOL => NextToken;
 ##        SMILEY => NextToken;
 #        #LDOTS => NextToken;
 
-        SPACES;
-        SPACENLS;
+    
+        REDAUX => HandleQuotesProbablyRight;
+        SREDAUX => HandleQuotesProbablyRight;
+        QUOTES => HandleQuotesProbablyRight; ## TODO: TEST THIS I THINK I 
+                                             ## FUCKED UP THE CP1252 PARTS
 
+        FAKEDUCKFEET => NextToken;
+
+        MISCSYMBOL => NextToken;
+
+        0x95 => {
+            NEXT_TOKEN
+            NL_set_span_label(tokens[span_pos-1], uni_bullet, BULLET_LEN);     
+        };
+        0x99 => {
+            NEXT_TOKEN
+            NL_set_span_label(tokens[span_pos-1], uni_tm, TM_LEN);     
+        };
+
+
+
+#{ return getNext("\u2022", yytext()); } /* cp1252 bullet mapped to unicode */
+#\u0099          { return getNext("\u2122", yytext()); } /* cp1252 TM sign mapped to unicode */
+
+
+        ALL_SPACES;
+        '\0' => {
+            fwrite("Warning: tokenizer found null character.\n", 
+                   1, 41, stderr);
+        };
+
+        NEWLINE => TokenizeNewline;
+
+        #SPACENLS;
+
+        /&nbsp;/i ; # In CORENLP this is needed for invertible mode but we are
+                    # always invertible.
 
         0xEF 0xBB 0xBF => {printf("I found a byte order mark!\n");};
         any; # => { printf("the uncola: 0x%02X\n", (unsigned int)  *ts); };
@@ -925,6 +1086,15 @@ const static NL_label ptb3dash = (NL_label) "--\x00";
 const static NL_label amp = (NL_label) "&\x00";
 #define AMP_LEN 1
 
+const static NL_label newline_token = (NL_label) "*NL*\x00";
+#define NL_LEN 4
+
+const static NL_label uni_bullet = (NL_label) "\xE2\x80\xA2\x00";
+#define BULLET_LEN 3
+
+const static NL_label uni_tm = (NL_label) "\xE2\x84\xA2\x00";
+#define TM_LEN 3
+
 NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len, 
         size_t *num_tokens, NL_PTBTokConfig *cfg, NL_v_memmgr *mgr) {
 
@@ -966,6 +1136,11 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
     NL_normalize_quotes normalize_quotes = QUOTES_NONE;
     if (cfg != NULL) {
         normalize_quotes = cfg->normalize_quotes;
+    }
+
+    int tokenize_newlines = 0;
+    if (cfg != NULL) {
+        tokenize_newlines = cfg->tokenize_newlines;
     }
 
     %% write init;
