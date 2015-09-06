@@ -94,6 +94,22 @@ cdef class PTBTokenizerConfigWrapper(object):
                     u"Property 'normalize_quotes' takes 1 of 4 values: " \
                     + u"'unicode', 'ascii', 'latex', or None.")
 
+    property tokenize_newlines:
+        u"""When true, tokenizer tokenizes things like \\n and \\r\\n."""
+
+        def __get__(self):
+            if self._cfg.tokenize_newlines == 1:
+                return True
+            else:
+                return False
+
+        def __set__(self, value):
+            if bool(value):
+                self._cfg.tokenize_newlines = 1
+            else:
+                self._cfg.tokenize_newlines = 0
+
+
     def __str__(self):
         return "PTBTokenizerConfigWrapper\n" \
             + " ::    normalize dashes: {}\n".format(
@@ -102,7 +118,8 @@ cdef class PTBTokenizerConfigWrapper(object):
                     self.normalize_amp) \
             + " :: split assimilations: {}\n".format(
                     self.split_assimilations) \
-            + " ::    normalize quotes: {}".format(self.normalize_quotes)
+            + " ::    normalize quotes: {}".format(self.normalize_quotes) \
+            + " ::   tokenize newlines: {}".format(self.tokenize_newlines)
 
     def __dealloc__(self):
         print "PTBTokenizerConfigWrapper.__dealloc__()"

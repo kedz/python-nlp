@@ -10,6 +10,8 @@
             "-std=c11"
         ], 
         "extra_link_args": [
+            "-L/home/kedz/projects2015/python-nlp/python-nlp/lib", 
+            "-lnlp", 
             "-O9"
         ], 
         "include_dirs": [
