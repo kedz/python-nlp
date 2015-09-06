@@ -686,6 +686,46 @@ action NextIntermediate2 {
     te = '\0';                                           
 }
 
+action NextIntermediateHandleProbablyLeftQuotes1 {
+    if (span_pos == BUFSIZE) {                           
+        __token_list *next_slab = NL_allocate_mem_size(  
+            mgr, sizeof(__token_list));                  
+        next_slab->next = NULL;                          
+        next_slab->tokens = NL_allocate_mem_size(        
+            mgr, sizeof(NL_span *) * BUFSIZE);           
+        tail->next = next_slab;                          
+        tail = tail->next;                               
+        num_lists++;                                     
+        span_pos = 0;                                    
+        tokens = next_slab->tokens;                      
+    }                                                    
+    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, mgr); 
+
+    if (normalize_quotes == QUOTES_LATEX) {
+        size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti1 - ts);
+        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
+        NL_latex_quotes_probably_left(ts, ti1 - ts, label_str);
+        label_str[label_length - 1] = 0x01;
+        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+    } else if (normalize_quotes == QUOTES_UNICODE) {
+        size_t label_length = 1 + NL_get_size_unicode_quotes(ts, ti1 - ts);
+        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
+        NL_unicode_quotes_probably_left(ts, ti1 - ts, label_str);
+        label_str[label_length - 1] = 0x01;
+        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+    } else if (normalize_quotes == QUOTES_ASCII) {
+        size_t label_length = 1 + NL_get_size_ascii_quotes(ts, ti1 - ts);
+        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
+        NL_ascii_quotes(ts, ti1 - ts, label_str);
+        label_str[label_length - 1] = 0x01;
+        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+    }
+    alert_soft_hyphen = 0;
+    ts = ti1;                                            
+    fpc = ti1 - 1;                                       
+    te = '\0';                                           
+}
+
 action NextIntermediateHandleProbablyRightQuotes1 {
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -726,6 +766,46 @@ action NextIntermediateHandleProbablyRightQuotes1 {
     te = '\0';                                           
 }
 
+
+action NextIntermediateHandleProbablyLeftQuotes2 {
+    if (span_pos == BUFSIZE) {                           
+        __token_list *next_slab = NL_allocate_mem_size(  
+            mgr, sizeof(__token_list));                  
+        next_slab->next = NULL;                          
+        next_slab->tokens = NL_allocate_mem_size(        
+            mgr, sizeof(NL_span *) * BUFSIZE);           
+        tail->next = next_slab;                          
+        tail = tail->next;                               
+        num_lists++;                                     
+        span_pos = 0;                                    
+        tokens = next_slab->tokens;                      
+    }                                                    
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+
+    if (normalize_quotes == QUOTES_LATEX) {
+        size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti2 - ts);
+        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
+        NL_latex_quotes_probably_left(ts, ti2 - ts, label_str);
+        label_str[label_length - 1] = 0x01;
+        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+    } else if (normalize_quotes == QUOTES_UNICODE) {
+        size_t label_length = 1 + NL_get_size_unicode_quotes(ts, ti2 - ts);
+        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
+        NL_unicode_quotes_probably_left(ts, ti2 - ts, label_str);
+        label_str[label_length - 1] = 0x01;
+        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+    } else if (normalize_quotes == QUOTES_ASCII) {
+        size_t label_length = 1 + NL_get_size_ascii_quotes(ts, ti2 - ts);
+        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
+        NL_ascii_quotes(ts, ti2 - ts, label_str);
+        label_str[label_length - 1] = 0x01;
+        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+    }
+    alert_soft_hyphen = 0;
+    ts = ti2;                                            
+    fpc = ti2 - 1;                                       
+    te = '\0';                                           
+}
 
 action NextIntermediateHandleProbablyRightQuotes2 {
     if (span_pos == BUFSIZE) {                           
@@ -967,9 +1047,18 @@ action HandleQuotesProbablyRight {
 ##        SMILEY => NextToken;
 #        #LDOTS => NextToken;
 
-    
+   
         REDAUX => HandleQuotesProbablyRight;
         SREDAUX => HandleQuotesProbablyRight;
+
+        # This pattern is meant to be a negative case of the next.
+        "'" %MarkIntermediate2 [A-Za-z] 0xC2 0xA0 =>
+             NextIntermediateHandleProbablyRightQuotes2;
+
+        "'" %MarkIntermediate2 [A-Za-z][^ \t\n\r] =>
+             NextIntermediateHandleProbablyLeftQuotes2;
+ 
+
         QUOTES => HandleQuotesProbablyRight; ## TODO: TEST THIS I THINK I 
                                              ## FUCKED UP THE CP1252 PARTS
 
