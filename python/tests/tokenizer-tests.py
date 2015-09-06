@@ -450,7 +450,58 @@ def dolsign2_test_normalize():
 #  }
 
 
+def right_quote_weirdness_NO_normalize_test():
+    """Should match this pattern: '/[A-Za-z][^ \t\n\r\u00A0] but there is 
+    difficulty expressing the intersection of single and double character
+    negation."""
+
+    nlp.get_global_PTB_config().normalize_quotes = None    
+    string = u"'At last 'a\u00A2 'a\n 'a 'a\u00A0"
+    gold = [u"'", u"At", u"last", u"'", u"a", u"\u00A2", 
+            u"'", u"a", u"'", u"a", u"'", u"a"]
+
+    tokens = nlp.tokenize(string)
+    print "GOLD  ", gold
+    print "ACTUAL", tokens
+    for token, gold_token in zip(tokens, gold):
+        print token, gold_token.encode("utf-8")
+        assert token == gold_token.encode("utf-8")
+    assert len(tokens) == len(gold)
+
+def right_quote_weirdness_LATEX_normalize_test():
+
+    nlp.get_global_PTB_config().normalize_quotes = u"latex"
+    string = u"'At last 'a\u00A2 'a\n 'a 'a\u00A0"
+    gold = [u"`", u"At", u"last", u"`", u"a", u"\u00A2", 
+            u"'", u"a", u"'", u"a", u"'", u"a"]
+
+    tokens = nlp.tokenize(string)
+    print "GOLD  ", gold
+    print "ACTUAL", tokens
+    for token, gold_token in zip(tokens, gold):
+        print token, gold_token.encode("utf-8")
+        assert token == gold_token.encode("utf-8")
+    assert len(tokens) == len(gold)
+
+def right_quote_weirdness_UNICODE_normalize_test():
+
+    nlp.get_global_PTB_config().normalize_quotes = u"unicode"
+    string = u"'At last 'a\u00A2 'a\n 'a 'a\u00A0"
+    gold = [u"\u2018", u"At", u"last", u"\u2018", u"a", u"\u00A2", 
+            u"\u2019", u"a", u"\u2019", u"a", u"\u2019", u"a"]
+
+    tokens = nlp.tokenize(string)
+    print "GOLD  ", gold
+    print "ACTUAL", tokens
+    for token, gold_token in zip(tokens, gold):
+        print token, gold_token.encode("utf-8")
+        assert token == gold_token.encode("utf-8")
+    assert len(tokens) == len(gold)
+
+
+
 def terminal_redaux_test():
+    nlp.get_global_PTB_config().normalize_quotes = None
     string = u"test ends with you're"
     gold = [u"test", u"ends", u"with", u"you", u"'re"]
 
