@@ -239,7 +239,7 @@
     THING = ( [dDoOlL] APOSETCETERA (ualnum) )?
             ( ualnum )+
             ( HYPHEN ( [dDoOlL] APOSETCETERA ualnum )? ualnum+ )*;
-    THINGA = [A-Z]+ ( ("+" | "&" | SPAMP ) [A-Z]+ )+ ;
+    THINGA = [A-Z]+ ( ("+" | "&" | SPAMP %{ num_amps++; } ) [A-Z]+ )+ ;
     THING3 = [A-Za-z0-9]+ ("-" [A-Za-z]+ ){0,2} 
         ( "\\"? "/" [A-Za-z0-9]+ ("-" [A-Za-z]+ ){0,2} ){1,2} ;
 
@@ -555,6 +555,18 @@ action NormalizeAmp {
     }
 
 }
+
+action ConvertAmp {
+    NEXT_TOKEN
+    if (normalize_amp == 1 && num_amps > 0) {
+        size_t norm_size = te - ts - 4 * num_amps;
+        unsigned char *norm_str = NL_allocate_mem_size(mgr, norm_size+1);
+        NL_normalize_ampersand(ts, te - ts, norm_str);
+        NL_set_span_label(tokens[span_pos-1], norm_str, norm_size);     
+    }
+    num_amps = 0;
+}
+
 #action NormalizedAmpNext {
 #    if (span_pos == max_span_pos) {
 #        max_span_pos = max_span_pos * 2;
@@ -1074,7 +1086,8 @@ action HandleQuotesProbablyRight {
 ##        SMILEY => NextToken;
 #        #LDOTS => NextToken;
 
-   
+        THINGA => ConvertAmp;
+
         REDAUX => HandleQuotesProbablyRight;
         SREDAUX => HandleQuotesProbablyRight;
 
@@ -1233,6 +1246,7 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
 
     int span_pos = 0;
     int alert_soft_hyphen = 0;
+    size_t num_amps = 0;
 
 
     int cs, act;
