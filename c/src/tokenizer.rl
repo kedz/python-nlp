@@ -110,14 +110,18 @@
             | 0xE2 0x85 0x93..0x9E # u+2153 .. u+215E
             ;
 
+
     DOLSIGN = ([A-Z]*"$"|"#");
-    DOLSIGN2 =    0xC2 0xA2 # u+00A2 
-                | 0xC2 0xA3 # u+00A3 
-                | 0xC2 0xA4 # u+00A4 
-                | 0xC2 0xA5 # u+00A5 
-                | 0xC2 0x80 # u+0080 
-                | 0xE2 0x82 0xA0 # u+20A0 
-                | 0xE2 0x82 0xAC # u+20AC 
+
+    DOLSIGN2_NORM =   0xC2 0x80 # u+0080 
+                    | 0xC2 0xA4 # u+00A4 
+                    | 0xE2 0x82 0xA0 # u+20A0 
+                    | 0xE2 0x82 0xAC # u+20AC 
+                    ;
+    DOLSIGN2_CENTS = 0xC2 0xA2 ; # u+00A2 
+    DOLSIGN2_POUNDS = 0xC2 0xA3 ; # u+00A3
+
+    DOLSIGN2 =    0xC2 0xA5 # u+00A5 
                 | 0xD8 0x8B # u+060B 
                 | 0xE0 0xB8 0xBF # u+0E3F 
                 | 0xE2 0x82 0xA4 # u+20A4 
@@ -977,6 +981,29 @@ action HandleQuotesProbablyRight {
 #
         DOLSIGN => NextToken;
         DOLSIGN2 => NextToken;
+        DOLSIGN2_CENTS => {
+            NEXT_TOKEN
+            if (normalize_currency == 1) {
+                NL_set_span_label(tokens[span_pos-1], cents_label, CENTS_LEN);
+            }
+        };
+
+        DOLSIGN2_POUNDS => {
+            NEXT_TOKEN
+            if (normalize_currency == 1) {
+                NL_set_span_label(
+                    tokens[span_pos-1], pounds_label, POUNDS_LEN);
+            }
+        };
+
+        DOLSIGN2_NORM => {
+            NEXT_TOKEN
+            if (normalize_currency == 1) {
+                NL_set_span_label(
+                    tokens[span_pos-1], dollar_label, DOLLAR_LEN);
+            }
+        };
+
 #
 #
 #        ABBREV3 %MarkIntermediate1 SPACENL? udigit => NextIntermediate1;
@@ -1184,6 +1211,15 @@ const static NL_label uni_bullet = (NL_label) "\xE2\x80\xA2\x00";
 const static NL_label uni_tm = (NL_label) "\xE2\x84\xA2\x00";
 #define TM_LEN 3
 
+const static NL_label cents_label = (NL_label) "cents\x00";
+#define CENTS_LEN 5
+
+const static NL_label pounds_label = (NL_label) "#\x00";
+#define POUNDS_LEN 1
+
+const static NL_label dollar_label = (NL_label) "\\$\x00";
+#define DOLLAR_LEN 2
+
 NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len, 
         size_t *num_tokens, NL_PTBTokConfig *cfg, NL_v_memmgr *mgr) {
 
@@ -1230,6 +1266,11 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
     int tokenize_newlines = 0;
     if (cfg != NULL) {
         tokenize_newlines = cfg->tokenize_newlines;
+    }
+
+    int normalize_currency = 0;
+    if (cfg != NULL) {
+        normalize_currency = cfg->normalize_currency;
     }
 
     %% write init;
