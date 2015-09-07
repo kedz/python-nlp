@@ -359,8 +359,20 @@
     ACRONYM = ACRO".";
 
  
-    PUNC = [?!]+ |
-        [.¡¿]  ; # TODO add these ! \u037E\u0589\u061F\u06D4\u0700-\u0702\u07FA\u3002]
+    PUNC =    [?!]+ 
+            | "."
+            | "¡"
+            | "¿"  
+            | 0xCD 0xBE # U+037E
+            | 0xD6 0x89 # U+0589
+            | 0xD8 0x9F # U+061F
+            | 0xDB 0x94 # U+06D4
+            | 0xDC 0x80 # U+0700-U+0702
+            | 0xDC 0x81
+            | 0xDC 0x82
+            | 0xDF 0xBA # U+07FA
+            | 0xE3 0x80 0x82 # U+3002
+            ;
 
     ABBREV3 = (
               /ca/i
@@ -1059,8 +1071,6 @@ action HandleQuotesProbablyRight {
 #        #FNMARKS => NextToken;         
 #        #ASTS => NextToken;
 #
-#        INSENTP => NextToken;
-#        [?!]+ => NextToken;
 #
         "." => NextToken; # add other sentence final punc and add a test.
 #
@@ -1085,6 +1095,11 @@ action HandleQuotesProbablyRight {
 #
 ##        SMILEY => NextToken;
 #        #LDOTS => NextToken;
+
+
+        INSENTP => NextToken;
+        #[?!]+ => NextToken;
+        PUNC => NextToken;
 
         THINGA => ConvertAmp;
 

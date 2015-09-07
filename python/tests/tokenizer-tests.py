@@ -1,3 +1,5 @@
+# encoding=utf-8
+
 import nlp
 
 class Tok_Test:
@@ -442,17 +444,45 @@ class Tok_Test:
 
 
 
-    #  private static final Pattern CENTS_PATTERN = Pattern.compile("\u00A2");
-    #  private static final Pattern POUND_PATTERN = Pattern.compile("\u00A3");
-    #  private static final Pattern GENERIC_CURRENCY_PATTERN = Pattern.compile("[\u0080\u00A4\u20A0\u20AC]");
 
-    #  private static String normalizeCurrency(String in) {
-    #    String s1 = in;
-    #    s1 = CENTS_PATTERN.matcher(s1).replaceAll("cents");
-    #    s1 = POUND_PATTERN.matcher(s1).replaceAll("#");  // historically used for pound in PTB3
-    #    s1 = GENERIC_CURRENCY_PATTERN.matcher(s1).replaceAll("\\$");  // Euro (ECU, generic currency)  -- no good translation!
-    #    return s1;
-    #  }
+
+
+    def insentp_test(self):
+        string = u"word, word2; word3:word4\u3001word5"
+        gold = [u"word", u",", u"word2", u";", u"word3", u":", u"word4",
+                u"\u3001", u"word5"]
+
+        tokens = nlp.tokenize(string)
+        print "GOLD  ", gold
+        print "ACTUAL", tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def qmark_exclam_test(self):
+        string = u"huh?!? ? weirdness! !!! ??"
+        gold = [u"huh", u"?!?", u"?", u"weirdness", u"!", u"!!!", u"??"]
+
+        tokens = nlp.tokenize(string)
+        print "GOLD  ", gold
+        print "ACTUAL", tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def punc_test(self):
+        string = u".¡¿\u037E\u0589\u061F\u06D4\u0700\u0701\u0702\u07FA\u3002"
+        gold = [u".", u"¡", u"¿", u"\u037E", u"\u0589", u"\u061F", u"\u06D4",
+                u"\u0700", u"\u0701", u"\u0702", u"\u07FA", u"\u3002"]
+        tokens = nlp.tokenize(string)
+        print "GOLD  ", gold
+        print "ACTUAL", tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
 
     def thinga_NO_normalize_amp_test(self):
         nlp.get_global_PTB_config().normalize_amp = False
