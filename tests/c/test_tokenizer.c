@@ -422,8 +422,38 @@ int copy_no_softhyphen() {
     return errors;
 }
 
+int normalize_amp() {
+    int errors = 0;
+    
+    unsigned char *buf1 = (unsigned char *) 
+        "&amp; &amp! &amp &am! &am &a! &a &! & &am";
+    size_t buf1_size = strlen((char *) buf1);
+    unsigned char *gold1 = (unsigned char *) 
+        "& &amp! &amp &am! &am &a! &a &! & &am";
+    unsigned char *trans1 = malloc(
+        sizeof(unsigned char) * strlen((char *) gold1));
+    NL_normalize_ampersand(buf1, buf1_size, trans1);
+
+    printf("TRANS1 : %s\n", trans1);
+    printf("GOLD1  : %s\n", gold1);
+    if (strcmp((char *) trans1, (char *) gold1) != 0) {
+        errors = 1;
+    }
+
+    free(trans1);
+    return errors;
+
+}
 
 int main() {
+
+    if (normalize_amp() != 0) {
+        printf("normalize amp test failed!\n");
+    } else {
+        printf("normalize test success!\n");
+    }   
+    exit(1);
+
 
     if (copy_no_softhyphen() != 0) {
         printf("copy no softhypen test failed!\n");
