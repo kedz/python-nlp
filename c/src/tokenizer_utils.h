@@ -24,3 +24,6 @@ void NL_latex_quotes_probably_right(unsigned char *p, size_t buf_length,
 void NL_copy_no_softhyphen(unsigned char *p, size_t buf_length,
     unsigned char *transform);
 
+void NL_normalize_ampersand(unsigned char *p, size_t buf_length,
+    unsigned char *transform);
+

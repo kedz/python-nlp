@@ -2236,3 +2236,224 @@ _again:
 #line 550 "tokenizer_utils.rl"
 
 }
+
+
+#line 564 "tokenizer_utils.rl"
+
+
+
+#line 2246 "tokenizer_utils.c"
+static const char _NormalizeAmps_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1, 
+	3, 1, 4, 1, 5, 1, 6
+};
+
+static const char _NormalizeAmps_key_offsets[] = {
+	0, 2, 4, 5, 6
+};
+
+static const unsigned char _NormalizeAmps_trans_keys[] = {
+	77u, 109u, 80u, 112u, 59u, 38u, 65u, 97u, 
+	0
+};
+
+static const char _NormalizeAmps_single_lengths[] = {
+	2, 2, 1, 1, 2
+};
+
+static const char _NormalizeAmps_range_lengths[] = {
+	0, 0, 0, 0, 0
+};
+
+static const char _NormalizeAmps_index_offsets[] = {
+	0, 3, 6, 8, 10
+};
+
+static const char _NormalizeAmps_trans_targs[] = {
+	1, 1, 3, 2, 2, 3, 3, 3, 
+	4, 3, 0, 0, 3, 3, 3, 3, 
+	3, 0
+};
+
+static const char _NormalizeAmps_trans_actions[] = {
+	0, 0, 13, 0, 0, 13, 7, 13, 
+	5, 9, 0, 0, 11, 13, 13, 13, 
+	11, 0
+};
+
+static const char _NormalizeAmps_to_state_actions[] = {
+	0, 0, 0, 1, 0
+};
+
+static const char _NormalizeAmps_from_state_actions[] = {
+	0, 0, 0, 3, 0
+};
+
+static const char _NormalizeAmps_eof_trans[] = {
+	16, 16, 16, 0, 17
+};
+
+static const int NormalizeAmps_start = 3;
+static const int NormalizeAmps_error = -1;
+
+static const int NormalizeAmps_en_main = 3;
+
+
+#line 567 "tokenizer_utils.rl"
+
+void NL_normalize_ampersand(unsigned char *p, size_t buf_length,
+        unsigned char *transform) {
+
+    int cs, act;
+    unsigned char *ts, *te = 0;
+    unsigned char *pe = p + buf_length; 
+    unsigned char *eof = pe;
+
+    
+#line 2314 "tokenizer_utils.c"
+	{
+	cs = NormalizeAmps_start;
+	ts = 0;
+	te = 0;
+	act = 0;
+	}
+
+#line 577 "tokenizer_utils.rl"
+    
+#line 2324 "tokenizer_utils.c"
+	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
+	if ( p == pe )
+		goto _test_eof;
+_resume:
+	_acts = _NormalizeAmps_actions + _NormalizeAmps_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
+#line 1 "NONE"
+	{ts = p;}
+	break;
+#line 2343 "tokenizer_utils.c"
+		}
+	}
+
+	_keys = _NormalizeAmps_trans_keys + _NormalizeAmps_key_offsets[cs];
+	_trans = _NormalizeAmps_index_offsets[cs];
+
+	_klen = _NormalizeAmps_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _NormalizeAmps_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+_eof_trans:
+	cs = _NormalizeAmps_trans_targs[_trans];
+
+	if ( _NormalizeAmps_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _NormalizeAmps_actions + _NormalizeAmps_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
+	{
+		switch ( *_acts++ )
+		{
+	case 2:
+#line 1 "NONE"
+	{te = p+1;}
+	break;
+	case 3:
+#line 560 "tokenizer_utils.rl"
+	{te = p+1;{ *transform = '&'; transform++; }}
+	break;
+	case 4:
+#line 561 "tokenizer_utils.rl"
+	{te = p+1;{ *transform = *p; transform++; }}
+	break;
+	case 5:
+#line 561 "tokenizer_utils.rl"
+	{te = p;p--;{ *transform = *p; transform++; }}
+	break;
+	case 6:
+#line 561 "tokenizer_utils.rl"
+	{{p = ((te))-1;}{ *transform = *p; transform++; }}
+	break;
+#line 2428 "tokenizer_utils.c"
+		}
+	}
+
+_again:
+	_acts = _NormalizeAmps_actions + _NormalizeAmps_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 0:
+#line 1 "NONE"
+	{ts = 0;}
+	break;
+#line 2441 "tokenizer_utils.c"
+		}
+	}
+
+	if ( ++p != pe )
+		goto _resume;
+	_test_eof: {}
+	if ( p == eof )
+	{
+	if ( _NormalizeAmps_eof_trans[cs] > 0 ) {
+		_trans = _NormalizeAmps_eof_trans[cs] - 1;
+		goto _eof_trans;
+	}
+	}
+
+	}
+
+#line 578 "tokenizer_utils.rl"
+
+}
