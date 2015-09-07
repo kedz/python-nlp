@@ -124,7 +124,13 @@ cdef class PTBTokenizerConfigWrapper(object):
             else:
                 self._cfg.normalize_currency = 0
 
-
+    def default(self):
+        self.split_assimilations = True
+        self.normalize_dashes = True
+        self.normalize_amp = True
+        self.normalize_quotes = None
+        self.tokenize_newlines = False
+        self.normalize_currency = False
 
     def __str__(self):
         return "PTBTokenizerConfigWrapper\n" \
