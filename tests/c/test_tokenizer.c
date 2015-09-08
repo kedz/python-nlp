@@ -445,14 +445,68 @@ int normalize_amp() {
 
 }
 
+int get_size_for_escape() {
+    int errors = 0;
+
+    unsigned char *buf1 = (unsigned char *) 
+        "\\/ / * \\*";
+    size_t buf1_size = strlen((char *) buf1);
+    size_t gold_escape_size = buf1_size + 2;
+    size_t pred_escape_size = NL_get_size_escaped_forward_slash_asterisk(
+        buf1, buf1_size);
+
+    if (pred_escape_size != gold_escape_size) {
+        errors = 1;
+    }
+
+    return errors;
+}
+
+int escape_forward_slash_asterisk() {
+    int errors = 0;
+
+    unsigned char *buf1 = (unsigned char *) 
+        "/ \\/ * \\*";
+    unsigned char *gold1 = (unsigned char *) 
+        "\\/ \\/ \\* \\*";
+
+    size_t buf1_size = strlen((char *) buf1);
+    size_t escape_size = buf1_size + 2;
+    unsigned char *trans1 = malloc(sizeof(unsigned char) * escape_size);
+    NL_escape_forward_slash_asterisk(buf1, buf1_size, trans1);
+
+    printf("TRANS1 : %s\n", trans1);
+    printf("GOLD1  : %s\n", gold1);
+    if (strcmp((char *) trans1, (char *) gold1) != 0) {
+        errors = 1;
+    }
+
+    free(trans1);
+    return errors;
+}
+
+
 int main() {
+
+    if (get_size_for_escape() != 0) {
+        printf("get_size_for_escape test failed!\n");
+    } else {
+        printf("get_size_for_escape test success!\n");
+    }   
+
+    if (escape_forward_slash_asterisk() != 0) {
+        printf("escape forward slash asterisk test failed!\n");
+    } else {
+        printf("escape forward slash asterisk test success!\n");
+    }   
+
+
 
     if (normalize_amp() != 0) {
         printf("normalize amp test failed!\n");
     } else {
         printf("normalize test success!\n");
     }   
-    exit(1);
 
 
     if (copy_no_softhyphen() != 0) {
