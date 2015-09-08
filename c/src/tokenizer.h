@@ -19,6 +19,7 @@ typedef struct NL_PTBTokConfig {
     NL_normalize_quotes normalize_quotes;
     int tokenize_newlines;
     int normalize_currency;
+    int escape_forward_slash_asterisk;
     //    short int tokenizeNLs, americanize, normalizeSpace,
 //       normalizeAmpersandEntity, normalizeCurrency, normalizeFractions,
 //       normalizeParentheses, normalizeOtherBrackets,

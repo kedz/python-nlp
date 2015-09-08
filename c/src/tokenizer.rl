@@ -243,9 +243,9 @@
     THING3 = [A-Za-z0-9]+ ("-" [A-Za-z]+ ){0,2} 
         ( "\\"? "/" [A-Za-z0-9]+ ("-" [A-Za-z]+ ){0,2} ){1,2} ;
 
-    HTHING = [A-Za-z0-9] ( [A-Za-z0-9.,] | 0xC2 0xAD )*
+    HTHING = [A-Za-z0-9] ( [A-Za-z0-9.,] | 0xC2 0xAD %AlertSoftHyphen )*
              ( 
-                "-" (([A-Za-z0-9] | 0xC2 0xAD )+ | ACRO2 ".")
+                "-" (([A-Za-z0-9] | 0xC2 0xAD %AlertSoftHyphen)+ | ACRO2 ".")
              )+ ;
     REDAUX = APOS ( [msdMSD] | /re/i | /ve/i | /ll/i );
 
@@ -404,7 +404,7 @@
 
 #    ATS = "@"+;
 #    UNDS = "_"+;
-#    ASTS = "*"+ | ("\\*"){1,3} ;
+    ASTS = "*"+ | ("\\*"){1,3} ;
 #    HASHES = "#"+;
 #    FNMARKS = ATS|HASHES|UNDS;
 
@@ -926,6 +926,20 @@ action HandleQuotesProbablyRight {
         }
     }
 
+    action EscapeForwardSlashAsterisk {
+        NEXT_TOKEN 
+        if (escape_forward_slash_asterisk == 1) {
+            size_t label_size = 1 + NL_get_size_escaped_forward_slash_asterisk(
+                ts, te - ts);
+            unsigned char *label_str = NL_allocate_mem_size(mgr, label_size);
+            NL_escape_forward_slash_asterisk(ts, te - ts, label_str);
+            label_str[label_size - 1] = 0x01;
+            NL_set_span_label(tokens[span_pos-1], label_str, label_size - 1);
+        }
+
+    }
+
+
     main := |*
         [cC]"++" => NextToken;
         ([cC] | [fF] ) "#" => NextToken;
@@ -1096,10 +1110,20 @@ action HandleQuotesProbablyRight {
 ##        SMILEY => NextToken;
 #        #LDOTS => NextToken;
 
+        ASTS => EscapeForwardSlashAsterisk;
 
         INSENTP => NextToken;
-        #[?!]+ => NextToken;
         PUNC => NextToken;
+        "="+ => NextToken;
+        "\\/" => NextToken;
+        "/" => EscapeForwardSlashAsterisk; 
+
+        HTHING "." %MarkIntermediate1 INSENTP => NextIntermediate1;
+        HTHING => NextToken;
+
+        
+        THING "." %MarkIntermediate2 INSENTP => NextIntermediate2;
+        THING => NextToken;        
 
         THINGA => ConvertAmp;
 
@@ -1300,6 +1324,11 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
     int normalize_currency = 0;
     if (cfg != NULL) {
         normalize_currency = cfg->normalize_currency;
+    }
+
+    int escape_forward_slash_asterisk = 0;
+    if (cfg != NULL) {
+        escape_forward_slash_asterisk = cfg->escape_forward_slash_asterisk;
     }
 
     %% write init;
