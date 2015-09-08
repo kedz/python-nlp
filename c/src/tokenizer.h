@@ -12,6 +12,11 @@ typedef enum NL_normalize_quotes {
     QUOTES_UNICODE, 
     QUOTES_ASCII} NL_normalize_quotes; 
 
+typedef enum NL_normalize_ellipsis {
+    ELLIPSIS_NONE,
+    ELLIPSIS_PTB3,
+    ELLIPSIS_UNICODE } NL_normalize_ellipsis; 
+
 typedef struct NL_PTBTokConfig {
     int split_assimilations; // "cannot" => "can" "not"
     int normalize_dashes; 
@@ -20,6 +25,7 @@ typedef struct NL_PTBTokConfig {
     int tokenize_newlines;
     int normalize_currency;
     int escape_forward_slash_asterisk;
+    NL_normalize_ellipsis normalize_ellipsis;
     //    short int tokenizeNLs, americanize, normalizeSpace,
 //       normalizeAmpersandEntity, normalizeCurrency, normalizeFractions,
 //       normalizeParentheses, normalizeOtherBrackets,

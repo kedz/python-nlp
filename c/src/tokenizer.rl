@@ -397,16 +397,16 @@
     GREATERTHAN = ">"|"&gt;";
     #HYPHEN = [-_\u058A\u2010\u2011] defined above
     HYPHENS = "-"+;
-#    LDOTS = "."{3,5}
-#        | ("." (" " | 0xC2 0xA0)){2,4} "."
-       # | 0xC2 0x85 # u+0085 TODO: check if this is newline or hypen
-#        | 0xE2 0x80 0x81 ; # u+2026
+    LDOTS = "."{3,5}
+        | ("." (" " | 0xC2 0xA0)){2,4} "."
+        | 0xE2 0x80 0xA6 ; # u+2026
+       # | 0xC2 0x85 # u+0085 I disagree with corenlp that this should be here
 
-#    ATS = "@"+;
-#    UNDS = "_"+;
+    ATS = "@"+;
+    UNDS = "_"+;
+    HASHES = "#"+;
+    FNMARKS = ATS|HASHES|UNDS;
     ASTS = "*"+ | ("\\*"){1,3} ;
-#    HASHES = "#"+;
-#    FNMARKS = ATS|HASHES|UNDS;
 
     INSENTP = [,;:] | 0xE3 0x80 0x81; # u+3001
     QUOTES = APOS 
@@ -939,6 +939,16 @@ action HandleQuotesProbablyRight {
 
     }
 
+    action HandleEllipsis {
+        NEXT_TOKEN
+        if (normalize_ellipsis == ELLIPSIS_PTB3) {
+            NL_set_span_label(
+                tokens[span_pos-1], ptb3_ellipsis_label, PTB3_ELLIPSIS_LEN);
+        } else if (normalize_ellipsis == ELLIPSIS_UNICODE) {
+            NL_set_span_label(
+                tokens[span_pos-1], uni_ellipsis_label, UNI_ELLIPSIS_LEN);
+        }
+    }
 
     main := |*
         [cC]"++" => NextToken;
@@ -1108,8 +1118,9 @@ action HandleQuotesProbablyRight {
 #     #   all_word => NextToken;
 #
 ##        SMILEY => NextToken;
-#        #LDOTS => NextToken;
+        LDOTS => HandleEllipsis;
 
+        FNMARKS => NextToken;
         ASTS => EscapeForwardSlashAsterisk;
 
         INSENTP => NextToken;
@@ -1272,6 +1283,14 @@ const static NL_label pounds_label = (NL_label) "#\x00";
 const static NL_label dollar_label = (NL_label) "\\$\x00";
 #define DOLLAR_LEN 2
 
+const static NL_label ptb3_ellipsis_label = (NL_label) "...\x00";
+#define PTB3_ELLIPSIS_LEN 3
+
+const static NL_label uni_ellipsis_label = (NL_label) "\xE2\x80\xA6\x00";
+#define UNI_ELLIPSIS_LEN 3
+
+
+
 NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len, 
         size_t *num_tokens, NL_PTBTokConfig *cfg, NL_v_memmgr *mgr) {
 
@@ -1330,6 +1349,13 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
     if (cfg != NULL) {
         escape_forward_slash_asterisk = cfg->escape_forward_slash_asterisk;
     }
+
+    NL_normalize_ellipsis normalize_ellipsis = ELLIPSIS_NONE;
+    if (cfg != NULL) {
+        normalize_ellipsis = cfg->normalize_ellipsis;
+    }
+
+
 
     %% write init;
 
