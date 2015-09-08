@@ -444,6 +444,51 @@ class Tok_Test:
             assert token == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
+    def test_brackets_NO_normalize(self):
+        nlp.get_global_PTB_config().normalize_parentheses = False
+        nlp.get_global_PTB_config().normalize_brackets = False
+        string = u"(){}[]"
+        gold = [u"(", u")", u"{", u"}", u"[", u"]"]
+        tokens = nlp.tokenize(string)
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def test_brackets_normalize(self):
+        nlp.get_global_PTB_config().normalize_parentheses = True
+        nlp.get_global_PTB_config().normalize_brackets = True
+        string = u"(){}[]"
+        gold = [u"-LRB-", u"-RRB-", u"-LCB-", u"-RCB-", u"-LSB-", u"-RSB-"]
+        tokens = nlp.tokenize(string)
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def hyphens_NO_normalize_test(self):
+        nlp.get_global_PTB_config().normalize_dashes = False
+        string = u"--- - -- --- -----"
+        gold = [u"---", u"-", u"--", u"---", u"-----"]
+        tokens = nlp.tokenize(string)
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def hyphens_normalize_test(self):
+        nlp.get_global_PTB_config().normalize_dashes = True
+        string = u"--- - -- ---- -----"
+        gold = [u"--", u"-", u"--", u"--", u"-----"]
+        tokens = nlp.tokenize(string)
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+
+
+
     def ldots_NO_normalize_test(self):
         string = u"... .... ..... . .\u00A0. \u2026"
         gold = [u"...", u"....", u".....", u". .\u00A0.", u"\u2026"]

@@ -164,6 +164,40 @@ cdef class PTBTokenizerConfigWrapper(object):
                     u"Property 'normalize_ellipsis' takes 1 of 3 values: " \
                     + u"'unicode', 'ptb3', or None.")
 
+    property normalize_parentheses:
+        u"""When true, tokenizer converts "(" and ")" to "-LRB-" and "-RRB-",
+        respectively."""
+
+        def __get__(self):
+            if self._cfg.normalize_parentheses == 1:
+                return True
+            else:
+                return False
+
+        def __set__(self, value):
+            if bool(value):
+                self._cfg.normalize_parentheses = 1
+            else:
+                self._cfg.normalize_parentheses = 0
+
+    property normalize_brackets:
+        u"""When true, tokenizer converts "[", "]", "{", and "}" to "-LSB-",
+        "-RSB-", "-LCB-", and "-RCB-".
+        respectively."""
+
+        def __get__(self):
+            if self._cfg.normalize_brackets == 1:
+                return True
+            else:
+                return False
+
+        def __set__(self, value):
+            if bool(value):
+                self._cfg.normalize_brackets = 1
+            else:
+                self._cfg.normalize_brackets = 0
+
+
     def default(self):
         self.split_assimilations = True
         self.normalize_dashes = True
@@ -173,6 +207,8 @@ cdef class PTBTokenizerConfigWrapper(object):
         self.normalize_currency = False
         self.escape_forward_slash_asterisk = False
         self.normalize_ellipsis = None
+        self.normalize_parentheses = True
+        self.normalize_brackets = True
 
 
     def __str__(self):
@@ -191,8 +227,12 @@ cdef class PTBTokenizerConfigWrapper(object):
                     self.normalize_currency) \
             + " :: escape forward slash asterisk: {}\n".format(
                     self.escape_forward_slash_asterisk) \
-            + " ::            normalize ellipsis: {}".format(
-                    self.normalize_ellipsis)
+            + " ::            normalize ellipsis: {}\n".format(
+                    self.normalize_ellipsis) \
+            + " ::         normalize parentheses: {}\n".format(
+                    self.normalize_parentheses) \
+            + " ::            normalize brackets: {}".format(
+                    self.normalize_brackets)
 
     def __dealloc__(self):
         print "PTBTokenizerConfigWrapper.__dealloc__()"

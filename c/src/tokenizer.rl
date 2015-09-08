@@ -950,6 +950,55 @@ action HandleQuotesProbablyRight {
         }
     }
 
+    action NormalizeLCBNext { 
+        NEXT_TOKEN
+        if (normalize_brackets == 1) {
+            NL_set_span_label(
+                tokens[span_pos-1], lcb_label, LCB_LEN);
+        }
+    }
+
+    action NormalizeRCBNext { 
+        NEXT_TOKEN
+        if (normalize_brackets == 1) {
+            NL_set_span_label(
+                tokens[span_pos-1], rcb_label, RCB_LEN);
+        }
+    }
+
+    action NormalizeLSBNext { 
+        NEXT_TOKEN
+        if (normalize_brackets == 1) {
+            NL_set_span_label(
+                tokens[span_pos-1], lsb_label, LSB_LEN);
+        }
+    }
+
+    action NormalizeRSBNext { 
+        NEXT_TOKEN
+        if (normalize_brackets == 1) {
+            NL_set_span_label(
+                tokens[span_pos-1], rsb_label, RSB_LEN);
+        }
+    }
+
+    action NormalizeLRBNext { 
+        NEXT_TOKEN
+        if (normalize_parentheses == 1) {
+            NL_set_span_label(
+                tokens[span_pos-1], lrb_label, LRB_LEN);
+        }
+
+    }
+
+    action NormalizeRRBNext { 
+        NEXT_TOKEN
+        if (normalize_parentheses == 1) {
+            NL_set_span_label(
+                tokens[span_pos-1], rrb_label, RRB_LEN);
+        }
+    }
+
     main := |*
         [cC]"++" => NextToken;
         ([cC] | [fF] ) "#" => NextToken;
@@ -1083,14 +1132,7 @@ action HandleQuotesProbablyRight {
 #
 #
 #
-#        "{" => NextToken;
-#        "}" => NextToken;
-#        "[" => NextToken;
-#        "]" => NextToken;
-#        "(" => NormalizedLRBNext;
-#        ")" => NormalizedRRBNext;
-#
-#        HYPHENS => NextToken;
+
 #        #LDOTS => NextToken;
 #        #FNMARKS => NextToken;         
 #        #ASTS => NextToken;
@@ -1118,6 +1160,23 @@ action HandleQuotesProbablyRight {
 #     #   all_word => NextToken;
 #
 ##        SMILEY => NextToken;
+
+        "{" => NormalizeLCBNext;
+        "}" => NormalizeRCBNext;
+        "[" => NormalizeLSBNext;
+        "]" => NormalizeRSBNext;
+        "(" => NormalizeLRBNext;
+        ")" => NormalizeRRBNext;
+
+        HYPHENS => {
+            NEXT_TOKEN
+            size_t num_hyphens = te - ts;
+            if (normalize_ptb3_dashes 
+                    && 3 <= num_hyphens && num_hyphens <= 4) {
+                NL_set_span_label(
+                    tokens[span_pos-1], ptb3dash, PTB3DASH_LEN);
+            }; 
+        };
         LDOTS => HandleEllipsis;
 
         FNMARKS => NextToken;
@@ -1164,12 +1223,6 @@ action HandleQuotesProbablyRight {
             NEXT_TOKEN
             NL_set_span_label(tokens[span_pos-1], uni_tm, TM_LEN);     
         };
-
-
-
-#{ return getNext("\u2022", yytext()); } /* cp1252 bullet mapped to unicode */
-#\u0099          { return getNext("\u2122", yytext()); } /* cp1252 TM sign mapped to unicode */
-
 
         ALL_SPACES;
         '\0' => {
@@ -1289,6 +1342,26 @@ const static NL_label ptb3_ellipsis_label = (NL_label) "...\x00";
 const static NL_label uni_ellipsis_label = (NL_label) "\xE2\x80\xA6\x00";
 #define UNI_ELLIPSIS_LEN 3
 
+const static NL_label lrb_label = (NL_label) "-LRB-\x00";
+#define LRB_LEN 5
+
+const static NL_label rrb_label = (NL_label) "-RRB-\x00";
+#define RRB_LEN 5
+
+const static NL_label lsb_label = (NL_label) "-LSB-\x00";
+#define LSB_LEN 5
+
+const static NL_label rsb_label = (NL_label) "-RSB-\x00";
+#define RSB_LEN 5
+
+const static NL_label lcb_label = (NL_label) "-LCB-\x00";
+#define LCB_LEN 5
+
+const static NL_label rcb_label = (NL_label) "-RCB-\x00";
+#define RCB_LEN 5
+
+
+
 
 
 NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len, 
@@ -1355,6 +1428,15 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
         normalize_ellipsis = cfg->normalize_ellipsis;
     }
 
+    int normalize_parentheses = 1;
+    if (cfg != NULL) {
+        normalize_parentheses = cfg->normalize_parentheses;
+    }
+
+    int normalize_brackets = 1;
+    if (cfg != NULL) {
+        normalize_brackets = cfg->normalize_brackets;
+    }
 
 
     %% write init;

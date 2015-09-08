@@ -26,6 +26,8 @@ typedef struct NL_PTBTokConfig {
     int normalize_currency;
     int escape_forward_slash_asterisk;
     NL_normalize_ellipsis normalize_ellipsis;
+    int normalize_parentheses;
+    int normalize_brackets;
     //    short int tokenizeNLs, americanize, normalizeSpace,
 //       normalizeAmpersandEntity, normalizeCurrency, normalizeFractions,
 //       normalizeParentheses, normalizeOtherBrackets,

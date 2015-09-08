@@ -36,6 +36,8 @@ cdef extern from "tokenizer.h":
         int normalize_currency;
         int escape_forward_slash_asterisk;
         NL_normalize_ellipsis normalize_ellipsis
+        int normalize_parentheses;
+        int normalize_brackets;
 
     cdef NL_span **NL_tokenize_buf(
         unsigned char *buf, size_t buf_len, size_t *num_tokens, 
