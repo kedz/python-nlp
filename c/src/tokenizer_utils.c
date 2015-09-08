@@ -2457,3 +2457,454 @@ _again:
 #line 578 "tokenizer_utils.rl"
 
 }
+
+
+#line 593 "tokenizer_utils.rl"
+
+
+
+#line 2467 "tokenizer_utils.c"
+static const char _CountUnescapedForwardSlashesAsterisks_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1, 
+	3, 1, 4, 1, 5
+};
+
+static const char _CountUnescapedForwardSlashesAsterisks_key_offsets[] = {
+	0, 3
+};
+
+static const unsigned char _CountUnescapedForwardSlashesAsterisks_trans_keys[] = {
+	42u, 47u, 92u, 42u, 47u, 0
+};
+
+static const char _CountUnescapedForwardSlashesAsterisks_single_lengths[] = {
+	3, 2
+};
+
+static const char _CountUnescapedForwardSlashesAsterisks_range_lengths[] = {
+	0, 0
+};
+
+static const char _CountUnescapedForwardSlashesAsterisks_index_offsets[] = {
+	0, 4
+};
+
+static const char _CountUnescapedForwardSlashesAsterisks_trans_targs[] = {
+	0, 0, 1, 0, 0, 0, 0, 0, 
+	0
+};
+
+static const char _CountUnescapedForwardSlashesAsterisks_trans_actions[] = {
+	7, 7, 0, 9, 5, 5, 11, 11, 
+	0
+};
+
+static const char _CountUnescapedForwardSlashesAsterisks_to_state_actions[] = {
+	1, 0
+};
+
+static const char _CountUnescapedForwardSlashesAsterisks_from_state_actions[] = {
+	3, 0
+};
+
+static const char _CountUnescapedForwardSlashesAsterisks_eof_trans[] = {
+	0, 8
+};
+
+static const int CountUnescapedForwardSlashesAsterisks_start = 0;
+static const int CountUnescapedForwardSlashesAsterisks_error = -1;
+
+static const int CountUnescapedForwardSlashesAsterisks_en_main = 0;
+
+
+#line 596 "tokenizer_utils.rl"
+
+size_t NL_get_size_escaped_forward_slash_asterisk(unsigned char *p, 
+    size_t buf_length) {
+
+    int cs, act;
+    unsigned char *ts, *te = 0;
+    unsigned char *pe = p + buf_length; 
+    unsigned char *eof = pe;
+    size_t count = 0;
+
+    
+#line 2533 "tokenizer_utils.c"
+	{
+	cs = CountUnescapedForwardSlashesAsterisks_start;
+	ts = 0;
+	te = 0;
+	act = 0;
+	}
+
+#line 607 "tokenizer_utils.rl"
+    
+#line 2543 "tokenizer_utils.c"
+	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
+	if ( p == pe )
+		goto _test_eof;
+_resume:
+	_acts = _CountUnescapedForwardSlashesAsterisks_actions + _CountUnescapedForwardSlashesAsterisks_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
+#line 1 "NONE"
+	{ts = p;}
+	break;
+#line 2562 "tokenizer_utils.c"
+		}
+	}
+
+	_keys = _CountUnescapedForwardSlashesAsterisks_trans_keys + _CountUnescapedForwardSlashesAsterisks_key_offsets[cs];
+	_trans = _CountUnescapedForwardSlashesAsterisks_index_offsets[cs];
+
+	_klen = _CountUnescapedForwardSlashesAsterisks_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _CountUnescapedForwardSlashesAsterisks_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+_eof_trans:
+	cs = _CountUnescapedForwardSlashesAsterisks_trans_targs[_trans];
+
+	if ( _CountUnescapedForwardSlashesAsterisks_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _CountUnescapedForwardSlashesAsterisks_actions + _CountUnescapedForwardSlashesAsterisks_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
+	{
+		switch ( *_acts++ )
+		{
+	case 2:
+#line 588 "tokenizer_utils.rl"
+	{te = p+1;{ count += 2; }}
+	break;
+	case 3:
+#line 589 "tokenizer_utils.rl"
+	{te = p+1;{ count += 2; }}
+	break;
+	case 4:
+#line 590 "tokenizer_utils.rl"
+	{te = p+1;{ count++; }}
+	break;
+	case 5:
+#line 590 "tokenizer_utils.rl"
+	{te = p;p--;{ count++; }}
+	break;
+#line 2643 "tokenizer_utils.c"
+		}
+	}
+
+_again:
+	_acts = _CountUnescapedForwardSlashesAsterisks_actions + _CountUnescapedForwardSlashesAsterisks_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 0:
+#line 1 "NONE"
+	{ts = 0;}
+	break;
+#line 2656 "tokenizer_utils.c"
+		}
+	}
+
+	if ( ++p != pe )
+		goto _resume;
+	_test_eof: {}
+	if ( p == eof )
+	{
+	if ( _CountUnescapedForwardSlashesAsterisks_eof_trans[cs] > 0 ) {
+		_trans = _CountUnescapedForwardSlashesAsterisks_eof_trans[cs] - 1;
+		goto _eof_trans;
+	}
+	}
+
+	}
+
+#line 608 "tokenizer_utils.rl"
+
+    return count;
+}
+
+
+#line 637 "tokenizer_utils.rl"
+
+
+
+#line 2683 "tokenizer_utils.c"
+static const char _EscapedForwardSlashesAsterisks_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1, 
+	3, 1, 4, 1, 5, 1, 6, 1, 
+	7
+};
+
+static const char _EscapedForwardSlashesAsterisks_key_offsets[] = {
+	0, 3
+};
+
+static const unsigned char _EscapedForwardSlashesAsterisks_trans_keys[] = {
+	42u, 47u, 92u, 42u, 47u, 0
+};
+
+static const char _EscapedForwardSlashesAsterisks_single_lengths[] = {
+	3, 2
+};
+
+static const char _EscapedForwardSlashesAsterisks_range_lengths[] = {
+	0, 0
+};
+
+static const char _EscapedForwardSlashesAsterisks_index_offsets[] = {
+	0, 4
+};
+
+static const char _EscapedForwardSlashesAsterisks_trans_targs[] = {
+	0, 0, 1, 0, 0, 0, 0, 0, 
+	0
+};
+
+static const char _EscapedForwardSlashesAsterisks_trans_actions[] = {
+	11, 9, 0, 13, 7, 5, 15, 15, 
+	0
+};
+
+static const char _EscapedForwardSlashesAsterisks_to_state_actions[] = {
+	1, 0
+};
+
+static const char _EscapedForwardSlashesAsterisks_from_state_actions[] = {
+	3, 0
+};
+
+static const char _EscapedForwardSlashesAsterisks_eof_trans[] = {
+	0, 8
+};
+
+static const int EscapedForwardSlashesAsterisks_start = 0;
+static const int EscapedForwardSlashesAsterisks_error = -1;
+
+static const int EscapedForwardSlashesAsterisks_en_main = 0;
+
+
+#line 640 "tokenizer_utils.rl"
+
+void NL_escape_forward_slash_asterisk(unsigned char *p, 
+    size_t buf_length, unsigned char *transform) {
+
+    int cs, act;
+    unsigned char *ts, *te = 0;
+    unsigned char *pe = p + buf_length; 
+    unsigned char *eof = pe;
+
+    
+#line 2749 "tokenizer_utils.c"
+	{
+	cs = EscapedForwardSlashesAsterisks_start;
+	ts = 0;
+	te = 0;
+	act = 0;
+	}
+
+#line 650 "tokenizer_utils.rl"
+    
+#line 2759 "tokenizer_utils.c"
+	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
+	if ( p == pe )
+		goto _test_eof;
+_resume:
+	_acts = _EscapedForwardSlashesAsterisks_actions + _EscapedForwardSlashesAsterisks_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
+#line 1 "NONE"
+	{ts = p;}
+	break;
+#line 2778 "tokenizer_utils.c"
+		}
+	}
+
+	_keys = _EscapedForwardSlashesAsterisks_trans_keys + _EscapedForwardSlashesAsterisks_key_offsets[cs];
+	_trans = _EscapedForwardSlashesAsterisks_index_offsets[cs];
+
+	_klen = _EscapedForwardSlashesAsterisks_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _EscapedForwardSlashesAsterisks_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+_eof_trans:
+	cs = _EscapedForwardSlashesAsterisks_trans_targs[_trans];
+
+	if ( _EscapedForwardSlashesAsterisks_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _EscapedForwardSlashesAsterisks_actions + _EscapedForwardSlashesAsterisks_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
+	{
+		switch ( *_acts++ )
+		{
+	case 2:
+#line 618 "tokenizer_utils.rl"
+	{te = p+1;{
+            *transform = '\\'; transform++; 
+            *transform = '/'; transform++;
+        }}
+	break;
+	case 3:
+#line 622 "tokenizer_utils.rl"
+	{te = p+1;{ 
+            *transform = '\\'; transform++; 
+            *transform = '*'; transform++;
+        }}
+	break;
+	case 4:
+#line 626 "tokenizer_utils.rl"
+	{te = p+1;{
+            *transform = '\\'; transform++; 
+            *transform = '/'; transform++;
+        }}
+	break;
+	case 5:
+#line 630 "tokenizer_utils.rl"
+	{te = p+1;{ 
+            *transform = '\\'; transform++; 
+            *transform = '*'; transform++;
+        }}
+	break;
+	case 6:
+#line 634 "tokenizer_utils.rl"
+	{te = p+1;{ *transform = *ts; transform++; }}
+	break;
+	case 7:
+#line 634 "tokenizer_utils.rl"
+	{te = p;p--;{ *transform = *ts; transform++; }}
+	break;
+#line 2879 "tokenizer_utils.c"
+		}
+	}
+
+_again:
+	_acts = _EscapedForwardSlashesAsterisks_actions + _EscapedForwardSlashesAsterisks_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 0:
+#line 1 "NONE"
+	{ts = 0;}
+	break;
+#line 2892 "tokenizer_utils.c"
+		}
+	}
+
+	if ( ++p != pe )
+		goto _resume;
+	_test_eof: {}
+	if ( p == eof )
+	{
+	if ( _EscapedForwardSlashesAsterisks_eof_trans[cs] > 0 ) {
+		_trans = _EscapedForwardSlashesAsterisks_eof_trans[cs] - 1;
+		goto _eof_trans;
+	}
+	}
+
+	}
+
+#line 651 "tokenizer_utils.rl"
+
+}

@@ -577,3 +577,76 @@ void NL_normalize_ampersand(unsigned char *p, size_t buf_length,
     %% write exec;
 
 }
+
+%%{
+
+    machine CountUnescapedForwardSlashesAsterisks;
+    alphtype unsigned char;
+
+              
+    main := |* 
+        "\\/" | "\\*" => { count += 2; };
+        "/"   | "*"   => { count += 2; };
+        any => { count++; };
+    *|;
+
+}%%
+
+%% write data nofinal;
+
+size_t NL_get_size_escaped_forward_slash_asterisk(unsigned char *p, 
+    size_t buf_length) {
+
+    int cs, act;
+    unsigned char *ts, *te = 0;
+    unsigned char *pe = p + buf_length; 
+    unsigned char *eof = pe;
+    size_t count = 0;
+
+    %% write init;
+    %% write exec;
+
+    return count;
+}
+
+%%{
+
+    machine EscapedForwardSlashesAsterisks;
+    alphtype unsigned char;
+              
+    main := |* 
+        "\\/" => {
+            *transform = '\\'; transform++; 
+            *transform = '/'; transform++;
+        };
+        "\\*" => { 
+            *transform = '\\'; transform++; 
+            *transform = '*'; transform++;
+        };
+        "/" => {
+            *transform = '\\'; transform++; 
+            *transform = '/'; transform++;
+        };
+        "*" => { 
+            *transform = '\\'; transform++; 
+            *transform = '*'; transform++;
+        };
+        any => { *transform = *ts; transform++; };
+    *|;
+
+}%%
+
+%% write data nofinal;
+
+void NL_escape_forward_slash_asterisk(unsigned char *p, 
+    size_t buf_length, unsigned char *transform) {
+
+    int cs, act;
+    unsigned char *ts, *te = 0;
+    unsigned char *pe = p + buf_length; 
+    unsigned char *eof = pe;
+
+    %% write init;
+    %% write exec;
+
+}
