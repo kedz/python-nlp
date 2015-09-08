@@ -31,6 +31,7 @@ cdef extern from "tokenizer.h":
         NL_normalize_quotes normalize_quotes
         int tokenize_newlines;
         int normalize_currency;
+        int escape_forward_slash_asterisk;
 
     cdef NL_span **NL_tokenize_buf(
         unsigned char *buf, size_t buf_len, size_t *num_tokens, 

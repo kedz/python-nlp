@@ -128,6 +128,8 @@ class Tok_Test:
             assert token == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
+
+
     def word_redaux_test_NO_normalize_quotes(self):
 
         nlp.get_global_PTB_config().normalize_quotes = None
@@ -381,7 +383,7 @@ class Tok_Test:
         string = u"-RRB- -LRB- -RCB- -lcb- -lsb- C.D.s PRO-nouns anti-con " + \
             u"s&p-500  S&amp;p-500  S&amp;Ls  cap'n C'est" #
         gold = [u"-RRB-", u"-LRB-", u"-RCB-", u"-lcb-", u"-lsb-", u"C.D.s", 
-                u"PRO-", u"nouns", u"anti-", u"con", u"s&p-500", u"S&p-500", 
+                u"PRO-nouns", u"anti-con", u"s&p-500", u"S&p-500", 
                 u"S&Ls", u"cap'n", u"C'est"]
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
@@ -444,6 +446,27 @@ class Tok_Test:
 
 
 
+    def asts_NO_escape_test(self):
+        string = u"* ** *** **** \\*\\*\\*\\*\\*"
+        gold = [u"*", u"**", u"***", u"****", u"\\*\\*\\*", u"\\*\\*"]
+        tokens = nlp.tokenize(string)
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def asts_escape_test(self):
+        nlp.get_global_PTB_config().escape_forward_slash_asterisk = True
+        string = u"* ** *** **** \\*\\*\\*\\*\\*"
+        gold = [u"\\*", u"\\*\\*", u"\\*\\*\\*", u"\\*\\*\\*\\*", 
+                u"\\*\\*\\*", u"\\*\\*"]
+        tokens = nlp.tokenize(string)
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+
 
 
 
@@ -483,6 +506,92 @@ class Tok_Test:
             print token, gold_token.encode("utf-8")
             assert token == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
+
+    def equals_test(self):
+        string = u"= == === x==y 1=x"
+        gold = [u"=", u"==", u"===", u"x", u"==", u"y", u"1", u"=", u"x"]
+        tokens = nlp.tokenize(string)
+        print "GOLD  ", gold
+        print "ACTUAL", tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def slash_NO_escape_test(self):
+        string = u"/ \\/"
+        gold = [u"/", u"\\/"]
+        tokens = nlp.tokenize(string)
+        print "GOLD  ", gold
+        print "ACTUAL", tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def slash_escape_test(self):
+        nlp.get_global_PTB_config().escape_forward_slash_asterisk = True
+        string = u"/ \\/"
+        gold = [u"\\/", u"\\/"]
+        tokens = nlp.tokenize(string)
+        print "GOLD  ", gold
+        print "ACTUAL", tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+
+    def hthing_per_insentp_test(self):
+        string = u"US-UK U.S.-U.K.;"
+        gold = [u"US-UK", u"U.S.-U.K.", u";"]
+        tokens = nlp.tokenize(string)
+        print "GOLD  ", gold
+        print "ACTUAL", tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+
+
+
+    def hthing_test(self):
+        string = u"US-UK U.S.\u00AD-USSR\u00AD"
+        gold = [u"US-UK", u"U.S.-USSR"]
+        tokens = nlp.tokenize(string)
+        print "GOLD  ", gold
+        print "ACTUAL", tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def thing_per_insentp_test(self):
+        string = u"O'doole-o'mally.: 1-o'mally.;"
+        gold = [u"O'doole-o'mally.", u":", u"1-o'mally.", u";"]
+        tokens = nlp.tokenize(string)
+        print "GOLD  ", gold
+        print "ACTUAL", tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+
+
+    def thing_test(self):
+        string = u"O'doole-o'mally 1-o'mally"
+        gold = [u"O'doole-o'mally", u"1-o'mally"]
+        tokens = nlp.tokenize(string)
+        print "GOLD  ", gold
+        print "ACTUAL", tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+
 
     def thinga_NO_normalize_amp_test(self):
         nlp.get_global_PTB_config().normalize_amp = False

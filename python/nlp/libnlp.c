@@ -476,7 +476,7 @@ static const char *__pyx_f[] = {
 struct __pyx_obj_3nlp_6libnlp_MemoryManagerWrapper;
 struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper;
 
-/* "nlp/libnlp.pxd":39
+/* "nlp/libnlp.pxd":40
  *         NL_PTBTokConfig *cfg, NL_v_memmgr *mgr);
  * 
  * cdef class MemoryManagerWrapper(object):             # <<<<<<<<<<<<<<
@@ -489,7 +489,7 @@ struct __pyx_obj_3nlp_6libnlp_MemoryManagerWrapper {
 };
 
 
-/* "nlp/libnlp.pxd":42
+/* "nlp/libnlp.pxd":43
  *     cdef NL_v_memmgr *_mgr
  * 
  * cdef class PTBTokenizerConfigWrapper(object):             # <<<<<<<<<<<<<<
@@ -695,25 +695,27 @@ static char __pyx_k_pyx_capi[] = "__pyx_capi__";
 static char __pyx_k_ValueError[] = "ValueError";
 static char __pyx_k_nlp_libnlp[] = "nlp.libnlp";
 static char __pyx_k_normalize_amp[] = "normalize_amp";
-static char __pyx_k_normalize_amp_2[] = " ::       normalize amp: {}\n";
+static char __pyx_k_normalize_amp_2[] = " ::                 normalize amp: {}\n";
 static char __pyx_k_normalize_dashes[] = "normalize_dashes";
 static char __pyx_k_normalize_quotes[] = "normalize_quotes";
 static char __pyx_k_tokenize_newlines[] = "tokenize_newlines";
 static char __pyx_k_global_ptb_tok_cfg[] = "global_ptb_tok_cfg";
 static char __pyx_k_normalize_currency[] = "normalize_currency";
-static char __pyx_k_normalize_dashes_2[] = " ::    normalize dashes: {}\n";
-static char __pyx_k_normalize_quotes_2[] = " ::    normalize quotes: {}";
+static char __pyx_k_normalize_dashes_2[] = " ::              normalize dashes: {}\n";
+static char __pyx_k_normalize_quotes_2[] = " ::              normalize quotes: {}\n";
 static char __pyx_k_split_assimilations[] = "split_assimilations";
-static char __pyx_k_tokenize_newlines_2[] = " ::   tokenize newlines: {}";
-static char __pyx_k_normalize_currency_2[] = " ::  normalize currency: {}";
+static char __pyx_k_tokenize_newlines_2[] = " ::             tokenize newlines: {}\n";
+static char __pyx_k_normalize_currency_2[] = " ::            normalize currency: {}\n";
 static char __pyx_k_get_global_PTB_config[] = "get_global_PTB_config";
-static char __pyx_k_split_assimilations_2[] = " :: split assimilations: {}\n";
+static char __pyx_k_split_assimilations_2[] = " ::           split assimilations: {}\n";
 static char __pyx_k_PTBTokenizerConfigWrapper[] = "PTBTokenizerConfigWrapper\n";
 static char __pyx_k_MemoryManagerWrapper___cinit[] = "MemoryManagerWrapper.__cinit__()";
+static char __pyx_k_escape_forward_slash_asterisk[] = "escape_forward_slash_asterisk";
 static char __pyx_k_MemoryManagerWrapper___dealloc[] = "MemoryManagerWrapper.__dealloc__()";
 static char __pyx_k_MemoryManagerWrapper_object_don[] = "MemoryManagerWrapper object (don't mess with me!)";
 static char __pyx_k_Property_normalize_quotes_takes[] = "Property 'normalize_quotes' takes 1 of 4 values: 'unicode', 'ascii', 'latex', or None.";
 static char __pyx_k_When_true_tokenizer_creates_two[] = "When true, tokenizer creates two tokens for assimilated words.\n        E.g. \"gimme\" is tokenized as [\"gim\", \"me\"].";
+static char __pyx_k_escape_forward_slash_asterisk_2[] = " :: escape forward slash asterisk: {}";
 static char __pyx_k_home_kedz_projects2015_python_n[] = "/home/kedz/projects2015/python-nlp/python-nlp/python/nlp/libnlp.pyx";
 static char __pyx_k_PTBTokenizerConfigWrapper___cini[] = "PTBTokenizerConfigWrapper.__cinit__()";
 static char __pyx_k_PTBTokenizerConfigWrapper___deal[] = "PTBTokenizerConfigWrapper.__dealloc__()";
@@ -721,6 +723,7 @@ static char __pyx_k_String_or_None_Accepts_unicode_a[] = "String or None. Accept
 static char __pyx_k_When_true_tokenizer_converts_thi[] = "When true, tokenizer converts things like '\302\242' to 'cents'.";
 static char __pyx_k_When_true_tokenizer_normalizes_t[] = "When true, tokenizer normalizes tokens like \"&mdash;\" and  \n        \"\302\226\" to \"--\".";
 static char __pyx_k_When_true_tokenizer_tokenizes_th[] = "When true, tokenizer tokenizes things like \\n and \\r\\n.";
+static char __pyx_k_When_true_tokenizer_transforms_a[] = "When true, tokenizer transforms '*' and '/' to '\\*' and '\\/'.\n        If either character is already escaped, no change is made.";
 static char __pyx_k_When_true_tokenizer_normalizes_t_2[] = "When true, tokenizer normalizes tokens like \"&amp;\" to \"&\".";
 static PyObject *__pyx_kp_s_MemoryManagerWrapper___cinit;
 static PyObject *__pyx_kp_s_MemoryManagerWrapper___dealloc;
@@ -732,6 +735,8 @@ static PyObject *__pyx_kp_u_Property_normalize_quotes_takes;
 static PyObject *__pyx_n_s_ValueError;
 static PyObject *__pyx_n_u_ascii;
 static PyObject *__pyx_n_s_end;
+static PyObject *__pyx_n_s_escape_forward_slash_asterisk;
+static PyObject *__pyx_kp_s_escape_forward_slash_asterisk_2;
 static PyObject *__pyx_n_s_file;
 static PyObject *__pyx_n_s_format;
 static PyObject *__pyx_n_s_get_global_PTB_config;
@@ -773,6 +778,8 @@ static PyObject *__pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_17tokenize_ne
 static int __pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_17tokenize_newlines_2__set__(struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
 static PyObject *__pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_18normalize_currency___get__(struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper *__pyx_v_self); /* proto */
 static int __pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_18normalize_currency_2__set__(struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
+static PyObject *__pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_29escape_forward_slash_asterisk___get__(struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper *__pyx_v_self); /* proto */
+static int __pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_29escape_forward_slash_asterisk_2__set__(struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
 static PyObject *__pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_2default(struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_4__str__(struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper *__pyx_v_self); /* proto */
 static void __pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_6__dealloc__(struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper *__pyx_v_self); /* proto */
@@ -2260,7 +2267,7 @@ static int __pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_18normalize_currenc
  *             else:
  *                 self._cfg.normalize_currency = 0             # <<<<<<<<<<<<<<
  * 
- *     def default(self):
+ *     property escape_forward_slash_asterisk:
  */
   /*else*/ {
     __pyx_v_self->_cfg->normalize_currency = 0;
@@ -2286,8 +2293,185 @@ static int __pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_18normalize_currenc
   return __pyx_r;
 }
 
-/* "nlp/libnlp.pyx":127
- *                 self._cfg.normalize_currency = 0
+/* "nlp/libnlp.pyx":131
+ *         If either character is already escaped, no change is made."""
+ * 
+ *         def __get__(self):             # <<<<<<<<<<<<<<
+ *             if self._cfg.escape_forward_slash_asterisk == 1:
+ *                 return True
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_3nlp_6libnlp_25PTBTokenizerConfigWrapper_29escape_forward_slash_asterisk_1__get__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_3nlp_6libnlp_25PTBTokenizerConfigWrapper_29escape_forward_slash_asterisk_1__get__(PyObject *__pyx_v_self) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_29escape_forward_slash_asterisk___get__(((struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_29escape_forward_slash_asterisk___get__(struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  __Pyx_RefNannySetupContext("__get__", 0);
+
+  /* "nlp/libnlp.pyx":132
+ * 
+ *         def __get__(self):
+ *             if self._cfg.escape_forward_slash_asterisk == 1:             # <<<<<<<<<<<<<<
+ *                 return True
+ *             else:
+ */
+  __pyx_t_1 = ((__pyx_v_self->_cfg->escape_forward_slash_asterisk == 1) != 0);
+  if (__pyx_t_1) {
+
+    /* "nlp/libnlp.pyx":133
+ *         def __get__(self):
+ *             if self._cfg.escape_forward_slash_asterisk == 1:
+ *                 return True             # <<<<<<<<<<<<<<
+ *             else:
+ *                 return False
+ */
+    __Pyx_XDECREF(__pyx_r);
+    __Pyx_INCREF(Py_True);
+    __pyx_r = Py_True;
+    goto __pyx_L0;
+
+    /* "nlp/libnlp.pyx":132
+ * 
+ *         def __get__(self):
+ *             if self._cfg.escape_forward_slash_asterisk == 1:             # <<<<<<<<<<<<<<
+ *                 return True
+ *             else:
+ */
+  }
+
+  /* "nlp/libnlp.pyx":135
+ *                 return True
+ *             else:
+ *                 return False             # <<<<<<<<<<<<<<
+ * 
+ *         def __set__(self, value):
+ */
+  /*else*/ {
+    __Pyx_XDECREF(__pyx_r);
+    __Pyx_INCREF(Py_False);
+    __pyx_r = Py_False;
+    goto __pyx_L0;
+  }
+
+  /* "nlp/libnlp.pyx":131
+ *         If either character is already escaped, no change is made."""
+ * 
+ *         def __get__(self):             # <<<<<<<<<<<<<<
+ *             if self._cfg.escape_forward_slash_asterisk == 1:
+ *                 return True
+ */
+
+  /* function exit code */
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "nlp/libnlp.pyx":137
+ *                 return False
+ * 
+ *         def __set__(self, value):             # <<<<<<<<<<<<<<
+ *             if bool(value):
+ *                 self._cfg.escape_forward_slash_asterisk = 1
+ */
+
+/* Python wrapper */
+static int __pyx_pw_3nlp_6libnlp_25PTBTokenizerConfigWrapper_29escape_forward_slash_asterisk_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
+static int __pyx_pw_3nlp_6libnlp_25PTBTokenizerConfigWrapper_29escape_forward_slash_asterisk_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__set__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_29escape_forward_slash_asterisk_2__set__(((struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper *)__pyx_v_self), ((PyObject *)__pyx_v_value));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static int __pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_29escape_forward_slash_asterisk_2__set__(struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper *__pyx_v_self, PyObject *__pyx_v_value) {
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("__set__", 0);
+
+  /* "nlp/libnlp.pyx":138
+ * 
+ *         def __set__(self, value):
+ *             if bool(value):             # <<<<<<<<<<<<<<
+ *                 self._cfg.escape_forward_slash_asterisk = 1
+ *             else:
+ */
+  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_value); if (unlikely(__pyx_t_1 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 138; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (((!(!__pyx_t_1)) != 0)) {
+
+    /* "nlp/libnlp.pyx":139
+ *         def __set__(self, value):
+ *             if bool(value):
+ *                 self._cfg.escape_forward_slash_asterisk = 1             # <<<<<<<<<<<<<<
+ *             else:
+ *                 self._cfg.escape_forward_slash_asterisk = 0
+ */
+    __pyx_v_self->_cfg->escape_forward_slash_asterisk = 1;
+
+    /* "nlp/libnlp.pyx":138
+ * 
+ *         def __set__(self, value):
+ *             if bool(value):             # <<<<<<<<<<<<<<
+ *                 self._cfg.escape_forward_slash_asterisk = 1
+ *             else:
+ */
+    goto __pyx_L3;
+  }
+
+  /* "nlp/libnlp.pyx":141
+ *                 self._cfg.escape_forward_slash_asterisk = 1
+ *             else:
+ *                 self._cfg.escape_forward_slash_asterisk = 0             # <<<<<<<<<<<<<<
+ * 
+ *     def default(self):
+ */
+  /*else*/ {
+    __pyx_v_self->_cfg->escape_forward_slash_asterisk = 0;
+  }
+  __pyx_L3:;
+
+  /* "nlp/libnlp.pyx":137
+ *                 return False
+ * 
+ *         def __set__(self, value):             # <<<<<<<<<<<<<<
+ *             if bool(value):
+ *                 self._cfg.escape_forward_slash_asterisk = 1
+ */
+
+  /* function exit code */
+  __pyx_r = 0;
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("nlp.libnlp.PTBTokenizerConfigWrapper.escape_forward_slash_asterisk.__set__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = -1;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "nlp/libnlp.pyx":143
+ *                 self._cfg.escape_forward_slash_asterisk = 0
  * 
  *     def default(self):             # <<<<<<<<<<<<<<
  *         self.split_assimilations = True
@@ -2315,62 +2499,71 @@ static PyObject *__pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_2default(stru
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("default", 0);
 
-  /* "nlp/libnlp.pyx":128
+  /* "nlp/libnlp.pyx":144
  * 
  *     def default(self):
  *         self.split_assimilations = True             # <<<<<<<<<<<<<<
  *         self.normalize_dashes = True
  *         self.normalize_amp = True
  */
-  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_split_assimilations, Py_True) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 128; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_split_assimilations, Py_True) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 144; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "nlp/libnlp.pyx":129
+  /* "nlp/libnlp.pyx":145
  *     def default(self):
  *         self.split_assimilations = True
  *         self.normalize_dashes = True             # <<<<<<<<<<<<<<
  *         self.normalize_amp = True
  *         self.normalize_quotes = None
  */
-  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_normalize_dashes, Py_True) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 129; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_normalize_dashes, Py_True) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "nlp/libnlp.pyx":130
+  /* "nlp/libnlp.pyx":146
  *         self.split_assimilations = True
  *         self.normalize_dashes = True
  *         self.normalize_amp = True             # <<<<<<<<<<<<<<
  *         self.normalize_quotes = None
  *         self.tokenize_newlines = False
  */
-  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_normalize_amp, Py_True) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 130; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_normalize_amp, Py_True) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 146; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "nlp/libnlp.pyx":131
+  /* "nlp/libnlp.pyx":147
  *         self.normalize_dashes = True
  *         self.normalize_amp = True
  *         self.normalize_quotes = None             # <<<<<<<<<<<<<<
  *         self.tokenize_newlines = False
  *         self.normalize_currency = False
  */
-  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_normalize_quotes, Py_None) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 131; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_normalize_quotes, Py_None) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 147; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "nlp/libnlp.pyx":132
+  /* "nlp/libnlp.pyx":148
  *         self.normalize_amp = True
  *         self.normalize_quotes = None
  *         self.tokenize_newlines = False             # <<<<<<<<<<<<<<
  *         self.normalize_currency = False
- * 
+ *         self.escape_forward_slash_asterisk = False
  */
-  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_tokenize_newlines, Py_False) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 132; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_tokenize_newlines, Py_False) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "nlp/libnlp.pyx":133
+  /* "nlp/libnlp.pyx":149
  *         self.normalize_quotes = None
  *         self.tokenize_newlines = False
  *         self.normalize_currency = False             # <<<<<<<<<<<<<<
+ *         self.escape_forward_slash_asterisk = False
+ * 
+ */
+  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_normalize_currency, Py_False) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 149; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+  /* "nlp/libnlp.pyx":150
+ *         self.tokenize_newlines = False
+ *         self.normalize_currency = False
+ *         self.escape_forward_slash_asterisk = False             # <<<<<<<<<<<<<<
  * 
  *     def __str__(self):
  */
-  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_normalize_currency, Py_False) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 133; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_escape_forward_slash_asterisk, Py_False) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 150; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "nlp/libnlp.pyx":127
- *                 self._cfg.normalize_currency = 0
+  /* "nlp/libnlp.pyx":143
+ *                 self._cfg.escape_forward_slash_asterisk = 0
  * 
  *     def default(self):             # <<<<<<<<<<<<<<
  *         self.split_assimilations = True
@@ -2389,12 +2582,12 @@ static PyObject *__pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_2default(stru
   return __pyx_r;
 }
 
-/* "nlp/libnlp.pyx":135
- *         self.normalize_currency = False
+/* "nlp/libnlp.pyx":152
+ *         self.escape_forward_slash_asterisk = False
  * 
  *     def __str__(self):             # <<<<<<<<<<<<<<
  *         return "PTBTokenizerConfigWrapper\n" \
- *             + " ::    normalize dashes: {}\n".format(
+ *             + " ::              normalize dashes: {}\n".format(
  */
 
 /* Python wrapper */
@@ -2424,33 +2617,33 @@ static PyObject *__pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_4__str__(stru
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__str__", 0);
 
-  /* "nlp/libnlp.pyx":136
+  /* "nlp/libnlp.pyx":153
  * 
  *     def __str__(self):
  *         return "PTBTokenizerConfigWrapper\n" \             # <<<<<<<<<<<<<<
- *             + " ::    normalize dashes: {}\n".format(
+ *             + " ::              normalize dashes: {}\n".format(
  *                     self.normalize_dashes) \
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "nlp/libnlp.pyx":137
+  /* "nlp/libnlp.pyx":154
  *     def __str__(self):
  *         return "PTBTokenizerConfigWrapper\n" \
- *             + " ::    normalize dashes: {}\n".format(             # <<<<<<<<<<<<<<
+ *             + " ::              normalize dashes: {}\n".format(             # <<<<<<<<<<<<<<
  *                     self.normalize_dashes) \
- *             + " ::       normalize amp: {}\n".format(
+ *             + " ::                 normalize amp: {}\n".format(
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_normalize_dashes_2, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 137; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_normalize_dashes_2, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
 
-  /* "nlp/libnlp.pyx":138
+  /* "nlp/libnlp.pyx":155
  *         return "PTBTokenizerConfigWrapper\n" \
- *             + " ::    normalize dashes: {}\n".format(
+ *             + " ::              normalize dashes: {}\n".format(
  *                     self.normalize_dashes) \             # <<<<<<<<<<<<<<
- *             + " ::       normalize amp: {}\n".format(
+ *             + " ::                 normalize amp: {}\n".format(
  *                     self.normalize_amp) \
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_normalize_dashes); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 138; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_normalize_dashes); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 155; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
@@ -2463,51 +2656,51 @@ static PyObject *__pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_4__str__(stru
     }
   }
   if (!__pyx_t_4) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 137; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else {
-    __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 137; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
     __Pyx_GIVEREF(__pyx_t_3);
     PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_t_3);
     __pyx_t_3 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 137; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "nlp/libnlp.pyx":137
+  /* "nlp/libnlp.pyx":154
  *     def __str__(self):
  *         return "PTBTokenizerConfigWrapper\n" \
- *             + " ::    normalize dashes: {}\n".format(             # <<<<<<<<<<<<<<
+ *             + " ::              normalize dashes: {}\n".format(             # <<<<<<<<<<<<<<
  *                     self.normalize_dashes) \
- *             + " ::       normalize amp: {}\n".format(
+ *             + " ::                 normalize amp: {}\n".format(
  */
-  __pyx_t_2 = PyNumber_Add(__pyx_n_s_PTBTokenizerConfigWrapper, __pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 137; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyNumber_Add(__pyx_n_s_PTBTokenizerConfigWrapper, __pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "nlp/libnlp.pyx":139
- *             + " ::    normalize dashes: {}\n".format(
+  /* "nlp/libnlp.pyx":156
+ *             + " ::              normalize dashes: {}\n".format(
  *                     self.normalize_dashes) \
- *             + " ::       normalize amp: {}\n".format(             # <<<<<<<<<<<<<<
+ *             + " ::                 normalize amp: {}\n".format(             # <<<<<<<<<<<<<<
  *                     self.normalize_amp) \
- *             + " :: split assimilations: {}\n".format(
+ *             + " ::           split assimilations: {}\n".format(
  */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_normalize_amp_2, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 139; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_normalize_amp_2, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
 
-  /* "nlp/libnlp.pyx":140
+  /* "nlp/libnlp.pyx":157
  *                     self.normalize_dashes) \
- *             + " ::       normalize amp: {}\n".format(
+ *             + " ::                 normalize amp: {}\n".format(
  *                     self.normalize_amp) \             # <<<<<<<<<<<<<<
- *             + " :: split assimilations: {}\n".format(
+ *             + " ::           split assimilations: {}\n".format(
  *                     self.split_assimilations) \
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_normalize_amp); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 140; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_normalize_amp); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 157; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_5))) {
@@ -2520,52 +2713,52 @@ static PyObject *__pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_4__str__(stru
     }
   }
   if (!__pyx_t_4) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 139; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else {
-    __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 139; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __pyx_t_4 = NULL;
     __Pyx_GIVEREF(__pyx_t_3);
     PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_3);
     __pyx_t_3 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 139; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   }
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "nlp/libnlp.pyx":139
- *             + " ::    normalize dashes: {}\n".format(
+  /* "nlp/libnlp.pyx":156
+ *             + " ::              normalize dashes: {}\n".format(
  *                     self.normalize_dashes) \
- *             + " ::       normalize amp: {}\n".format(             # <<<<<<<<<<<<<<
+ *             + " ::                 normalize amp: {}\n".format(             # <<<<<<<<<<<<<<
  *                     self.normalize_amp) \
- *             + " :: split assimilations: {}\n".format(
+ *             + " ::           split assimilations: {}\n".format(
  */
-  __pyx_t_5 = PyNumber_Add(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 139; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = PyNumber_Add(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "nlp/libnlp.pyx":141
- *             + " ::       normalize amp: {}\n".format(
+  /* "nlp/libnlp.pyx":158
+ *             + " ::                 normalize amp: {}\n".format(
  *                     self.normalize_amp) \
- *             + " :: split assimilations: {}\n".format(             # <<<<<<<<<<<<<<
+ *             + " ::           split assimilations: {}\n".format(             # <<<<<<<<<<<<<<
  *                     self.split_assimilations) \
- *             + " ::    normalize quotes: {}".format(self.normalize_quotes) \
+ *             + " ::              normalize quotes: {}\n".format(
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_split_assimilations_2, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 141; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_split_assimilations_2, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
 
-  /* "nlp/libnlp.pyx":142
+  /* "nlp/libnlp.pyx":159
  *                     self.normalize_amp) \
- *             + " :: split assimilations: {}\n".format(
+ *             + " ::           split assimilations: {}\n".format(
  *                     self.split_assimilations) \             # <<<<<<<<<<<<<<
- *             + " ::    normalize quotes: {}".format(self.normalize_quotes) \
- *             + " ::   tokenize newlines: {}".format(self.tokenize_newlines) \
+ *             + " ::              normalize quotes: {}\n".format(
+ *                     self.normalize_quotes) \
  */
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_split_assimilations); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 142; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_split_assimilations); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 159; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_6);
   __pyx_t_3 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
@@ -2578,44 +2771,52 @@ static PyObject *__pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_4__str__(stru
     }
   }
   if (!__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_6); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 141; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_6); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else {
-    __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 141; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3); __pyx_t_3 = NULL;
     __Pyx_GIVEREF(__pyx_t_6);
     PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_t_6);
     __pyx_t_6 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 141; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "nlp/libnlp.pyx":141
- *             + " ::       normalize amp: {}\n".format(
+  /* "nlp/libnlp.pyx":158
+ *             + " ::                 normalize amp: {}\n".format(
  *                     self.normalize_amp) \
- *             + " :: split assimilations: {}\n".format(             # <<<<<<<<<<<<<<
+ *             + " ::           split assimilations: {}\n".format(             # <<<<<<<<<<<<<<
  *                     self.split_assimilations) \
- *             + " ::    normalize quotes: {}".format(self.normalize_quotes) \
+ *             + " ::              normalize quotes: {}\n".format(
  */
-  __pyx_t_2 = PyNumber_Add(__pyx_t_5, __pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 141; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyNumber_Add(__pyx_t_5, __pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "nlp/libnlp.pyx":143
- *             + " :: split assimilations: {}\n".format(
+  /* "nlp/libnlp.pyx":160
+ *             + " ::           split assimilations: {}\n".format(
  *                     self.split_assimilations) \
- *             + " ::    normalize quotes: {}".format(self.normalize_quotes) \             # <<<<<<<<<<<<<<
- *             + " ::   tokenize newlines: {}".format(self.tokenize_newlines) \
- *             + " ::  normalize currency: {}".format(self.normalize_currency)
+ *             + " ::              normalize quotes: {}\n".format(             # <<<<<<<<<<<<<<
+ *                     self.normalize_quotes) \
+ *             + " ::             tokenize newlines: {}\n".format(
  */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_normalize_quotes_2, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 143; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_normalize_quotes_2, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_normalize_quotes); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 143; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+  /* "nlp/libnlp.pyx":161
+ *                     self.split_assimilations) \
+ *             + " ::              normalize quotes: {}\n".format(
+ *                     self.normalize_quotes) \             # <<<<<<<<<<<<<<
+ *             + " ::             tokenize newlines: {}\n".format(
+ *                     self.tokenize_newlines) \
+ */
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_normalize_quotes); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_6 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_5))) {
@@ -2628,36 +2829,52 @@ static PyObject *__pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_4__str__(stru
     }
   }
   if (!__pyx_t_6) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 143; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else {
-    __pyx_t_3 = PyTuple_New(1+1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 143; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = PyTuple_New(1+1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_6); __pyx_t_6 = NULL;
     __Pyx_GIVEREF(__pyx_t_4);
     PyTuple_SET_ITEM(__pyx_t_3, 0+1, __pyx_t_4);
     __pyx_t_4 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 143; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   }
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyNumber_Add(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 143; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+  /* "nlp/libnlp.pyx":160
+ *             + " ::           split assimilations: {}\n".format(
+ *                     self.split_assimilations) \
+ *             + " ::              normalize quotes: {}\n".format(             # <<<<<<<<<<<<<<
+ *                     self.normalize_quotes) \
+ *             + " ::             tokenize newlines: {}\n".format(
+ */
+  __pyx_t_5 = PyNumber_Add(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "nlp/libnlp.pyx":144
- *                     self.split_assimilations) \
- *             + " ::    normalize quotes: {}".format(self.normalize_quotes) \
- *             + " ::   tokenize newlines: {}".format(self.tokenize_newlines) \             # <<<<<<<<<<<<<<
- *             + " ::  normalize currency: {}".format(self.normalize_currency)
- * 
+  /* "nlp/libnlp.pyx":162
+ *             + " ::              normalize quotes: {}\n".format(
+ *                     self.normalize_quotes) \
+ *             + " ::             tokenize newlines: {}\n".format(             # <<<<<<<<<<<<<<
+ *                     self.tokenize_newlines) \
+ *             + " ::            normalize currency: {}\n".format(
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_tokenize_newlines_2, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 144; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_tokenize_newlines_2, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 162; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_tokenize_newlines); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 144; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+  /* "nlp/libnlp.pyx":163
+ *                     self.normalize_quotes) \
+ *             + " ::             tokenize newlines: {}\n".format(
+ *                     self.tokenize_newlines) \             # <<<<<<<<<<<<<<
+ *             + " ::            normalize currency: {}\n".format(
+ *                     self.normalize_currency) \
+ */
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_tokenize_newlines); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 163; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
@@ -2670,36 +2887,52 @@ static PyObject *__pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_4__str__(stru
     }
   }
   if (!__pyx_t_4) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 144; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 162; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else {
-    __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 144; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 162; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __pyx_t_4 = NULL;
     __Pyx_GIVEREF(__pyx_t_3);
     PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_3);
     __pyx_t_3 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 144; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 162; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyNumber_Add(__pyx_t_5, __pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 144; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+  /* "nlp/libnlp.pyx":162
+ *             + " ::              normalize quotes: {}\n".format(
+ *                     self.normalize_quotes) \
+ *             + " ::             tokenize newlines: {}\n".format(             # <<<<<<<<<<<<<<
+ *                     self.tokenize_newlines) \
+ *             + " ::            normalize currency: {}\n".format(
+ */
+  __pyx_t_2 = PyNumber_Add(__pyx_t_5, __pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 162; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "nlp/libnlp.pyx":145
- *             + " ::    normalize quotes: {}".format(self.normalize_quotes) \
- *             + " ::   tokenize newlines: {}".format(self.tokenize_newlines) \
- *             + " ::  normalize currency: {}".format(self.normalize_currency)             # <<<<<<<<<<<<<<
- * 
- *     def __dealloc__(self):
+  /* "nlp/libnlp.pyx":164
+ *             + " ::             tokenize newlines: {}\n".format(
+ *                     self.tokenize_newlines) \
+ *             + " ::            normalize currency: {}\n".format(             # <<<<<<<<<<<<<<
+ *                     self.normalize_currency) \
+ *             + " :: escape forward slash asterisk: {}".format(
  */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_normalize_currency_2, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_normalize_currency_2, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_normalize_currency); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+  /* "nlp/libnlp.pyx":165
+ *                     self.tokenize_newlines) \
+ *             + " ::            normalize currency: {}\n".format(
+ *                     self.normalize_currency) \             # <<<<<<<<<<<<<<
+ *             + " :: escape forward slash asterisk: {}".format(
+ *                     self.escape_forward_slash_asterisk)
+ */
+  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_normalize_currency); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 165; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_6);
   __pyx_t_3 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_5))) {
@@ -2712,35 +2945,101 @@ static PyObject *__pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_4__str__(stru
     }
   }
   if (!__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else {
-    __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3); __pyx_t_3 = NULL;
     __Pyx_GIVEREF(__pyx_t_6);
     PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_t_6);
     __pyx_t_6 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   }
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyNumber_Add(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+  /* "nlp/libnlp.pyx":164
+ *             + " ::             tokenize newlines: {}\n".format(
+ *                     self.tokenize_newlines) \
+ *             + " ::            normalize currency: {}\n".format(             # <<<<<<<<<<<<<<
+ *                     self.normalize_currency) \
+ *             + " :: escape forward slash asterisk: {}".format(
+ */
+  __pyx_t_5 = PyNumber_Add(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_r = __pyx_t_5;
-  __pyx_t_5 = 0;
+
+  /* "nlp/libnlp.pyx":166
+ *             + " ::            normalize currency: {}\n".format(
+ *                     self.normalize_currency) \
+ *             + " :: escape forward slash asterisk: {}".format(             # <<<<<<<<<<<<<<
+ *                     self.escape_forward_slash_asterisk)
+ * 
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_escape_forward_slash_asterisk_2, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 166; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+
+  /* "nlp/libnlp.pyx":167
+ *                     self.normalize_currency) \
+ *             + " :: escape forward slash asterisk: {}".format(
+ *                     self.escape_forward_slash_asterisk)             # <<<<<<<<<<<<<<
+ * 
+ *     def __dealloc__(self):
+ */
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_escape_forward_slash_asterisk); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 167; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_6 = NULL;
+  if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_6)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  if (!__pyx_t_6) {
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 166; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_GOTREF(__pyx_t_1);
+  } else {
+    __pyx_t_3 = PyTuple_New(1+1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 166; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_6); __pyx_t_6 = NULL;
+    __Pyx_GIVEREF(__pyx_t_4);
+    PyTuple_SET_ITEM(__pyx_t_3, 0+1, __pyx_t_4);
+    __pyx_t_4 = 0;
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 166; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  }
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "nlp/libnlp.pyx":166
+ *             + " ::            normalize currency: {}\n".format(
+ *                     self.normalize_currency) \
+ *             + " :: escape forward slash asterisk: {}".format(             # <<<<<<<<<<<<<<
+ *                     self.escape_forward_slash_asterisk)
+ * 
+ */
+  __pyx_t_2 = PyNumber_Add(__pyx_t_5, __pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 166; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_r = __pyx_t_2;
+  __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "nlp/libnlp.pyx":135
- *         self.normalize_currency = False
+  /* "nlp/libnlp.pyx":152
+ *         self.escape_forward_slash_asterisk = False
  * 
  *     def __str__(self):             # <<<<<<<<<<<<<<
  *         return "PTBTokenizerConfigWrapper\n" \
- *             + " ::    normalize dashes: {}\n".format(
+ *             + " ::              normalize dashes: {}\n".format(
  */
 
   /* function exit code */
@@ -2759,8 +3058,8 @@ static PyObject *__pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_4__str__(stru
   return __pyx_r;
 }
 
-/* "nlp/libnlp.pyx":147
- *             + " ::  normalize currency: {}".format(self.normalize_currency)
+/* "nlp/libnlp.pyx":169
+ *                     self.escape_forward_slash_asterisk)
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
  *         print "PTBTokenizerConfigWrapper.__dealloc__()"
@@ -2785,16 +3084,16 @@ static void __pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_6__dealloc__(struc
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "nlp/libnlp.pyx":148
+  /* "nlp/libnlp.pyx":170
  * 
  *     def __dealloc__(self):
  *         print "PTBTokenizerConfigWrapper.__dealloc__()"             # <<<<<<<<<<<<<<
  *         PyMem_Free(self._cfg);
  * 
  */
-  if (__Pyx_PrintOne(0, __pyx_kp_s_PTBTokenizerConfigWrapper___deal) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_PrintOne(0, __pyx_kp_s_PTBTokenizerConfigWrapper___deal) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 170; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "nlp/libnlp.pyx":149
+  /* "nlp/libnlp.pyx":171
  *     def __dealloc__(self):
  *         print "PTBTokenizerConfigWrapper.__dealloc__()"
  *         PyMem_Free(self._cfg);             # <<<<<<<<<<<<<<
@@ -2803,8 +3102,8 @@ static void __pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_6__dealloc__(struc
  */
   PyMem_Free(__pyx_v_self->_cfg);
 
-  /* "nlp/libnlp.pyx":147
- *             + " ::  normalize currency: {}".format(self.normalize_currency)
+  /* "nlp/libnlp.pyx":169
+ *                     self.escape_forward_slash_asterisk)
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
  *         print "PTBTokenizerConfigWrapper.__dealloc__()"
@@ -2819,7 +3118,7 @@ static void __pyx_pf_3nlp_6libnlp_25PTBTokenizerConfigWrapper_6__dealloc__(struc
   __Pyx_RefNannyFinishContext();
 }
 
-/* "nlp/libnlp.pyx":154
+/* "nlp/libnlp.pyx":176
  * cdef PTBTokenizerConfigWrapper global_ptb_tok_cfg = PTBTokenizerConfigWrapper()
  * 
  * def get_global_PTB_config():             # <<<<<<<<<<<<<<
@@ -2846,7 +3145,7 @@ static PyObject *__pyx_pf_3nlp_6libnlp_get_global_PTB_config(CYTHON_UNUSED PyObj
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_global_PTB_config", 0);
 
-  /* "nlp/libnlp.pyx":156
+  /* "nlp/libnlp.pyx":178
  * def get_global_PTB_config():
  *     global global_ptb_tok_cfg
  *     return global_ptb_tok_cfg             # <<<<<<<<<<<<<<
@@ -2856,7 +3155,7 @@ static PyObject *__pyx_pf_3nlp_6libnlp_get_global_PTB_config(CYTHON_UNUSED PyObj
   __pyx_r = ((PyObject *)__pyx_v_3nlp_6libnlp_global_ptb_tok_cfg);
   goto __pyx_L0;
 
-  /* "nlp/libnlp.pyx":154
+  /* "nlp/libnlp.pyx":176
  * cdef PTBTokenizerConfigWrapper global_ptb_tok_cfg = PTBTokenizerConfigWrapper()
  * 
  * def get_global_PTB_config():             # <<<<<<<<<<<<<<
@@ -3079,6 +3378,20 @@ static int __pyx_setprop_3nlp_6libnlp_25PTBTokenizerConfigWrapper_normalize_curr
   }
 }
 
+static PyObject *__pyx_getprop_3nlp_6libnlp_25PTBTokenizerConfigWrapper_escape_forward_slash_asterisk(PyObject *o, CYTHON_UNUSED void *x) {
+  return __pyx_pw_3nlp_6libnlp_25PTBTokenizerConfigWrapper_29escape_forward_slash_asterisk_1__get__(o);
+}
+
+static int __pyx_setprop_3nlp_6libnlp_25PTBTokenizerConfigWrapper_escape_forward_slash_asterisk(PyObject *o, PyObject *v, CYTHON_UNUSED void *x) {
+  if (v) {
+    return __pyx_pw_3nlp_6libnlp_25PTBTokenizerConfigWrapper_29escape_forward_slash_asterisk_3__set__(o, v);
+  }
+  else {
+    PyErr_SetString(PyExc_NotImplementedError, "__del__");
+    return -1;
+  }
+}
+
 static PyMethodDef __pyx_methods_3nlp_6libnlp_PTBTokenizerConfigWrapper[] = {
   {"default", (PyCFunction)__pyx_pw_3nlp_6libnlp_25PTBTokenizerConfigWrapper_3default, METH_NOARGS, 0},
   {0, 0, 0, 0}
@@ -3091,6 +3404,7 @@ static struct PyGetSetDef __pyx_getsets_3nlp_6libnlp_PTBTokenizerConfigWrapper[]
   {(char *)"normalize_quotes", __pyx_getprop_3nlp_6libnlp_25PTBTokenizerConfigWrapper_normalize_quotes, __pyx_setprop_3nlp_6libnlp_25PTBTokenizerConfigWrapper_normalize_quotes, __pyx_k_String_or_None_Accepts_unicode_a, 0},
   {(char *)"tokenize_newlines", __pyx_getprop_3nlp_6libnlp_25PTBTokenizerConfigWrapper_tokenize_newlines, __pyx_setprop_3nlp_6libnlp_25PTBTokenizerConfigWrapper_tokenize_newlines, __pyx_k_When_true_tokenizer_tokenizes_th, 0},
   {(char *)"normalize_currency", __pyx_getprop_3nlp_6libnlp_25PTBTokenizerConfigWrapper_normalize_currency, __pyx_setprop_3nlp_6libnlp_25PTBTokenizerConfigWrapper_normalize_currency, __pyx_k_When_true_tokenizer_converts_thi, 0},
+  {(char *)"escape_forward_slash_asterisk", __pyx_getprop_3nlp_6libnlp_25PTBTokenizerConfigWrapper_escape_forward_slash_asterisk, __pyx_setprop_3nlp_6libnlp_25PTBTokenizerConfigWrapper_escape_forward_slash_asterisk, __pyx_k_When_true_tokenizer_transforms_a, 0},
   {0, 0, 0, 0, 0}
 };
 
@@ -3185,6 +3499,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
   {&__pyx_n_u_ascii, __pyx_k_ascii, sizeof(__pyx_k_ascii), 0, 1, 0, 1},
   {&__pyx_n_s_end, __pyx_k_end, sizeof(__pyx_k_end), 0, 0, 1, 1},
+  {&__pyx_n_s_escape_forward_slash_asterisk, __pyx_k_escape_forward_slash_asterisk, sizeof(__pyx_k_escape_forward_slash_asterisk), 0, 0, 1, 1},
+  {&__pyx_kp_s_escape_forward_slash_asterisk_2, __pyx_k_escape_forward_slash_asterisk_2, sizeof(__pyx_k_escape_forward_slash_asterisk_2), 0, 0, 1, 0},
   {&__pyx_n_s_file, __pyx_k_file, sizeof(__pyx_k_file), 0, 0, 1, 1},
   {&__pyx_n_s_format, __pyx_k_format, sizeof(__pyx_k_format), 0, 0, 1, 1},
   {&__pyx_n_s_get_global_PTB_config, __pyx_k_get_global_PTB_config, sizeof(__pyx_k_get_global_PTB_config), 0, 0, 1, 1},
@@ -3234,14 +3550,14 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
-  /* "nlp/libnlp.pyx":154
+  /* "nlp/libnlp.pyx":176
  * cdef PTBTokenizerConfigWrapper global_ptb_tok_cfg = PTBTokenizerConfigWrapper()
  * 
  * def get_global_PTB_config():             # <<<<<<<<<<<<<<
  *     global global_ptb_tok_cfg
  *     return global_ptb_tok_cfg
  */
-  __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_kedz_projects2015_python_n, __pyx_n_s_get_global_PTB_config, 154, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_kedz_projects2015_python_n, __pyx_n_s_get_global_PTB_config, 176, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 176; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -3362,44 +3678,44 @@ PyMODINIT_FUNC PyInit_libnlp(void)
   if (__Pyx_patch_abc() < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   #endif
 
-  /* "nlp/libnlp.pyx":151
+  /* "nlp/libnlp.pyx":173
  *         PyMem_Free(self._cfg);
  * 
  * cdef MemoryManagerWrapper memmgr = MemoryManagerWrapper()             # <<<<<<<<<<<<<<
  * cdef PTBTokenizerConfigWrapper global_ptb_tok_cfg = PTBTokenizerConfigWrapper()
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_3nlp_6libnlp_MemoryManagerWrapper), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 151; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_3nlp_6libnlp_MemoryManagerWrapper), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 173; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(((PyObject *)__pyx_v_3nlp_6libnlp_memmgr));
   __Pyx_DECREF_SET(__pyx_v_3nlp_6libnlp_memmgr, ((struct __pyx_obj_3nlp_6libnlp_MemoryManagerWrapper *)__pyx_t_1));
   __Pyx_GIVEREF(__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "nlp/libnlp.pyx":152
+  /* "nlp/libnlp.pyx":174
  * 
  * cdef MemoryManagerWrapper memmgr = MemoryManagerWrapper()
  * cdef PTBTokenizerConfigWrapper global_ptb_tok_cfg = PTBTokenizerConfigWrapper()             # <<<<<<<<<<<<<<
  * 
  * def get_global_PTB_config():
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_3nlp_6libnlp_PTBTokenizerConfigWrapper), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_3nlp_6libnlp_PTBTokenizerConfigWrapper), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 174; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(((PyObject *)__pyx_v_3nlp_6libnlp_global_ptb_tok_cfg));
   __Pyx_DECREF_SET(__pyx_v_3nlp_6libnlp_global_ptb_tok_cfg, ((struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper *)__pyx_t_1));
   __Pyx_GIVEREF(__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "nlp/libnlp.pyx":154
+  /* "nlp/libnlp.pyx":176
  * cdef PTBTokenizerConfigWrapper global_ptb_tok_cfg = PTBTokenizerConfigWrapper()
  * 
  * def get_global_PTB_config():             # <<<<<<<<<<<<<<
  *     global global_ptb_tok_cfg
  *     return global_ptb_tok_cfg
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_3nlp_6libnlp_1get_global_PTB_config, NULL, __pyx_n_s_nlp_libnlp); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_3nlp_6libnlp_1get_global_PTB_config, NULL, __pyx_n_s_nlp_libnlp); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 176; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_get_global_PTB_config, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_get_global_PTB_config, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 176; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "nlp/libnlp.pyx":1

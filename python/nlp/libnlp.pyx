@@ -124,6 +124,22 @@ cdef class PTBTokenizerConfigWrapper(object):
             else:
                 self._cfg.normalize_currency = 0
 
+    property escape_forward_slash_asterisk:
+        u"""When true, tokenizer transforms '*' and '/' to '\\*' and '\\/'.
+        If either character is already escaped, no change is made."""
+
+        def __get__(self):
+            if self._cfg.escape_forward_slash_asterisk == 1:
+                return True
+            else:
+                return False
+
+        def __set__(self, value):
+            if bool(value):
+                self._cfg.escape_forward_slash_asterisk = 1
+            else:
+                self._cfg.escape_forward_slash_asterisk = 0
+
     def default(self):
         self.split_assimilations = True
         self.normalize_dashes = True
@@ -131,18 +147,24 @@ cdef class PTBTokenizerConfigWrapper(object):
         self.normalize_quotes = None
         self.tokenize_newlines = False
         self.normalize_currency = False
+        self.escape_forward_slash_asterisk = False
 
     def __str__(self):
         return "PTBTokenizerConfigWrapper\n" \
-            + " ::    normalize dashes: {}\n".format(
+            + " ::              normalize dashes: {}\n".format(
                     self.normalize_dashes) \
-            + " ::       normalize amp: {}\n".format(
+            + " ::                 normalize amp: {}\n".format(
                     self.normalize_amp) \
-            + " :: split assimilations: {}\n".format(
+            + " ::           split assimilations: {}\n".format(
                     self.split_assimilations) \
-            + " ::    normalize quotes: {}".format(self.normalize_quotes) \
-            + " ::   tokenize newlines: {}".format(self.tokenize_newlines) \
-            + " ::  normalize currency: {}".format(self.normalize_currency)
+            + " ::              normalize quotes: {}\n".format(
+                    self.normalize_quotes) \
+            + " ::             tokenize newlines: {}\n".format(
+                    self.tokenize_newlines) \
+            + " ::            normalize currency: {}\n".format(
+                    self.normalize_currency) \
+            + " :: escape forward slash asterisk: {}".format(
+                    self.escape_forward_slash_asterisk)
 
     def __dealloc__(self):
         print "PTBTokenizerConfigWrapper.__dealloc__()"
