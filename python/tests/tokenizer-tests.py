@@ -444,6 +444,58 @@ class Tok_Test:
             assert token == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
+    def ldots_NO_normalize_test(self):
+        string = u"... .... ..... . .\u00A0. \u2026"
+        gold = [u"...", u"....", u".....", u". .\u00A0.", u"\u2026"]
+        tokens = nlp.tokenize(string)
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def ldots_ptb3_normalize_test(self):
+        nlp.get_global_PTB_config().normalize_ellipsis = u"ptb3"
+        string = u"... .... ..... . .\u00A0. \u2026"
+        gold = [u"...", u"...", u"...", u"...", u"..."]
+        tokens = nlp.tokenize(string)
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def ldots_unicode_normalize_test(self):
+        nlp.get_global_PTB_config().normalize_ellipsis = u"unicode"
+        string = u"... .... ..... . .\u00A0.   \u2026"
+        gold = [u"\u2026", u"\u2026", u"\u2026", u"\u2026", u"\u2026"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+
+
+    def ldots_ptb3_normalize_test(self):
+        nlp.get_global_PTB_config().normalize_ellipsis = u"ptb3"
+        string = u"... .... ..... . .\u00A0."
+        gold = [u"...", u"...", u"...", u"..."]
+        tokens = nlp.tokenize(string)
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+
+
+    def fnmarks_test(self):
+        string = u"____@@@@@@##### ### @@@ _"
+        gold = [u"____", u"@@@@@@", u"#####", u"###", u"@@@", u"_"]
+        tokens = nlp.tokenize(string)
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
 
 
     def asts_NO_escape_test(self):
