@@ -477,7 +477,7 @@ static const char *__pyx_f[] = {
 struct __pyx_obj_3nlp_6libnlp_MemoryManagerWrapper;
 struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper;
 
-/* "nlp/libnlp.pxd":40
+/* "nlp/libnlp.pxd":44
  *         NL_PTBTokConfig *cfg, NL_v_memmgr *mgr);
  * 
  * cdef class MemoryManagerWrapper(object):             # <<<<<<<<<<<<<<
@@ -490,7 +490,7 @@ struct __pyx_obj_3nlp_6libnlp_MemoryManagerWrapper {
 };
 
 
-/* "nlp/libnlp.pxd":43
+/* "nlp/libnlp.pxd":47
  *     cdef NL_v_memmgr *_mgr
  * 
  * cdef class PTBTokenizerConfigWrapper(object):             # <<<<<<<<<<<<<<
@@ -1199,8 +1199,8 @@ PyMODINIT_FUNC PyInit_ez(void)
   /*--- Function export code ---*/
   /*--- Type init code ---*/
   /*--- Type import code ---*/
-  __pyx_ptype_3nlp_6libnlp_MemoryManagerWrapper = __Pyx_ImportType("nlp.libnlp", "MemoryManagerWrapper", sizeof(struct __pyx_obj_3nlp_6libnlp_MemoryManagerWrapper), 1); if (unlikely(!__pyx_ptype_3nlp_6libnlp_MemoryManagerWrapper)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_ptype_3nlp_6libnlp_PTBTokenizerConfigWrapper = __Pyx_ImportType("nlp.libnlp", "PTBTokenizerConfigWrapper", sizeof(struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper), 1); if (unlikely(!__pyx_ptype_3nlp_6libnlp_PTBTokenizerConfigWrapper)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 43; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_ptype_3nlp_6libnlp_MemoryManagerWrapper = __Pyx_ImportType("nlp.libnlp", "MemoryManagerWrapper", sizeof(struct __pyx_obj_3nlp_6libnlp_MemoryManagerWrapper), 1); if (unlikely(!__pyx_ptype_3nlp_6libnlp_MemoryManagerWrapper)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_ptype_3nlp_6libnlp_PTBTokenizerConfigWrapper = __Pyx_ImportType("nlp.libnlp", "PTBTokenizerConfigWrapper", sizeof(struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper), 1); if (unlikely(!__pyx_ptype_3nlp_6libnlp_PTBTokenizerConfigWrapper)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   /*--- Variable import code ---*/
   __pyx_t_1 = __Pyx_ImportModule("nlp.libnlp"); if (!__pyx_t_1) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (__Pyx_ImportVoidPtr(__pyx_t_1, "memmgr", (void **)&__pyx_vp_3nlp_6libnlp_memmgr, "struct __pyx_obj_3nlp_6libnlp_MemoryManagerWrapper *") < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}

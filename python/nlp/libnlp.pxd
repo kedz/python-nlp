@@ -24,6 +24,9 @@ cdef extern from "tokenizer.h":
     ctypedef enum NL_normalize_quotes:
         QUOTES_NONE, QUOTES_LATEX, QUOTES_UNICODE, QUOTES_ASCII
 
+    ctypedef enum NL_normalize_ellipsis:
+        ELLIPSIS_NONE, ELLIPSIS_PTB3, ELLIPSIS_UNICODE
+
     ctypedef struct NL_PTBTokConfig:
         int split_assimilations
         int normalize_dashes
@@ -32,6 +35,7 @@ cdef extern from "tokenizer.h":
         int tokenize_newlines;
         int normalize_currency;
         int escape_forward_slash_asterisk;
+        NL_normalize_ellipsis normalize_ellipsis
 
     cdef NL_span **NL_tokenize_buf(
         unsigned char *buf, size_t buf_len, size_t *num_tokens, 

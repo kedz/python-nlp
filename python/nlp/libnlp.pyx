@@ -140,6 +140,30 @@ cdef class PTBTokenizerConfigWrapper(object):
             else:
                 self._cfg.escape_forward_slash_asterisk = 0
 
+    property normalize_ellipsis:
+        u"""String or None. Accepts ["unicode"|"ptb3"|None]."""
+
+        def __get__(self):
+            
+            if self._cfg.normalize_ellipsis == ELLIPSIS_UNICODE:
+                return u"unicode"
+            elif self._cfg.normalize_ellipsis == ELLIPSIS_PTB3:
+                return u"ptb3"
+            elif self._cfg.normalize_ellipsis == ELLIPSIS_NONE:
+                return None
+
+        def __set__(self, value):
+            if value == None:
+                self._cfg.normalize_ellipsis = ELLIPSIS_NONE
+            elif value == u"unicode":
+                self._cfg.normalize_ellipsis = ELLIPSIS_UNICODE
+            elif value == u"ptb3":
+                self._cfg.normalize_ellipsis = ELLIPSIS_PTB3
+            else:
+                raise ValueError(
+                    u"Property 'normalize_ellipsis' takes 1 of 3 values: " \
+                    + u"'unicode', 'ptb3', or None.")
+
     def default(self):
         self.split_assimilations = True
         self.normalize_dashes = True
@@ -148,6 +172,8 @@ cdef class PTBTokenizerConfigWrapper(object):
         self.tokenize_newlines = False
         self.normalize_currency = False
         self.escape_forward_slash_asterisk = False
+        self.normalize_ellipsis = None
+
 
     def __str__(self):
         return "PTBTokenizerConfigWrapper\n" \
@@ -163,8 +189,10 @@ cdef class PTBTokenizerConfigWrapper(object):
                     self.tokenize_newlines) \
             + " ::            normalize currency: {}\n".format(
                     self.normalize_currency) \
-            + " :: escape forward slash asterisk: {}".format(
-                    self.escape_forward_slash_asterisk)
+            + " :: escape forward slash asterisk: {}\n".format(
+                    self.escape_forward_slash_asterisk) \
+            + " ::            normalize ellipsis: {}".format(
+                    self.normalize_ellipsis)
 
     def __dealloc__(self):
         print "PTBTokenizerConfigWrapper.__dealloc__()"
