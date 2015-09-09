@@ -38,6 +38,7 @@ cdef extern from "tokenizer.h":
         NL_normalize_ellipsis normalize_ellipsis
         int normalize_parentheses;
         int normalize_brackets;
+        int strict_ptb3;
 
     cdef NL_span **NL_tokenize_buf(
         unsigned char *buf, size_t buf_len, size_t *num_tokens, 

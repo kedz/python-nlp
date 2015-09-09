@@ -28,12 +28,17 @@ typedef struct NL_PTBTokConfig {
     NL_normalize_ellipsis normalize_ellipsis;
     int normalize_parentheses;
     int normalize_brackets;
-    //    short int tokenizeNLs, americanize, normalizeSpace,
-//       normalizeAmpersandEntity, normalizeCurrency, normalizeFractions,
+    int strict_ptb3;
+//       strictTreebank3,
+    //    //americanize, normalizeSpace,
+//       normalizeFractions,
+    //    short int tokenizeNLs, 
+    //
+//       normalizeAmpersandEntity, normalizeCurrency, 
 //       normalizeParentheses, normalizeOtherBrackets,
 //       quotes_latex, quotes_unicode, quotes_ascii,
 //       ellipsis_ptb3, ellipsis_unicode,
-//       ptb3Dashes, escapeForwardSlashAsterisk, strictTreebank3,
+//       ptb3Dashes, escapeForwardSlashAsterisk,
 //       splitAssimilations;
 } NL_PTBTokConfig;
 

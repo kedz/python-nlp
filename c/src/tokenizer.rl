@@ -1161,6 +1161,54 @@ action HandleQuotesProbablyRight {
 #
 ##        SMILEY => NextToken;
 
+
+    ACRONYM %MarkIntermediate1 SPACENLS (
+          [A] /bout/i | [A] /ccording/i | [A] /dditionally/i | [A] /fter/i
+        | [A] /n/i | [A] | [A] /s/i | [A] /t/i | [B] /ut/i | [D] /id/i
+        | [D] /uring/i | [E] /arlier/i | [H] /e/i | [H] /er/i | [H] /ere/i
+        | [H] /ow/i | [H] /owever/i | [I] /f/i | [I] /n/i | [I] /t/i
+        | [L] /ast/i | [M] /any/i | [M] /ore/i | [M] /r/i "." | [M] /s/i "."
+        | [N] /ow/i | [O] /nce/i | [O] /ne/i | [O] /ther/i | [O] /ur/i
+        | [S] /he/i | [S] /ince/i | [S] /o/i | [S] /ome/i | [S] /uch/i
+        | [T] /hat/i | [T] /he/i | [T] /heir/i | [T] /hen/i | [T] /here/i
+        | [T] /hese/i | [T] /hey/i | [T] /his/i | [W] /e/i | [W] /hen/i
+        | [W] /hile/i | [W] /hat/i | [Y] /et/i | [Y] /ou/i
+        | SGML) SPACENL => {
+            if (ti1 - ts == 2) { // e.g. "I."
+ 
+                te = ti1 - 1;
+                NEXT_TOKEN
+
+                ts = ti1 - 1;
+                fpc = ti1 - 2;
+                te = '\0';
+
+            } else if (strict_ptb3 && memcmp(ts, "U.S.", 4) != 0) {
+                te = ti1 - 1;
+                NEXT_TOKEN
+                ts = ti1 - 1;
+                fpc = ti1 - 2;
+                te = '\0';
+
+
+            } else { // Return next word WITH period and return period for 
+                     // next token.
+               
+                te = ti1;
+                NEXT_TOKEN
+                ts = ti1 - 1;
+                fpc = ti1 - 2;
+                te = '\0';
+
+            }
+        };
+
+
+        ABBREV3 %MarkIntermediate2 SPACENL ? udigit => NextIntermediate2;
+
+        (/pt/i [eyEY]|/co/i)"." %MarkIntermediate2 
+            SPACE ( /ltd/i | /lim/i ) => NextIntermediate2;
+
         "{" => NormalizeLCBNext;
         "}" => NormalizeRCBNext;
         "[" => NormalizeLSBNext;
@@ -1437,6 +1485,12 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
     if (cfg != NULL) {
         normalize_brackets = cfg->normalize_brackets;
     }
+
+    int strict_ptb3 = 0;
+    if (cfg != NULL) {
+        strict_ptb3 = cfg->strict_ptb3;
+    }
+
 
 
     %% write init;

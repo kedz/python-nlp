@@ -444,6 +444,55 @@ class Tok_Test:
             assert token == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
+
+    def acronym_space_special_word_test(self):
+        nlp.get_global_PTB_config().strict_ptb3 = False
+        string = u"I. About A.B.C. After "
+        gold = [u"I", u".", u"About", u"A.B.C.", u".", u"After"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def pty_ltd_test(self):
+        string = u"pte. ltd. co. lim."
+        gold = [u"pte.", u"ltd", u".", u"co.", u"lim", u"."]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def acronym3_space_digit_test(self):
+        string = u"fig. 2 figs.3 prop.4 no.5 nos.6 art.7 bldg.8 pp.9 op.1"
+        gold = [u"fig.", u"2", u"figs.", u"3", u"prop.", u"4",
+                u"no.", u"5", u"nos.", u"6", u"art.", u"7", u"bldg.", u"8",
+                u"pp.", u"9", u"op.", u"1"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+
+
+    def acronym_STRICT_ptb3_space_special_word_test(self):
+        nlp.get_global_PTB_config().strict_ptb3 = True
+        string = u"I. About A.B.C. After "
+        gold = [u"I", u".", u"About", u"A.B.C", u".", u"After"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+
+
     def test_brackets_NO_normalize(self):
         nlp.get_global_PTB_config().normalize_parentheses = False
         nlp.get_global_PTB_config().normalize_brackets = False

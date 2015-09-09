@@ -197,6 +197,22 @@ cdef class PTBTokenizerConfigWrapper(object):
             else:
                 self._cfg.normalize_brackets = 0
 
+    property strict_ptb3:
+        u"""When true, tokenizer tokenizes "U.K. About ", as ["U.K", ".", 
+        "About"]."""
+
+        def __get__(self):
+            if self._cfg.strict_ptb3 == 1:
+                return True
+            else:
+                return False
+
+        def __set__(self, value):
+            if bool(value):
+                self._cfg.strict_ptb3 = 1
+            else:
+                self._cfg.strict_ptb3 = 0
+
 
     def default(self):
         self.split_assimilations = True
@@ -209,6 +225,7 @@ cdef class PTBTokenizerConfigWrapper(object):
         self.normalize_ellipsis = None
         self.normalize_parentheses = True
         self.normalize_brackets = True
+        self.strict_ptb3 = False
 
 
     def __str__(self):
@@ -231,8 +248,10 @@ cdef class PTBTokenizerConfigWrapper(object):
                     self.normalize_ellipsis) \
             + " ::         normalize parentheses: {}\n".format(
                     self.normalize_parentheses) \
-            + " ::            normalize brackets: {}".format(
-                    self.normalize_brackets)
+            + " ::            normalize brackets: {}\n".format(
+                    self.normalize_brackets) \
+            + " ::                   strict ptb3: {}".format(
+                    self.strict_ptb3)
 
     def __dealloc__(self):
         print "PTBTokenizerConfigWrapper.__dealloc__()"
