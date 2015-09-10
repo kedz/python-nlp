@@ -458,13 +458,223 @@ class Tok_Test:
 
     def pty_ltd_test(self):
         string = u"pte. ltd. co. lim."
-        gold = [u"pte.", u"ltd", u".", u"co.", u"lim", u"."]
+        gold = [u"pte.", u"ltd.", u"co.", u"lim", u"."]
         tokens = nlp.tokenize(string)
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
             assert token == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
+
+    def abbrev1_sentend_STRICT_test(self):
+        nlp.get_global_PTB_config().strict_ptb3 = True
+        string = u"Mass.  et al.  " 
+        gold = [u"Mass", u".", u"et", u"al", u"."]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def abbrev1_sentend_test(self):
+        nlp.get_global_PTB_config().strict_ptb3 = False
+        string = u"Mass.  et al.  " 
+        gold = [u"Mass.", u".", u"et", u"al.", u"."]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def abbrev1_any_any_test(self):
+        string = u"Mass. ave  " 
+        gold = [u"Mass.", u"ave"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def abbrev1_STRICT_test(self):
+        nlp.get_global_PTB_config().strict_ptb3 = True
+        string = u"Mass." 
+        gold = [u"Mass", u"."]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+
+    def abbrev1_test(self):
+        nlp.get_global_PTB_config().strict_ptb3 = False
+        string = u"Mass." 
+        gold = [u"Mass.", u"."]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def abbrev2_test(self):
+        string = u"U.S. a.k.a." 
+        gold = [u"U.S.", u"a.k.a."]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def abbrev4_space_test(self):
+        string = u"Dept Ph " 
+        gold = [u"Dept", u"Ph"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def acro_space_test(self):
+        string = u"U.S U.K " 
+        gold = [u"U.S", u"U.K"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def tbspec_space_test(self):
+        string = u"'99 '86" 
+        gold = [u"'99", u"'", u"86"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def filename_spacepunc_test(self):
+        string = u"test1.gif. test2.gif!" 
+        gold = [u"test1.gif", u".", u"test2.gif", u"!"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def word_per_insentp_test(self):
+        string = u"PP\u00ADL.; for one"
+        gold = [u"PPL.", u";", u"for", u"one"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def phone_NO_normalize_space_NO_normalize_par_test(self):
+        string = u"++012.12.123.12345 (123) 123-1234"
+        gold = [u"++012.12.123.12345", u"(123) 123-1234"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def phone_normalize_space_NO_normalize_par_test(self):
+        string = u"++012.12.123.12345 (123) 123-1234"
+        gold = [u"++012.12.123.12345", u"(123)\u00A0123-1234"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def phone_NO_normalize_space_normalize_par_test(self):
+        string = u"++012.12.123.12345 (123) 123-1234"
+        gold = [u"++012.12.123.12345", u"-LRB-123-RRB- 123-1234"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def phone_normalize_space_normalize_par_test(self):
+        string = u"++012.12.123.12345 (123) 123-1234"
+        gold = [u"++012.12.123.12345", u"-LRB-123-RRB-\u00A0123-1234"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+
+    def double_quotes_NO_normalize_test(self):
+        nlp.get_global_PTB_config().normalize_quotes = None
+        string = u'"This is a test"'
+        gold = [u'"', u"This", u"is", u"a", u"test", u'"']
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def double_quotes_LATEX_normalize_test(self):
+        nlp.get_global_PTB_config().normalize_quotes = u"latex"
+        string = u'"This is a test"'
+        gold = [u'``', u"This", u"is", u"a", u"test", u"''"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def double_quotes_unicode_normalize_test(self):
+        nlp.get_global_PTB_config().normalize_quotes = u"unicode"
+        string = u'"This is a test"'
+        gold = [u'\u201C', u"This", u"is", u"a", u"test", u"\u201D"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def double_quotes_ASCII_normalize_test(self):
+        nlp.get_global_PTB_config().normalize_quotes = u"ascii"
+        string = u'&quot;This is a test&quot;'
+        gold = [u'"', u"This", u"is", u"a", u"test", u'"']
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def gt_lt_test(self):
+        string = u"< > &gt; &lt;"
+        gold = [u"<", u">", u">", u"<"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)   
 
     def acronym3_space_digit_test(self):
         string = u"fig. 2 figs.3 prop.4 no.5 nos.6 art.7 bldg.8 pp.9 op.1"

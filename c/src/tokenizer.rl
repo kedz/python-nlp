@@ -70,7 +70,7 @@
     SPACENLS = SPACENL+ ;
 
     #TODO: Need to break out UPPER for SENTEND
-    #
+    SENTEND = SPACENL (SPACENL | upper | SGML);
     #
 
     DIGIT = udigit | 0xDF 0x80..0x89 ;
@@ -1209,6 +1209,83 @@ action HandleQuotesProbablyRight {
         (/pt/i [eyEY]|/co/i)"." %MarkIntermediate2 
             SPACE ( /ltd/i | /lim/i ) => NextIntermediate2;
 
+        ABBREV1 %MarkIntermediate1 SENTEND => {
+            if (strict_ptb3 && memcmp(ts, "U.S.", 4) != 0) {
+                te = ti1 - 1;
+                NEXT_TOKEN
+                ts = ti1 - 1;
+                fpc = ti1 - 2;
+                te = '\0';
+
+
+            } else { // Return next word WITH period and return period for 
+                     // next token.
+               
+                te = ti1;
+                NEXT_TOKEN
+                ts = ti1 - 1;
+                fpc = ti1 - 2;
+                te = '\0';
+
+            }
+
+
+        };
+        
+        ABBREV1 %MarkIntermediate1 any any => NextIntermediate1;
+
+        ABBREV1  => {
+            if (strict_ptb3 && memcmp(ts, "U.S.", 4) != 0) {
+                te = te - 1;
+                NEXT_TOKEN
+                ts = te;
+                fpc = te - 1;
+                te = '\0';
+
+
+            } else { // Return next word WITH period and return period for 
+                     // next token.
+               
+                NEXT_TOKEN
+                ts = te - 1;
+                fpc = te - 2;
+                te = '\0';
+
+            }
+
+
+        };
+
+        ABBREV2 => NextToken; 
+
+        ABBREV4 %MarkIntermediate2 SPACE => NextIntermediate2;
+        ACRO %MarkIntermediate2 SPACENL => NextIntermediate2;
+        TBSPEC2 %MarkIntermediate2 SPACENL => NextIntermediate2;
+        FILENAME %MarkIntermediate2 (SPACENL|[.?!,]) => NextIntermediate2;
+
+        WORD"." %MarkIntermediate2 INSENTP => NextIntermediate2;
+
+        PHONE => NextToken;
+
+        DBLQUOT %MarkIntermediate2 [A-Za-z0-9$] => 
+            NextIntermediateHandleProbablyLeftQuotes2;
+        #    NextToken;
+        DBLQUOT => HandleQuotesProbablyRight;
+       
+        LESSTHAN => {
+            NEXT_TOKEN
+            if (*ts != '<') {
+                NL_set_span_label(tokens[span_pos-1], lessthan_label, LT_LEN);
+            }
+        };
+        GREATERTHAN => {
+            NEXT_TOKEN
+            if (*ts != '>') {
+                NL_set_span_label(
+                    tokens[span_pos-1], greaterthan_label, GT_LEN);
+            }
+        };
+ 
         "{" => NormalizeLCBNext;
         "}" => NormalizeRCBNext;
         "[" => NormalizeLSBNext;
@@ -1408,8 +1485,11 @@ const static NL_label lcb_label = (NL_label) "-LCB-\x00";
 const static NL_label rcb_label = (NL_label) "-RCB-\x00";
 #define RCB_LEN 5
 
+const static NL_label lessthan_label = (NL_label) "<\x00";
+#define LT_LEN 1
 
-
+const static NL_label greaterthan_label = (NL_label) ">\x00";
+#define GT_LEN 1
 
 
 NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len, 
