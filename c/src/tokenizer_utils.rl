@@ -650,3 +650,62 @@ void NL_escape_forward_slash_asterisk(unsigned char *p,
     %% write exec;
 
 }
+
+%%{
+
+    machine CountSpaces;
+    alphtype unsigned char;
+              
+    main := |* 
+        " " => { count += 2; };
+        any => { count++; };
+    *|;
+
+}%%
+
+%% write data nofinal;
+
+size_t NL_get_size_normalized_spaces(unsigned char *p, 
+    size_t buf_length) {
+
+    int cs, act;
+    unsigned char *ts, *te = 0;
+    unsigned char *pe = p + buf_length; 
+    unsigned char *eof = pe;
+    size_t count = 0;
+
+    %% write init;
+    %% write exec;
+
+    return count;
+}
+
+%%{
+
+    machine NormalizeSpaces;
+    alphtype unsigned char;
+              
+    main := |* 
+        " " => {
+            *transform = 0xC2; transform++;
+            *transform = 0xA0; transform++;
+        };
+        [^ ] => { *transform = *ts; transform++; };
+    *|;
+
+}%%
+
+%% write data nofinal;
+
+void NL_normalize_spaces(unsigned char *p, 
+    size_t buf_length, unsigned char *transform) {
+
+    int cs, act;
+    unsigned char *ts, *te = 0;
+    unsigned char *pe = p + buf_length; 
+    unsigned char *eof = pe;
+
+    %% write init;
+    %% write exec;
+
+}

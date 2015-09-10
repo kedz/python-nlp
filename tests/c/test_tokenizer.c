@@ -485,8 +485,65 @@ int escape_forward_slash_asterisk() {
     return errors;
 }
 
+int space_normalizer() {
+    int errors = 0;
+
+    unsigned char *buf1 = (unsigned char *) 
+        "there are 4 spaces ";
+    unsigned char *gold1 = (unsigned char *) 
+        "there\xc2\xa0" "are\xc2\xa0" "4\xc2\xa0spaces\xc2\xa0";
+
+    size_t buf1_size = strlen((char *) buf1);
+    size_t escape_size = buf1_size + 4;
+    unsigned char *trans1 = malloc(sizeof(unsigned char) * escape_size);
+    NL_normalize_spaces(buf1, buf1_size, trans1);
+
+    printf("TRANS1 : %s\n", trans1);
+    printf("GOLD1  : %s\n", gold1);
+    if (strcmp((char *) trans1, (char *) gold1) != 0) {
+        errors = 1;
+    }
+
+    free(trans1);
+    return errors;
+}
+
+
+int get_size_for_space_normalizer() {
+    int errors = 0;
+
+    unsigned char *buf1 = (unsigned char *) 
+        "there are 4 spaces ";
+    size_t buf1_size = strlen((char *) buf1);
+    size_t gold_escape_size = buf1_size + 4;
+    size_t pred_escape_size = NL_get_size_normalized_spaces(
+        buf1, buf1_size);
+
+    if (pred_escape_size != gold_escape_size) {
+        errors = 1;
+    }
+
+    return errors;
+}
+
+
 
 int main() {
+
+    if (get_size_for_space_normalizer() != 0) {
+        printf("get_size_for_space_normalizer test failed!\n");
+    } else {
+        printf("get_size_for_space_normalizer test success!\n");
+    }   
+
+
+    if (space_normalizer() != 0) {
+        printf("space_normalizer test failed!\n");
+    } else {
+        printf("space_normalizer test success!\n");
+    }   
+
+
 
     if (get_size_for_escape() != 0) {
         printf("get_size_for_escape test failed!\n");

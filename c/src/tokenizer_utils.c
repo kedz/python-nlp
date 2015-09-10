@@ -2908,3 +2908,390 @@ _again:
 #line 651 "tokenizer_utils.rl"
 
 }
+
+
+#line 664 "tokenizer_utils.rl"
+
+
+
+#line 2918 "tokenizer_utils.c"
+static const char _CountSpaces_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1, 
+	3
+};
+
+static const char _CountSpaces_key_offsets[] = {
+	0
+};
+
+static const unsigned char _CountSpaces_trans_keys[] = {
+	32u, 0
+};
+
+static const char _CountSpaces_single_lengths[] = {
+	1
+};
+
+static const char _CountSpaces_range_lengths[] = {
+	0
+};
+
+static const char _CountSpaces_index_offsets[] = {
+	0
+};
+
+static const char _CountSpaces_trans_targs[] = {
+	0, 0, 0
+};
+
+static const char _CountSpaces_trans_actions[] = {
+	5, 7, 0
+};
+
+static const char _CountSpaces_to_state_actions[] = {
+	1
+};
+
+static const char _CountSpaces_from_state_actions[] = {
+	3
+};
+
+static const int CountSpaces_start = 0;
+static const int CountSpaces_error = -1;
+
+static const int CountSpaces_en_main = 0;
+
+
+#line 667 "tokenizer_utils.rl"
+
+size_t NL_get_size_normalized_spaces(unsigned char *p, 
+    size_t buf_length) {
+
+    int cs, act;
+    unsigned char *ts, *te = 0;
+    unsigned char *pe = p + buf_length; 
+    unsigned char *eof = pe;
+    size_t count = 0;
+
+    
+#line 2978 "tokenizer_utils.c"
+	{
+	cs = CountSpaces_start;
+	ts = 0;
+	te = 0;
+	act = 0;
+	}
+
+#line 678 "tokenizer_utils.rl"
+    
+#line 2988 "tokenizer_utils.c"
+	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
+	if ( p == pe )
+		goto _test_eof;
+_resume:
+	_acts = _CountSpaces_actions + _CountSpaces_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
+#line 1 "NONE"
+	{ts = p;}
+	break;
+#line 3007 "tokenizer_utils.c"
+		}
+	}
+
+	_keys = _CountSpaces_trans_keys + _CountSpaces_key_offsets[cs];
+	_trans = _CountSpaces_index_offsets[cs];
+
+	_klen = _CountSpaces_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _CountSpaces_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+	cs = _CountSpaces_trans_targs[_trans];
+
+	if ( _CountSpaces_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _CountSpaces_actions + _CountSpaces_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
+	{
+		switch ( *_acts++ )
+		{
+	case 2:
+#line 660 "tokenizer_utils.rl"
+	{te = p+1;{ count += 2; }}
+	break;
+	case 3:
+#line 661 "tokenizer_utils.rl"
+	{te = p+1;{ count++; }}
+	break;
+#line 3079 "tokenizer_utils.c"
+		}
+	}
+
+_again:
+	_acts = _CountSpaces_actions + _CountSpaces_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 0:
+#line 1 "NONE"
+	{ts = 0;}
+	break;
+#line 3092 "tokenizer_utils.c"
+		}
+	}
+
+	if ( ++p != pe )
+		goto _resume;
+	_test_eof: {}
+	}
+
+#line 679 "tokenizer_utils.rl"
+
+    return count;
+}
+
+
+#line 696 "tokenizer_utils.rl"
+
+
+
+#line 3111 "tokenizer_utils.c"
+static const char _NormalizeSpaces_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1, 
+	3
+};
+
+static const char _NormalizeSpaces_key_offsets[] = {
+	0
+};
+
+static const unsigned char _NormalizeSpaces_trans_keys[] = {
+	32u, 0
+};
+
+static const char _NormalizeSpaces_single_lengths[] = {
+	1
+};
+
+static const char _NormalizeSpaces_range_lengths[] = {
+	0
+};
+
+static const char _NormalizeSpaces_index_offsets[] = {
+	0
+};
+
+static const char _NormalizeSpaces_trans_targs[] = {
+	0, 0, 0
+};
+
+static const char _NormalizeSpaces_trans_actions[] = {
+	5, 7, 0
+};
+
+static const char _NormalizeSpaces_to_state_actions[] = {
+	1
+};
+
+static const char _NormalizeSpaces_from_state_actions[] = {
+	3
+};
+
+static const int NormalizeSpaces_start = 0;
+static const int NormalizeSpaces_error = -1;
+
+static const int NormalizeSpaces_en_main = 0;
+
+
+#line 699 "tokenizer_utils.rl"
+
+void NL_normalize_spaces(unsigned char *p, 
+    size_t buf_length, unsigned char *transform) {
+
+    int cs, act;
+    unsigned char *ts, *te = 0;
+    unsigned char *pe = p + buf_length; 
+    unsigned char *eof = pe;
+
+    
+#line 3170 "tokenizer_utils.c"
+	{
+	cs = NormalizeSpaces_start;
+	ts = 0;
+	te = 0;
+	act = 0;
+	}
+
+#line 709 "tokenizer_utils.rl"
+    
+#line 3180 "tokenizer_utils.c"
+	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
+	if ( p == pe )
+		goto _test_eof;
+_resume:
+	_acts = _NormalizeSpaces_actions + _NormalizeSpaces_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
+#line 1 "NONE"
+	{ts = p;}
+	break;
+#line 3199 "tokenizer_utils.c"
+		}
+	}
+
+	_keys = _NormalizeSpaces_trans_keys + _NormalizeSpaces_key_offsets[cs];
+	_trans = _NormalizeSpaces_index_offsets[cs];
+
+	_klen = _NormalizeSpaces_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _NormalizeSpaces_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+	cs = _NormalizeSpaces_trans_targs[_trans];
+
+	if ( _NormalizeSpaces_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _NormalizeSpaces_actions + _NormalizeSpaces_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
+	{
+		switch ( *_acts++ )
+		{
+	case 2:
+#line 689 "tokenizer_utils.rl"
+	{te = p+1;{
+            *transform = 0xC2; transform++;
+            *transform = 0xA0; transform++;
+        }}
+	break;
+	case 3:
+#line 693 "tokenizer_utils.rl"
+	{te = p+1;{ *transform = *ts; transform++; }}
+	break;
+#line 3274 "tokenizer_utils.c"
+		}
+	}
+
+_again:
+	_acts = _NormalizeSpaces_actions + _NormalizeSpaces_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 0:
+#line 1 "NONE"
+	{ts = 0;}
+	break;
+#line 3287 "tokenizer_utils.c"
+		}
+	}
+
+	if ( ++p != pe )
+		goto _resume;
+	_test_eof: {}
+	}
+
+#line 710 "tokenizer_utils.rl"
+
+}
