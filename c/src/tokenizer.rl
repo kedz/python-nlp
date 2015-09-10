@@ -1009,7 +1009,19 @@ action HandleQuotesProbablyRight {
         (/'twas/i 
             | /'tis/i) => SplitAssimilation2;                   
 
-        SGML => NextToken; #TODO test this
+        SGML => {
+            NEXT_TOKEN
+            if (normalize_spaces == 1) {
+                size_t label_size = 1 + NL_get_size_normalized_spaces(
+                    ts, te - ts);
+                unsigned char *label_str = NL_allocate_mem_size(
+                    mgr, label_size);
+                NL_normalize_spaces(ts, te - ts, label_str);
+                label_str[label_size - 1] = 0x01;
+                NL_set_span_label(tokens[span_pos-1], 
+                    label_str, label_size - 1);
+            }
+        };
 
         # needed to break a weird tie between word and apoword
         "cont'd" => HandleQuotesProbablyRight; 
@@ -1571,7 +1583,10 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
         strict_ptb3 = cfg->strict_ptb3;
     }
 
-
+    int normalize_spaces = 1;
+    if (cfg != NULL) {
+        normalize_spaces = cfg->normalize_spaces;
+    }
 
     %% write init;
 

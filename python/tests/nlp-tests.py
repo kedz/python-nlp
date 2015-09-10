@@ -37,7 +37,7 @@ def tokenize_simple_test_2():
 
 
 def tokenize_sgml_test_2_no_normalize():
-    
+    nlp.get_global_PTB_config().strict_ptb3 = False
     sent2 = "Panasonic brand products are produced by Samsung Electronics " \
             "Co. Ltd. Sanyo products aren't."
     gold = [u"Panasonic", u"brand", u"products", u"are", u"produced", u"by", 
@@ -51,6 +51,7 @@ def tokenize_sgml_test_2_no_normalize():
     assert len(tokens) == len(gold)
 
 def tokenize_sgml_test_3_no_normalize():
+    nlp.get_global_PTB_config().normalize_parentheses = False
     sent3 = "Oesophageal acid exposure (% time <pH 4) was similar in " \
             "patients with or without complications (19.2% v 19.3% p>0.05)."
 
@@ -65,8 +66,26 @@ def tokenize_sgml_test_3_no_normalize():
     for token, gold_token in zip(tokens, gold):
         assert token == gold_token
 
+def tokenize_sgml_test_4_normalize():
+    nlp.get_global_PTB_config().normalize_spaces = True
+    sent4 = "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Strict//EN\" " \
+            "\"http://www.w3.org/TR/html4/strict.dtd\">"
+
+    gold = [
+        u"<!DOCTYPE\u00A0html\u00A0PUBLIC\u00A0\"-//W3C//DTD\u00A0HTML" \
+        u"\u00A04.01\u00A0Strict//EN\"\u00A0" \
+        u"\"http://www.w3.org/TR/html4/strict.dtd\">"] 
+        # spaces go to &nbsp; \u00A0
+
+    tokens = nlp.tokenize(sent4)
+    assert len(tokens) == len(gold)
+    for token, gold_token in zip(tokens, gold):
+        assert token == gold_token.encode("utf-8")
+
+
 
 def tokenize_sgml_test_4_no_normalize():
+    nlp.get_global_PTB_config().normalize_spaces = False
     sent4 = "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Strict//EN\" " \
             "\"http://www.w3.org/TR/html4/strict.dtd\">"
 
@@ -122,32 +141,37 @@ def tokenize_sgml_test_7_no_normalize():
         assert token == gold_token
 
 def tokenize_sgml_test_8_no_normalize():
+    nlp.get_global_PTB_config().escape_forward_slash_asterisk = False
     sent8 = "<a href=\"http:\\\\it's\\here\"> <quote orig_author='some " \
             "\"dude'/> <not sgmltag"
       
-    gold = [u"<a href=\"http:\\\\it's\\here\">", 
-            u"<quote orig_author='some \"dude'/>", u"<", u"not", u"sgmltag"]
+    gold = [u"<a href=\"http:\\\\it's\\here\">", 
+            u"<quote orig_author='some \"dude'/>", u"<", u"not", u"sgmltag"]
           
     tokens = nlp.tokenize(sent8)
+    print tokens
+    print gold
     assert len(tokens) == len(gold)
     for token, gold_token in zip(tokens, gold):
-        assert token == gold_token
+        assert token == gold_token.encode("utf-8")
 
 def tokenize_sgml_test_9_no_normalize():
     sent9 = "<quote previouspost=\"\n" \
             "&gt; &gt; I really don't want to process this junk.\n" \
-            "&gt; No one said you did, runny.  What's got you so scared, " \
+            "&gt; No one said you did, runny.  What's got you so scared, " \
             "anyway?-\n\">"
 
-    gold = [u"<quote previouspost=\"\n" \
-            u"&gt; &gt; I really don't want to process this junk.\n" \
-            u"&gt; No one said you did, runny.  What's got you so " \
-            u"scared, anyway?-\n\">"]
+    gold = [u"<quote previouspost=\"\n" \
+            u"&gt; &gt; I really don't want to process this junk.\n" \
+            u"&gt; No one said you did, runny.  What's got you so " \
+            u"scared, anyway?-\n\">"]
 
     tokens = nlp.tokenize(sent9)
-    assert len(tokens) == len(gold)
+    print tokens
+    print gold
     for token, gold_token in zip(tokens, gold):
-        assert token == gold_token
+        assert token == gold_token.encode("utf-8")
+    assert len(tokens) == len(gold)
 
 def tokenize_sgml_test_10_no_normalize():
     sent10 = "&lt;b...@canada.com&gt; funky@thedismalscience.net " \

@@ -6,7 +6,7 @@
 #include "tokenizer_utils.h"
 
 
-#line 1373 "tokenizer.rl"
+#line 1385 "tokenizer.rl"
 
 
 
@@ -718,7 +718,7 @@ static const unsigned char _tok_trans_keys[] = {
 	73u, 79u, 85u, 97u, 101u, 105u, 111u, 117u, 
 	97u, 103u, 117u, 99u, 117u, 116u, 101u, 59u, 
 	170u, 173u, 181u, 186u, 128u, 150u, 152u, 182u, 
-	184u, 255u, 192u, 255u, 0u, 127u, 128u, 191u, 
+	184u, 255u, 192u, 255u, 128u, 255u, 128u, 191u, 
 	128u, 189u, 140u, 132u, 134u, 136u, 138u, 142u, 
 	161u, 163u, 255u, 130u, 136u, 137u, 166u, 176u, 
 	160u, 151u, 152u, 190u, 136u, 144u, 192u, 255u, 
@@ -12054,8 +12054,8 @@ static const short _tok_indicies[] = {
 	5, 5, 5, 5, 4, 6, 7, 8, 
 	4, 9, 4, 10, 4, 11, 4, 12, 
 	4, 13, 4, 13, 14, 13, 13, 4, 
-	13, 13, 13, 4, 13, 4, 13, 4, 
-	13, 13, 4, 13, 4, 13, 13, 13, 
+	13, 13, 13, 4, 13, 4, 13, 13, 
+	4, 13, 4, 13, 4, 13, 13, 13, 
 	13, 13, 4, 4, 4, 13, 4, 13, 
 	4, 4, 13, 4, 4, 4, 13, 13, 
 	13, 13, 13, 13, 4, 13, 13, 4, 
@@ -23896,7 +23896,7 @@ static const int tok_error = -1;
 static const int tok_en_main = 3967;
 
 
-#line 1376 "tokenizer.rl"
+#line 1388 "tokenizer.rl"
 
 #define BUFSIZE 32
 
@@ -24016,7 +24016,6 @@ const static NL_label greaterthan_label = (NL_label) ">\x00";
 #define GT_LEN 1
 
 
-
 NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len, 
         size_t *num_tokens, NL_PTBTokConfig *cfg, NL_v_memmgr *mgr) {
 
@@ -24096,10 +24095,13 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
         strict_ptb3 = cfg->strict_ptb3;
     }
 
-
+    int normalize_spaces = 1;
+    if (cfg != NULL) {
+        normalize_spaces = cfg->normalize_spaces;
+    }
 
     
-#line 24103 "tokenizer.c"
+#line 24105 "tokenizer.c"
 	{
 	cs = tok_start;
 	ts = 0;
@@ -24107,10 +24109,10 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
 	act = 0;
 	}
 
-#line 1578 "tokenizer.rl"
+#line 1592 "tokenizer.rl"
 
     
-#line 24114 "tokenizer.c"
+#line 24116 "tokenizer.c"
 	{
 	int _klen;
 	unsigned int _trans;
@@ -24129,7 +24131,7 @@ _resume:
 #line 1 "NONE"
 	{ts = p;}
 	break;
-#line 24133 "tokenizer.c"
+#line 24135 "tokenizer.c"
 		}
 	}
 
@@ -24278,7 +24280,7 @@ _eof_trans:
 	{act = 21;}
 	break;
 	case 21:
-#line 1060 "tokenizer.rl"
+#line 1072 "tokenizer.rl"
 	{act = 23;}
 	break;
 	case 22:
@@ -24298,7 +24300,7 @@ _eof_trans:
 	{act = 33;}
 	break;
 	case 26:
-#line 1212 "tokenizer.rl"
+#line 1224 "tokenizer.rl"
 	{act = 35;}
 	break;
 	case 27:
@@ -24334,7 +24336,7 @@ _eof_trans:
 	{act = 53;}
 	break;
 	case 35:
-#line 1296 "tokenizer.rl"
+#line 1308 "tokenizer.rl"
 	{act = 55;}
 	break;
 	case 36:
@@ -24370,7 +24372,7 @@ _eof_trans:
 	{act = 75;}
 	break;
 	case 44:
-#line 1366 "tokenizer.rl"
+#line 1378 "tokenizer.rl"
 	{act = 83;}
 	break;
 	case 45:
@@ -24396,10 +24398,20 @@ _eof_trans:
 }}
 	break;
 	case 48:
-#line 535 "tokenizer.rl"
+#line 1012 "tokenizer.rl"
 	{te = p+1;{
-    NEXT_TOKEN    
-}}
+            NEXT_TOKEN
+            if (normalize_spaces == 1) {
+                size_t label_size = 1 + NL_get_size_normalized_spaces(
+                    ts, te - ts);
+                unsigned char *label_str = NL_allocate_mem_size(
+                    mgr, label_size);
+                NL_normalize_spaces(ts, te - ts, label_str);
+                label_str[label_size - 1] = 0x01;
+                NL_set_span_label(tokens[span_pos-1], 
+                    label_str, label_size - 1);
+            }
+        }}
 	break;
 	case 49:
 #line 556 "tokenizer.rl"
@@ -24667,7 +24679,7 @@ _eof_trans:
 }}
 	break;
 	case 60:
-#line 1045 "tokenizer.rl"
+#line 1057 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN            
             unsigned char *label_str = NL_allocate_mem_size(mgr, 8);
@@ -24684,7 +24696,7 @@ _eof_trans:
         }}
 	break;
 	case 61:
-#line 1060 "tokenizer.rl"
+#line 1072 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             
@@ -24750,7 +24762,7 @@ _eof_trans:
 }}
 	break;
 	case 65:
-#line 1081 "tokenizer.rl"
+#line 1093 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_currency == 1) {
@@ -24759,7 +24771,7 @@ _eof_trans:
         }}
 	break;
 	case 66:
-#line 1088 "tokenizer.rl"
+#line 1100 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_currency == 1) {
@@ -24769,7 +24781,7 @@ _eof_trans:
         }}
 	break;
 	case 67:
-#line 1096 "tokenizer.rl"
+#line 1108 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_currency == 1) {
@@ -24779,7 +24791,7 @@ _eof_trans:
         }}
 	break;
 	case 68:
-#line 1176 "tokenizer.rl"
+#line 1188 "tokenizer.rl"
 	{te = p+1;{
             if (ti1 - ts == 2) { // e.g. "I."
  
@@ -24889,7 +24901,7 @@ _eof_trans:
 }}
 	break;
 	case 71:
-#line 1212 "tokenizer.rl"
+#line 1224 "tokenizer.rl"
 	{te = p+1;{
             if (strict_ptb3 && memcmp(ts, "U.S.", 4) != 0) {
                 te = ti1 - 1;
@@ -25196,7 +25208,7 @@ _eof_trans:
 }}
 	break;
 	case 80:
-#line 1275 "tokenizer.rl"
+#line 1287 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (*ts != '<') {
@@ -25205,7 +25217,7 @@ _eof_trans:
         }}
 	break;
 	case 81:
-#line 1281 "tokenizer.rl"
+#line 1293 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (*ts != '>') {
@@ -25526,25 +25538,25 @@ _eof_trans:
 }}
 	break;
 	case 100:
-#line 1343 "tokenizer.rl"
+#line 1355 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             NL_set_span_label(tokens[span_pos-1], uni_bullet, BULLET_LEN);     
         }}
 	break;
 	case 101:
-#line 1347 "tokenizer.rl"
+#line 1359 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             NL_set_span_label(tokens[span_pos-1], uni_tm, TM_LEN);     
         }}
 	break;
 	case 102:
-#line 1352 "tokenizer.rl"
+#line 1364 "tokenizer.rl"
 	{te = p+1;}
 	break;
 	case 103:
-#line 1353 "tokenizer.rl"
+#line 1365 "tokenizer.rl"
 	{te = p+1;{
             fwrite("Warning: tokenizer found null character.\n", 
                    1, 41, stderr);
@@ -25560,11 +25572,11 @@ _eof_trans:
     }}
 	break;
 	case 105:
-#line 1362 "tokenizer.rl"
+#line 1374 "tokenizer.rl"
 	{te = p+1;}
 	break;
 	case 106:
-#line 1366 "tokenizer.rl"
+#line 1378 "tokenizer.rl"
 	{te = p+1;}
 	break;
 	case 107:
@@ -25762,7 +25774,7 @@ _eof_trans:
 }}
 	break;
 	case 119:
-#line 1176 "tokenizer.rl"
+#line 1188 "tokenizer.rl"
 	{te = p;p--;{
             if (ti1 - ts == 2) { // e.g. "I."
  
@@ -25833,7 +25845,7 @@ _eof_trans:
 }}
 	break;
 	case 121:
-#line 1212 "tokenizer.rl"
+#line 1224 "tokenizer.rl"
 	{te = p;p--;{
             if (strict_ptb3 && memcmp(ts, "U.S.", 4) != 0) {
                 te = ti1 - 1;
@@ -25897,7 +25909,7 @@ _eof_trans:
 }}
 	break;
 	case 123:
-#line 1237 "tokenizer.rl"
+#line 1249 "tokenizer.rl"
 	{te = p;p--;{
             if (strict_ptb3 && memcmp(ts, "U.S.", 4) != 0) {
                 te = te - 1;
@@ -26115,7 +26127,7 @@ _eof_trans:
 }}
 	break;
 	case 131:
-#line 1275 "tokenizer.rl"
+#line 1287 "tokenizer.rl"
 	{te = p;p--;{
             NEXT_TOKEN
             if (*ts != '<') {
@@ -26124,7 +26136,7 @@ _eof_trans:
         }}
 	break;
 	case 132:
-#line 1281 "tokenizer.rl"
+#line 1293 "tokenizer.rl"
 	{te = p;p--;{
             NEXT_TOKEN
             if (*ts != '>') {
@@ -26145,7 +26157,7 @@ _eof_trans:
     }}
 	break;
 	case 134:
-#line 1296 "tokenizer.rl"
+#line 1308 "tokenizer.rl"
 	{te = p;p--;{
             NEXT_TOKEN
             size_t num_hyphens = te - ts;
@@ -26360,7 +26372,7 @@ _eof_trans:
 }}
 	break;
 	case 149:
-#line 1352 "tokenizer.rl"
+#line 1364 "tokenizer.rl"
 	{te = p;p--;}
 	break;
 	case 150:
@@ -26373,7 +26385,7 @@ _eof_trans:
     }}
 	break;
 	case 151:
-#line 1366 "tokenizer.rl"
+#line 1378 "tokenizer.rl"
 	{te = p;p--;}
 	break;
 	case 152:
@@ -26511,7 +26523,7 @@ _eof_trans:
 }}
 	break;
 	case 160:
-#line 1237 "tokenizer.rl"
+#line 1249 "tokenizer.rl"
 	{{p = ((te))-1;}{
             if (strict_ptb3 && memcmp(ts, "U.S.", 4) != 0) {
                 te = te - 1;
@@ -26541,7 +26553,7 @@ _eof_trans:
 }}
 	break;
 	case 162:
-#line 1275 "tokenizer.rl"
+#line 1287 "tokenizer.rl"
 	{{p = ((te))-1;}{
             NEXT_TOKEN
             if (*ts != '<') {
@@ -26561,7 +26573,7 @@ _eof_trans:
     }}
 	break;
 	case 164:
-#line 1296 "tokenizer.rl"
+#line 1308 "tokenizer.rl"
 	{{p = ((te))-1;}{
             NEXT_TOKEN
             size_t num_hyphens = te - ts;
@@ -26700,11 +26712,11 @@ _eof_trans:
 }}
 	break;
 	case 173:
-#line 1352 "tokenizer.rl"
+#line 1364 "tokenizer.rl"
 	{{p = ((te))-1;}}
 	break;
 	case 174:
-#line 1366 "tokenizer.rl"
+#line 1378 "tokenizer.rl"
 	{{p = ((te))-1;}}
 	break;
 	case 175:
@@ -27416,7 +27428,7 @@ _eof_trans:
 	}
 	}
 	break;
-#line 27420 "tokenizer.c"
+#line 27432 "tokenizer.c"
 		}
 	}
 
@@ -27429,7 +27441,7 @@ _again:
 #line 1 "NONE"
 	{ts = 0;}
 	break;
-#line 27433 "tokenizer.c"
+#line 27445 "tokenizer.c"
 		}
 	}
 
@@ -27446,7 +27458,7 @@ _again:
 
 	}
 
-#line 1580 "tokenizer.rl"
+#line 1594 "tokenizer.rl"
 
     *num_tokens = BUFSIZE * (num_lists - 1) + span_pos;
     NL_span **out_tokens = NL_allocate_mem_size(

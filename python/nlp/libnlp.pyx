@@ -213,6 +213,23 @@ cdef class PTBTokenizerConfigWrapper(object):
             else:
                 self._cfg.strict_ptb3 = 0
 
+    property normalize_spaces:
+        u"""When true, tokenizer converts whitespace in phone numbers and 
+        sgml to non-breaking unicode space U+00A0."""
+
+        def __get__(self):
+            if self._cfg.normalize_spaces == 1:
+                return True
+            else:
+                return False
+
+        def __set__(self, value):
+            if bool(value):
+                self._cfg.normalize_spaces = 1
+            else:
+                self._cfg.normalize_spaces = 0
+
+
 
     def default(self):
         self.split_assimilations = True
@@ -226,6 +243,7 @@ cdef class PTBTokenizerConfigWrapper(object):
         self.normalize_parentheses = True
         self.normalize_brackets = True
         self.strict_ptb3 = False
+        self.normalize_spaces = True
 
 
     def __str__(self):
@@ -250,8 +268,10 @@ cdef class PTBTokenizerConfigWrapper(object):
                     self.normalize_parentheses) \
             + " ::            normalize brackets: {}\n".format(
                     self.normalize_brackets) \
-            + " ::                   strict ptb3: {}".format(
-                    self.strict_ptb3)
+            + " ::                   strict ptb3: {}\n".format(
+                    self.strict_ptb3) \
+            + " ::             normalize spaces : {}".format(
+                    self.normalize_spaces)
 
     def __dealloc__(self):
         print "PTBTokenizerConfigWrapper.__dealloc__()"

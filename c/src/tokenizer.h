@@ -29,6 +29,7 @@ typedef struct NL_PTBTokConfig {
     int normalize_parentheses;
     int normalize_brackets;
     int strict_ptb3;
+    int normalize_spaces;
 //       strictTreebank3,
     //    //americanize, normalizeSpace,
 //       normalizeFractions,
