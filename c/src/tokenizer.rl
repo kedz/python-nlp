@@ -464,9 +464,14 @@
 
 
  
-    SMILEY = [<>]? [:;=] [\-o\*']? [\(\)DPdpO\\{@\|\[\]]  ;  
+    SMILEY = [<>]? [:;=] [\-o\*']? 
+        ("(" | ")" | "D" | "d" |"P" | "p" | "O" | "\\" | "{" 
+             | "@" | "|" |"["| "]" ); #  [()DPdpO\\{@|\[\]]  ;  
 #ASIANSMILEY = [\^x=~<>]\.\[\^x=~<>]|[\-\^x=~<>']_[\-\^x=~<>']|\([\-\^x=~<>'][_.]?[\-\^x=~<>']\)|\([\^x=~<>']-[\^x=~<>'`]\)
-
+    ASIANSMILEY = [\^x=~<>]"."[\^x=~<>] 
+                | [\-\^x=~<>']"_"[\-\^x=~<>']
+                | "("[\-\^x=~<>'][_.]?[\-\^x=~<>']")"
+                | "("[\^x=~<>']"-"[\^x=~<>'`]")";
 
 
     MISCSYMBOL = 
@@ -1327,7 +1332,39 @@ action HandleQuotesProbablyRight {
                     tokens[span_pos-1], greaterthan_label, GT_LEN);
             }
         };
- 
+
+        SMILEY %MarkIntermediate2 [^A-Za-z0-9] => {
+            te = ti2;
+            NEXT_TOKEN
+            if (normalize_parentheses == 1) {
+                size_t label_size = 1 + NL_get_size_normalized_parentheses(
+                    ts, te - ts);
+                unsigned char *label_str = NL_allocate_mem_size(
+                    mgr, label_size);
+                NL_normalize_parentheses(ts, te - ts, label_str);
+                label_str[label_size - 1] = 0x01;
+                NL_set_span_label(tokens[span_pos-1], 
+                    label_str, label_size - 1);
+            }    
+            ts = te;
+            fpc = te - 1;
+            te = '\0';
+
+        };
+        ASIANSMILEY => {
+            NEXT_TOKEN
+            if (normalize_parentheses == 1) {
+                size_t label_size = 1 + NL_get_size_normalized_parentheses(
+                    ts, te - ts);
+                unsigned char *label_str = NL_allocate_mem_size(
+                    mgr, label_size);
+                NL_normalize_parentheses(ts, te - ts, label_str);
+                label_str[label_size - 1] = 0x01;
+                NL_set_span_label(tokens[span_pos-1], 
+                    label_str, label_size - 1);
+            }
+        };
+
         "{" => NormalizeLCBNext;
         "}" => NormalizeRCBNext;
         "[" => NormalizeLSBNext;
@@ -1408,10 +1445,6 @@ action HandleQuotesProbablyRight {
         any; # => { printf("the uncola: 0x%02X\n", (unsigned int)  *ts); };
     *|;
 
-#main := |*
-#    [^ \n]+ => NextToken; 
-#    any;
-#    *|;
 }%%
 
 %% write data nofinal;

@@ -682,6 +682,30 @@ class Tok_Test:
             assert token == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)   
 
+    def smiley_NO_normalize_test(self):
+        nlp.get_global_PTB_config().normalize_parentheses = False
+        string = u"<:-(   >;o)   =\\ "
+        gold = [u"<:-(", u">;o)", u"=\\"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def smiley_normalize_test(self):
+        nlp.get_global_PTB_config().normalize_parentheses = True
+        string = u"<:-(   >;o)   ={ "
+        gold = [u"<:--LRB-", u">;o-RRB-", u"={"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+
+
     def acronym3_space_digit_test(self):
         string = u"fig. 2 figs.3 prop.4 no.5 nos.6 art.7 bldg.8 pp.9 op.1"
         gold = [u"fig.", u"2", u"figs.", u"3", u"prop.", u"4",
