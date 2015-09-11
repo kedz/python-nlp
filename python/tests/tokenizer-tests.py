@@ -582,6 +582,8 @@ class Tok_Test:
         assert len(tokens) == len(gold)
 
     def phone_NO_normalize_space_NO_normalize_par_test(self):
+        nlp.get_global_PTB_config().normalize_spaces = False
+        nlp.get_global_PTB_config().normalize_parentheses = False
         string = u"++012.12.123.12345 (123) 123-1234"
         gold = [u"++012.12.123.12345", u"(123) 123-1234"]
         tokens = nlp.tokenize(string)
@@ -592,6 +594,8 @@ class Tok_Test:
         assert len(tokens) == len(gold)
 
     def phone_normalize_space_NO_normalize_par_test(self):
+        nlp.get_global_PTB_config().normalize_spaces = True
+        nlp.get_global_PTB_config().normalize_parentheses = False
         string = u"++012.12.123.12345 (123) 123-1234"
         gold = [u"++012.12.123.12345", u"(123)\u00A0123-1234"]
         tokens = nlp.tokenize(string)
@@ -602,6 +606,8 @@ class Tok_Test:
         assert len(tokens) == len(gold)
 
     def phone_NO_normalize_space_normalize_par_test(self):
+        nlp.get_global_PTB_config().normalize_spaces = False
+        nlp.get_global_PTB_config().normalize_parentheses = True
         string = u"++012.12.123.12345 (123) 123-1234"
         gold = [u"++012.12.123.12345", u"-LRB-123-RRB- 123-1234"]
         tokens = nlp.tokenize(string)
@@ -749,6 +755,7 @@ class Tok_Test:
 
 
     def ldots_NO_normalize_test(self):
+        nlp.get_global_PTB_config().normalize_ellipsis = None
         string = u"... .... ..... . .\u00A0. \u2026"
         gold = [u"...", u"....", u".....", u". .\u00A0.", u"\u2026"]
         tokens = nlp.tokenize(string)

@@ -1132,7 +1132,37 @@ action HandleQuotesProbablyRight {
 #
 #        FILENAME %MarkIntermediate2 (SPACENL|[.?!,]) => NextIntermediate2;
 #        WORD "." %MarkIntermediate2 INSENTP => NextIntermediate2;
-#        PHONE => NextToken;
+        PHONE => {
+            NEXT_TOKEN
+            if (normalize_spaces == 1 && normalize_parentheses == 1) {
+                size_t label_size = 1 + NL_get_size_normalized_spaces_parens(
+                    ts, te - ts);
+                unsigned char *label_str = NL_allocate_mem_size(
+                    mgr, label_size);
+                NL_normalize_parens_spaces(ts, te - ts, label_str);
+                label_str[label_size - 1] = 0x01;
+                NL_set_span_label(tokens[span_pos-1], 
+                    label_str, label_size - 1);
+            } else if (normalize_spaces == 1) {
+                size_t label_size = 1 + NL_get_size_normalized_spaces(
+                    ts, te - ts);
+                unsigned char *label_str = NL_allocate_mem_size(
+                    mgr, label_size);
+                NL_normalize_spaces(ts, te - ts, label_str);
+                label_str[label_size - 1] = 0x01;
+                NL_set_span_label(tokens[span_pos-1], 
+                    label_str, label_size - 1);
+            } else if (normalize_parentheses == 1) {
+                size_t label_size = 1 + NL_get_size_normalized_parentheses(
+                    ts, te - ts);
+                unsigned char *label_str = NL_allocate_mem_size(
+                    mgr, label_size);
+                NL_normalize_parentheses(ts, te - ts, label_str);
+                label_str[label_size - 1] = 0x01;
+                NL_set_span_label(tokens[span_pos-1], 
+                    label_str, label_size - 1);
+            }
+        };
 #        
 #        DBLQUOT => NextToken;
 #        

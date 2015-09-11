@@ -16,8 +16,7 @@ cdef class PTBTokenizerConfigWrapper(object):
     def __cinit__(self):
         print "PTBTokenizerConfigWrapper.__cinit__()"
         self._cfg = <NL_PTBTokConfig *> PyMem_Malloc(sizeof(NL_PTBTokConfig))
-        self._cfg.split_assimilations = 1
-        self._cfg.normalize_dashes = 1
+        self.default()
 
     property split_assimilations:
         """When true, tokenizer creates two tokens for assimilated words.
@@ -235,11 +234,11 @@ cdef class PTBTokenizerConfigWrapper(object):
         self.split_assimilations = True
         self.normalize_dashes = True
         self.normalize_amp = True
-        self.normalize_quotes = None
+        self.normalize_quotes = u"latex"
         self.tokenize_newlines = False
         self.normalize_currency = False
         self.escape_forward_slash_asterisk = False
-        self.normalize_ellipsis = None
+        self.normalize_ellipsis = u"ptb3"
         self.normalize_parentheses = True
         self.normalize_brackets = True
         self.strict_ptb3 = False

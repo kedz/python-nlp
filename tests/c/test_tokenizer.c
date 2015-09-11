@@ -526,9 +526,114 @@ int get_size_for_space_normalizer() {
     return errors;
 }
 
+int get_size_for_parens_normalizer() {
+    int errors = 0;
 
+    unsigned char *buf1 = (unsigned char *) 
+        "there are (4 )spaces ";
+    size_t buf1_size = strlen((char *) buf1);
+    size_t gold_escape_size = buf1_size + 2*4;
+    size_t pred_escape_size = NL_get_size_normalized_parentheses(
+        buf1, buf1_size);
+
+    if (pred_escape_size != gold_escape_size) {
+        errors = 1;
+    }
+
+    return errors;
+}
+
+int parens_normalizer() {
+    int errors = 0;
+
+    unsigned char *buf1 = (unsigned char *) 
+        "there are (4) spaces";
+    unsigned char *gold1 = (unsigned char *) 
+        "there are -LRB-4-RRB- spaces";
+
+    size_t buf1_size = strlen((char *) buf1);
+    size_t escape_size = buf1_size + 4 * 2;
+    unsigned char *trans1 = malloc(sizeof(unsigned char) * escape_size);
+    NL_normalize_parentheses(buf1, buf1_size, trans1);
+
+    printf("TRANS1 : %s\n", trans1);
+    printf("GOLD1  : %s\n", gold1);
+    if (strcmp((char *) trans1, (char *) gold1) != 0) {
+        errors = 1;
+    }
+
+    free(trans1);
+    return errors;
+}
+
+int get_size_for_spaces_parens_normalizer() {
+    int errors = 0;
+
+    unsigned char *buf1 = (unsigned char *) 
+        "there are (4) spaces ";
+    size_t buf1_size = strlen((char *) buf1);
+    size_t gold_escape_size = buf1_size + 2*4 + 4;
+    size_t pred_escape_size = NL_get_size_normalized_spaces_parens(
+        buf1, buf1_size);
+
+    if (pred_escape_size != gold_escape_size) {
+        errors = 1;
+    }
+
+    return errors;
+}
+
+int spaces_parens_normalizer() {
+    int errors = 0;
+
+    unsigned char *buf1 = (unsigned char *) 
+        "there are (3) spaces";
+    unsigned char *gold1 = (unsigned char *) 
+        "there\xC2\xA0" "are\xC2\xA0-LRB-3-RRB-\xC2\xA0spaces";
+
+    size_t buf1_size = strlen((char *) buf1);
+    size_t escape_size = buf1_size + 4 * 2 + 3;
+    unsigned char *trans1 = malloc(sizeof(unsigned char) * escape_size);
+    NL_normalize_parens_spaces(buf1, buf1_size, trans1);
+
+    printf("TRANS1 : %s\n", trans1);
+    printf("GOLD1  : %s\n", gold1);
+    if (strcmp((char *) trans1, (char *) gold1) != 0) {
+        errors = 1;
+    }
+
+    free(trans1);
+    return errors;
+}
 
 int main() {
+
+    if (get_size_for_spaces_parens_normalizer() != 0) {
+        printf("get_size_for_spaces_parens_normalizer test failed!\n");
+    } else {
+        printf("get_size_for_spaces_parens_normalizer test success!\n");
+    }  
+
+    if (spaces_parens_normalizer() != 0) {
+        printf("spaces_parens_normalizer test failed!\n");
+    } else {
+        printf("spaces_parens_normalizer test success!\n");
+    }   
+
+    exit(1);
+
+    if (get_size_for_parens_normalizer() != 0) {
+        printf("get_size_for_parens_normalizer test failed!\n");
+    } else {
+        printf("get_size_for_parens_normalizer test success!\n");
+    }   
+    if (parens_normalizer() != 0) {
+        printf("parens_normalizer test failed!\n");
+    } else {
+        printf("parens_normalizer test success!\n");
+    }   
+
+
 
     if (get_size_for_space_normalizer() != 0) {
         printf("get_size_for_space_normalizer test failed!\n");

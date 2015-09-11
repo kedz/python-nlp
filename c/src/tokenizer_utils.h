@@ -38,3 +38,17 @@ size_t NL_get_size_normalized_spaces(unsigned char *p,
 
 void NL_normalize_spaces(unsigned char *p, 
     size_t buf_length, unsigned char *transform);
+
+size_t NL_get_size_normalized_parentheses(unsigned char *p, 
+    size_t buf_length);
+
+void NL_normalize_parentheses(unsigned char *p, 
+    size_t buf_length, unsigned char *transform);
+
+size_t NL_get_size_normalized_spaces_parens(unsigned char *p, 
+    size_t buf_length);
+
+void NL_normalize_parens_spaces(unsigned char *p, 
+    size_t buf_length, unsigned char *transform);
+
+
