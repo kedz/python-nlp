@@ -250,7 +250,7 @@
     REDAUX = APOS ( [msdMSD] | /re/i | /ve/i | /ll/i );
 
     SWORD = ( [A-Za-z] | 0xC2 0xAD )* [A-MO-Za-mo-z] ( 0xC2 0xAD )* ;
-    SREDAUX = "n" APOSETCETERA "t" ;
+    SREDAUX = [Nn] APOSETCETERA [Tt] ;
 
     APOWORD = APOS "n" APOS? 
             | [lLdDjJ] APOS 
