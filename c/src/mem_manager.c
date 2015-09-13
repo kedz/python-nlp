@@ -120,6 +120,7 @@ inline NL_memmgr *NL_new_memmgr(size_t block_size, size_t object_size) {
         m->free_list = NULL;
         m->mem_list = NULL;
         m->empty_containers = NULL;
+        m->allocs = 0;
     }
 
     return m;
@@ -184,6 +185,7 @@ inline void *NL_allocate_mem(NL_memmgr *mgr) {
     container->next = mgr->empty_containers;
     mgr->empty_containers = container;
     mgr->available -= 1;
+    mgr->allocs++;
 
     return (void *) container->data;
 }
@@ -196,7 +198,7 @@ inline void NL_deallocate_mem(NL_memmgr *mgr, void *data) {
     container->next = mgr->free_list;
     mgr->free_list = container;
     mgr->available += 1;
-
+    mgr->allocs--;
 
 }
 

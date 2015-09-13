@@ -20,6 +20,7 @@ typedef struct NL_memmgr {
     NL_mem_list *free_list;
     NL_mem_list *mem_list;
     NL_mem_list *empty_containers;
+    unsigned int allocs;
     
 } NL_memmgr;
 

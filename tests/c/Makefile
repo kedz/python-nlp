@@ -4,7 +4,7 @@ INCLUDE = -I../../include
 LIBS = -L../../lib -lnlp
 
 #all: test sizes var_alloc_test
-all: var_alloc_test sizes test_span test_tokenizer
+all: var_alloc_test sizes test_span test_tokenizer ptb_inputs_test
 
 sizes: sizes.c
 	$(CC) $(CFLAGS) sizes.c -o sizes $(INCLUDE) $(LIBS)
@@ -19,9 +19,10 @@ test_span: test_span.c
 test_tokenizer: test_tokenizer.c
 	$(CC) $(CFLAGS) test_tokenizer.c -o test_tokenizer $(INCLUDE) $(LIBS)
 
-
+ptb_inputs_test: ptb_inputs_test.c
+	$(CC) $(CFLAGS) ptb_inputs_test.c -o ptb_inputs_test $(INCLUDE) $(LIBS)
 
 #test: memmgr_test.c
 #	$(CC) $(CFLAGS) memmgr_test.c -o test $(INCLUDE) $(LIBS)
 clean:
-	rm -f test var_alloc_test sizes test_span test_tokenizer
+	rm -f test var_alloc_test sizes test_span test_tokenizer ptb_inputs_test
