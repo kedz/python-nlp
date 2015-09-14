@@ -49,7 +49,7 @@ typedef struct __token_list {
     NL_span **tokens;
 } __token_list;
 
-
+NL_PTBTokConfig *NL_new_PTB_tokenizer_config(NL_v_memmgr* mgr);
 
 NL_span **NL_tokenize_buf(
     unsigned char *buf, size_t buf_len, size_t *num_tokens, 

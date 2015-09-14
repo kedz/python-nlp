@@ -1090,9 +1090,7 @@ action HandleQuotesProbablyRight {
         BANGWORDS => NextToken;
         BANGMAGAZINES %MarkIntermediate1 SPACENL /magazine/i =>
             NextIntermediate1;
-#
-#        THING3 => NextToken;
-#
+        THING3 => EscapeForwardSlashAsterisk;
         DOLSIGN => NextToken;
         DOLSIGN2 => NextToken;
         DOLSIGN2_CENTS => {
@@ -1419,11 +1417,11 @@ action HandleQuotesProbablyRight {
 
         MISCSYMBOL => NextToken;
 
-        0x95 => {
+        0xC2 0x95 => {
             NEXT_TOKEN
             NL_set_span_label(tokens[span_pos-1], uni_bullet, BULLET_LEN);     
         };
-        0x99 => {
+        0xC2 0x99 => {
             NEXT_TOKEN
             NL_set_span_label(tokens[span_pos-1], uni_tm, TM_LEN);     
         };
@@ -1606,7 +1604,7 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
         normalize_amp = cfg->normalize_amp;
     }
 
-    NL_normalize_quotes normalize_quotes = QUOTES_NONE;
+    NL_normalize_quotes normalize_quotes = QUOTES_LATEX;
     if (cfg != NULL) {
         normalize_quotes = cfg->normalize_quotes;
     }
@@ -1626,7 +1624,7 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
         escape_forward_slash_asterisk = cfg->escape_forward_slash_asterisk;
     }
 
-    NL_normalize_ellipsis normalize_ellipsis = ELLIPSIS_NONE;
+    NL_normalize_ellipsis normalize_ellipsis = ELLIPSIS_PTB3;
     if (cfg != NULL) {
         normalize_ellipsis = cfg->normalize_ellipsis;
     }
@@ -1677,4 +1675,24 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
 
     return out_tokens;
 
+}
+
+NL_PTBTokConfig *NL_new_PTB_tokenizer_config(NL_v_memmgr *mgr) {
+
+    NL_PTBTokConfig *cfg = NL_allocate_mem_size(mgr, sizeof(NL_PTBTokConfig));
+    if (cfg != NULL) {
+        cfg->split_assimilations = 1;
+        cfg->normalize_dashes = 1;
+        cfg->normalize_amp = 1;
+        cfg->normalize_quotes = QUOTES_LATEX;
+        cfg->tokenize_newlines = 0;
+        cfg->normalize_currency = 0;
+        cfg->escape_forward_slash_asterisk = 0;
+        cfg->normalize_ellipsis = ELLIPSIS_PTB3;
+        cfg->normalize_parentheses = 1;
+        cfg->normalize_brackets = 1;
+        cfg->strict_ptb3 = 0;
+        cfg->normalize_spaces = 1;
+    }
+    return cfg;
 }

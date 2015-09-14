@@ -378,6 +378,8 @@ class Tok_Test:
 
     # do fracs
 
+    
+
 
     def tbspec_test(self):
         string = u"-RRB- -LRB- -RCB- -lcb- -lsb- C.D.s PRO-nouns anti-con " + \
@@ -400,9 +402,27 @@ class Tok_Test:
             assert token == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
-    # do thing3 here
     def thing3_test_NO_escaping(self):
-        assert 0
+        nlp.get_global_PTB_config().escape_forward_slash_asterisk = False
+        string = u"Aa0-Ab-Ab/Aa0/Aa0-Aa1 ab\\/zzz"
+        gold = [u"Aa0-Ab-Ab/Aa0/Aa0-Aa", u"1", u"ab\\/zzz"]
+        tokens = nlp.tokenize(string)
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+    def thing3_test_escaping(self):
+        nlp.get_global_PTB_config().escape_forward_slash_asterisk = True
+        string = u"Aa0-Ab-Ab/Aa0/Aa0-Aa1 ab\\/zzz"
+        gold = [u"Aa0-Ab-Ab\\/Aa0\\/Aa0-Aa", u"1", u"ab\\/zzz"]
+        tokens = nlp.tokenize(string)
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)
+
+
 
     def dolsign_test(self):
         string = u"US$ $ # UK$"
