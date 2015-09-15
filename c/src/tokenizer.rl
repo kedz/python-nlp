@@ -1057,6 +1057,221 @@ action HandleQuotesProbablyRight {
 #
 #        FRAC => NextToken;
 #        FRAC2 => NextToken;
+
+        FRAC => {
+            NEXT_TOKEN
+            if (normalize_spaces == 1 && escape_forward_slash_asterisk == 1) {
+                size_t label_size = 1 + NL_get_size_normalized_spaces_slashes(
+                    ts, te - ts);
+                unsigned char *label_str = NL_allocate_mem_size(
+                    mgr, label_size);
+                NL_normalize_parens_slashes(ts, te - ts, label_str);
+                label_str[label_size - 1] = 0x01;
+                NL_set_span_label(tokens[span_pos-1], 
+                    label_str, label_size - 1);
+            } else if (normalize_spaces == 1) {
+                size_t label_size = 1 + NL_get_size_normalized_spaces(
+                    ts, te - ts);
+                unsigned char *label_str = NL_allocate_mem_size(
+                    mgr, label_size);
+                NL_normalize_spaces(ts, te - ts, label_str);
+                label_str[label_size - 1] = 0x01;
+                NL_set_span_label(tokens[span_pos-1], 
+                    label_str, label_size - 1);
+            } else if (escape_forward_slash_asterisk == 1) {
+                size_t label_size = 1 + 
+                    NL_get_size_escaped_forward_slash_asterisk(ts, te - ts);
+                unsigned char *label_str = NL_allocate_mem_size(
+                    mgr, label_size);
+                NL_escape_forward_slash_asterisk(ts, te - ts, label_str);
+                label_str[label_size - 1] = 0x01;
+                NL_set_span_label(tokens[span_pos-1], 
+                    label_str, label_size - 1);
+            }
+
+        };
+
+        ### FRAC2 patterns ###
+        0xC2 0xBC => {
+            NEXT_TOKEN
+            if (normalize_fractions == 1) {
+                if (escape_forward_slash_asterisk == 0) {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "1/4\x00", 3);
+                } else {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "1\\/4\x00", 4);
+                }
+            }
+        };
+        0xC2 0xBD => {
+            NEXT_TOKEN
+            if (normalize_fractions == 1) {
+                if (escape_forward_slash_asterisk == 0) {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "1/2\x00", 3);
+                } else {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "1\\/2\x00", 4);
+                }
+            }
+        };
+        0xC2 0xBE => {
+            NEXT_TOKEN
+            if (normalize_fractions == 1) {
+                if (escape_forward_slash_asterisk == 0) {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "3/4\x00", 3);
+                } else {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "3\\/4\x00", 4);
+                }
+            }
+        };
+        0xE2 0x85 0x93 => {
+            NEXT_TOKEN
+            if (normalize_fractions == 1) {
+                if (escape_forward_slash_asterisk == 0) {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "1/3\x00", 3);
+                } else {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "1\\/3\x00", 4);
+                }
+            }
+        };
+        0xE2 0x85 0x94 => {
+            NEXT_TOKEN
+            if (normalize_fractions == 1) {
+                if (escape_forward_slash_asterisk == 0) {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "2/3\x00", 3);
+                } else {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "2\\/3\x00", 4);
+                }
+            }
+        };
+        0xE2 0x85 0x95 => {
+            NEXT_TOKEN
+            if (normalize_fractions == 1) {
+                if (escape_forward_slash_asterisk == 0) {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "1/5\x00", 3);
+                } else {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "1\\/5\x00", 4);
+                }
+            }
+        };
+        0xE2 0x85 0x96 => {
+            NEXT_TOKEN
+            if (normalize_fractions == 1) {
+                if (escape_forward_slash_asterisk == 0) {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "2/5\x00", 3);
+                } else {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "2\\/5\x00", 4);
+                }
+            }
+        };
+        0xE2 0x85 0x97 => {
+            NEXT_TOKEN
+            if (normalize_fractions == 1) {
+                if (escape_forward_slash_asterisk == 0) {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "3/5\x00", 3);
+                } else {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "3\\/5\x00", 4);
+                }
+            }
+        };
+        0xE2 0x85 0x98 => {
+            NEXT_TOKEN
+            if (normalize_fractions == 1) {
+                if (escape_forward_slash_asterisk == 0) {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "4/5\x00", 3);
+                } else {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "4\\/5\x00", 4);
+                }
+            }
+        };
+        0xE2 0x85 0x99 => {
+            NEXT_TOKEN
+            if (normalize_fractions == 1) {
+                if (escape_forward_slash_asterisk == 0) {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "1/6\x00", 3);
+                } else {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "1\\/6\x00", 4);
+                }
+            }
+        };
+        0xE2 0x85 0x9A => {
+            NEXT_TOKEN
+            if (normalize_fractions == 1) {
+                if (escape_forward_slash_asterisk == 0) {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "5/6\x00", 3);
+                } else {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "5\\/6\x00", 4);
+                }
+            }
+        };
+        0xE2 0x85 0x9B => {
+            NEXT_TOKEN
+            if (normalize_fractions == 1) {
+                if (escape_forward_slash_asterisk == 0) {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "1/8\x00", 3);
+                } else {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "1\\/8\x00", 4);
+                }
+            }
+        };
+        0xE2 0x85 0x9C => {
+            NEXT_TOKEN
+            if (normalize_fractions == 1) {
+                if (escape_forward_slash_asterisk == 0) {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "3/8\x00", 3);
+                } else {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "3\\/8\x00", 4);
+                }
+            }
+        };
+        0xE2 0x85 0x9D => {
+            NEXT_TOKEN
+            if (normalize_fractions == 1) {
+                if (escape_forward_slash_asterisk == 0) {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "5/8\x00", 3);
+                } else {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "5\\/8\x00", 4);
+                }
+            }
+        };
+        0xE2 0x85 0x9E => {
+            NEXT_TOKEN
+            if (normalize_fractions == 1) {
+                if (escape_forward_slash_asterisk == 0) {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "7/8\x00", 3);
+                } else {
+                    NL_set_span_label(
+                        tokens[span_pos-1], (unsigned char *) "7\\/8\x00", 4);
+                }
+            }
+        };
 #
         TBSPEC => NextToken;
         TBSPEC_SampP => {
@@ -1116,25 +1331,6 @@ action HandleQuotesProbablyRight {
             }
         };
 
-#
-#
-#        ABBREV3 %MarkIntermediate1 SPACENL? udigit => NextIntermediate1;
-#        (/pt/i [eyEY] | /co/i)"." 
-#            %MarkIntermediate1 SPACE (/ltd/i|/lim/i) => NextIntermediate1; 
-#
-#        #ABBREV1 /SENTEND 
-#        ABBREV1 %MarkIntermediate2 any any => NextIntermediate2;        
-#        ABBREV1 => NextToken;
-#        ABBREV2 => NextToken;
-#
-#        ABBREV4 %MarkIntermediate2 SPACE => NextIntermediate2;
-#
-#        ACRO %MarkIntermediate2 SPACENL => NextIntermediate2;
-#
-#        TBSPEC2 %MarkIntermediate2 SPACENL => NextIntermediate2;
-#
-#        FILENAME %MarkIntermediate2 (SPACENL|[.?!,]) => NextIntermediate2;
-#        WORD "." %MarkIntermediate2 INSENTP => NextIntermediate2;
         PHONE => {
             NEXT_TOKEN
             if (normalize_spaces == 1 && normalize_parentheses == 1) {
@@ -1309,8 +1505,6 @@ action HandleQuotesProbablyRight {
         FILENAME %MarkIntermediate2 (SPACENL|[.?!,]) => NextIntermediate2;
 
         WORD"." %MarkIntermediate2 INSENTP => NextIntermediate2;
-
-        PHONE => NextToken;
 
         DBLQUOT %MarkIntermediate2 [A-Za-z0-9$] => 
             NextIntermediateHandleProbablyLeftQuotes2;
@@ -1649,6 +1843,13 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
         normalize_spaces = cfg->normalize_spaces;
     }
 
+    int normalize_fractions = 0;
+    if (cfg != NULL) {
+        normalize_fractions = cfg->normalize_fractions;
+    }
+
+    printf("STARTING TO TOKENIZE\n");
+
     %% write init;
 
     %% write exec;
@@ -1673,6 +1874,7 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
 
     }
 
+    printf("FINISHED TOKENIZE\n");
     return out_tokens;
 
 }
@@ -1693,6 +1895,7 @@ NL_PTBTokConfig *NL_new_PTB_tokenizer_config(NL_v_memmgr *mgr) {
         cfg->normalize_brackets = 1;
         cfg->strict_ptb3 = 0;
         cfg->normalize_spaces = 1;
+        cfg->normalize_fractions = 0;
     }
     return cfg;
 }

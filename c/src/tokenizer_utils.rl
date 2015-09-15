@@ -792,3 +792,46 @@ void NL_normalize_parens_spaces(unsigned char *p, size_t buf_length,
     }
 
 }
+
+size_t NL_get_size_normalized_spaces_slashes(unsigned char *p, 
+    size_t buf_length) {
+
+    unsigned char *end = p + buf_length;
+    size_t count = buf_length;
+    while ( p < end ) {
+        if (*p ==  ' ' || *p == '/')
+            count++;
+        else if (*p == '\\') { 
+            if (p < end - 1 && *(p+1) != ' ') {
+                p++;
+            }
+        }
+        p++;
+    }
+
+    return count;
+}
+
+void NL_normalize_parens_slashes(unsigned char *p, size_t buf_length, 
+        unsigned char *transform) {
+
+    unsigned char *end = p + buf_length;
+    while ( p < end ) {
+        if (*p == ' ') {
+            *transform = 0xC2; transform++;
+            *transform = 0xA0; transform++;
+        } else if (*p == '/') {
+            *transform = '\\'; transform++;
+            *transform = '/'; transform++;
+        } else if (*p == '\\') {
+            if (p < end - 1 && *(p+1) != ' ') {
+                *transform = *p; transform++; p++;
+            } 
+            *transform = *p; transform++;
+        } else {
+            *transform = *p; transform++;
+        }
+        p++;
+    }
+
+}
