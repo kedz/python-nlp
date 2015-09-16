@@ -190,15 +190,17 @@ inline void *NL_allocate_mem(NL_memmgr *mgr) {
     return (void *) container->data;
 }
 
-inline void NL_deallocate_mem(NL_memmgr *mgr, void *data) {
+inline void NL_deallocate_mem(NL_memmgr *mgr, void **data) {
     NL_mem_list *container = mgr->empty_containers;
     mgr->empty_containers = container->next;
      
-    container->data = data;
+    container->data = *data;
+    *data = NULL;
     container->next = mgr->free_list;
     mgr->free_list = container;
     mgr->available += 1;
     mgr->allocs--;
+
 
 }
 

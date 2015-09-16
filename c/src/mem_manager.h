@@ -45,6 +45,6 @@ NL_memmgr *NL_new_memmgr(size_t block_size, size_t object_size);
 void NL_free_memmgr(NL_memmgr **m_ptr);
 
 void *NL_allocate_mem(NL_memmgr *mgr);
-void NL_deallocate_mem(NL_memmgr *mgr, void * data);
+void NL_deallocate_mem(NL_memmgr *mgr, void **data);
 
 #endif
