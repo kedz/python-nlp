@@ -4,25 +4,31 @@ INCLUDE = -I../../include
 LIBS = -L../../lib -lnlp
 
 #all: test sizes var_alloc_test
-all: var_alloc_test sizes test_span test_tokenizer ptb_inputs_test
+all: test-libnlp sizes
 
+test-libnlp: test-libnlp.c memmgr_test.c ptb_inputs_test.c 
+	$(CC) $(CFLAGS) test-libnlp.c memmgr_test.c ptb_inputs_test.c -o test-libnlp $(INCLUDE) \
+		$(LIBS)
+
+#large_test: large_test.c
+#	$(CC) $(CFLAGS) large_test.c -o large_test $(INCLUDE) $(LIBS);
 sizes: sizes.c
 	$(CC) $(CFLAGS) sizes.c -o sizes $(INCLUDE) $(LIBS)
 
-var_alloc_test:
-	$(CC) $(CFLAGS) var_allocation_timings.c -o var_alloc_test \
-		$(INCLUDE) $(LIBS)
+#var_alloc_test:
+#	$(CC) $(CFLAGS) var_allocation_timings.c -o var_alloc_test \
+#		$(INCLUDE) $(LIBS)
 
-test_span: test_span.c
-	$(CC) $(CFLAGS) test_span.c -o test_span $(INCLUDE) $(LIBS)
+#test_span: test_span.c
+#	$(CC) $(CFLAGS) test_span.c -o test_span $(INCLUDE) $(LIBS)
 
-test_tokenizer: test_tokenizer.c
-	$(CC) $(CFLAGS) test_tokenizer.c -o test_tokenizer $(INCLUDE) $(LIBS)
+#test_tokenizer: test_tokenizer.c
+#	$(CC) $(CFLAGS) test_tokenizer.c -o test_tokenizer $(INCLUDE) $(LIBS)
 
-ptb_inputs_test: ptb_inputs_test.c
-	$(CC) $(CFLAGS) ptb_inputs_test.c -o ptb_inputs_test $(INCLUDE) $(LIBS)
+#ptb_inputs_test: ptb_inputs_test.c
+#	$(CC) $(CFLAGS) ptb_inputs_test.c -o ptb_inputs_test $(INCLUDE) $(LIBS)
 
 #test: memmgr_test.c
 #	$(CC) $(CFLAGS) memmgr_test.c -o test $(INCLUDE) $(LIBS)
 clean:
-	rm -f test var_alloc_test sizes test_span test_tokenizer ptb_inputs_test
+	rm -f test-libnlp sizes

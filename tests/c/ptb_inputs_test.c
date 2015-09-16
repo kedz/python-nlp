@@ -1,22 +1,5 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <stddef.h>
-#include "nlp/mem_manager.h"
-#include "nlp/tokenizer.h"
+#include "ptb_inputs_test.h"
 
-typedef struct error_info {
-    unsigned char *test_name;
-    unsigned char *msg;
-} error_info;
-
-
-#define NEW_ERROR                                                   \
-    *num_errors += 1;                                               \
-    errors = realloc(errors, *num_errors * sizeof(error_info *));   \
-    errors[*num_errors -1] = malloc(sizeof(error_info));            \
-    error_info *this_error = errors[*num_errors -1];                \
-    errors[*num_errors-1]->msg = malloc(sizeof(char) * 80);         \
 
 #define TOKEN_TEST                                                            \
   size_t *num_tokens = NL_allocate_mem_size(mgr, sizeof(size_t));             \
@@ -87,7 +70,11 @@ typedef struct error_info {
   for (int i=0; i < mgr->max_pools; i++) {                                    \
       unsigned int allocs = mgr->pools[i]->allocs;                            \
       if (allocs > 0) {                                                       \
-          NEW_ERROR                                                           \
+          *num_errors += 1;                                                   \
+          errors = realloc(errors, *num_errors * sizeof(error_info *));       \
+          errors[*num_errors -1] = malloc(sizeof(error_info));                \
+          error_info *this_error = errors[*num_errors -1];                    \
+          errors[*num_errors-1]->msg = malloc(sizeof(char) * 80);             \
           sprintf(                                                            \
               (char *) this_error->msg,                                       \
               "Memory manager leak %d allocations in pool size %d.",          \
@@ -1208,79 +1195,46 @@ error_info **sgml_test1(char **name, size_t *num_errors) {
     return errors;
 }
 
-#define num_tests 30
 
-error_info** (*tests[]) (char **, size_t*) = {
-    ptb_test1, 
-    ptb_test2,
-    ptb_test3,
-    ptb_test4,
-    ptb_test5,
-    ptb_test6,
-    ptb_test7,
-    ptb_test8,
-    ptb_test9,
-    ptb_test10,
-    ptb_test11,
-    ptb_test12,
-    ptb_test13,
-    ptb_test14,
-    ptb_test15,
-    ptb_test16,
-    ptb_test17,
-    ptb_test18,
-    ptb_test19,
-    ptb_test20,
-    ptb_test21,
-    ptb_test22,
-    ptb_test23,
-    ptb_test24,
-    ptb_test25,
-    ptb_test26,
-    corp_test1,
-    corp_test2,
-    jacob_eisenstein_apos_test,
-    sgml_test1,
-};
 
-int main(int argc, char *argv[]) {
-
-    char *usage = "ptb_inputs_test [-v] [-h]\n"
-        "\t-v\tverbose, print error messages\n"
-        "\t-h\tdisplay this message\n";
-
-    int verbose = 0;
-
-    for (int i=0; i < argc; i++) {
-        if (strcmp(argv[i], "-v") == 0) {
-            verbose = 1;
-        } else if (strcmp(argv[i], "-h") == 0) {
-            printf("%s", usage);
-            exit(0);
-        }
-
-    }
-
-    for (int i=0; i < num_tests; i++) {
-        char **name = malloc(sizeof(char *));
-        error_info **errors = NULL;
-        size_t num_errors = 0;
-        errors = (*tests[i]) (name, &num_errors);
-        char *status;
-        if (num_errors == 0) {
-            status = "OK";
-        } else {
-            status = "FAIL";
-        }
-        printf("%s ... %s\n", *name, status);
-        for (int e=0; e<num_errors; e++) {
-            if (verbose == 1) {
-                printf("Error %d: %s\n", e, errors[e]->msg);
-            }
-            free(errors[e]->msg);
-            free(errors[e]);
-        }
-        free(errors);
-        free(name);
-    }
-}
+//int main(int argc, char *argv[]) {
+//
+//    char *usage = "ptb_inputs_test [-v] [-h]\n"
+//        "\t-v\tverbose, print error messages\n"
+//        "\t-h\tdisplay this message\n";
+//
+//    int verbose = 0;
+//
+//    for (int i=0; i < argc; i++) {
+//        if (strcmp(argv[i], "-v") == 0) {
+//            verbose = 1;
+//        } else if (strcmp(argv[i], "-h") == 0) {
+//            printf("%s", usage);
+//            exit(0);
+//        }
+//
+//    }
+//
+//    for (int i=0; i < num_tests; i++) {
+//        char **name = malloc(sizeof(char *));
+//        error_info **errors = NULL;
+//        size_t num_errors = 0;
+//        errors = (*tests[i]) (name, &num_errors);
+//        char *status;
+//        if (num_errors == 0) {
+//            status = "OK";
+//        } else {
+//            status = "FAIL";
+//        }
+//        printf("%s ... %s\n", *name, status);
+//        for (int e=0; e<num_errors; e++) {
+//            if (verbose == 1) {
+//                printf("Error %d: %s\n", e, errors[e]->msg);
+//            }
+//            free(errors[e]->msg);
+//            free(errors[e]);
+//        }
+//        free(errors);
+//        free(name);
+//    }
+//}
