@@ -71,11 +71,11 @@ void NL_free_span(NL_span **span, NL_v_memmgr *manager) {
             if ((*span)->label != NULL) {
                 size_t label_len = (*span)->label_length;
                 if ((*span)->label[label_len] == 1) {
-                    NL_deallocate_v_mem(manager, (*span)->label);
+                    NL_deallocate_v_mem(manager, (void **) &(*span)->label);
                 }
             }
 
-            NL_deallocate_v_mem(manager, (void *) *span);
+            NL_deallocate_v_mem(manager, (void **) span);
             *span = NULL;
         }
     }

@@ -9,7 +9,7 @@ inline NL_v_memmgr *NL_new_v_memmgr(size_t block_size) {
     NL_v_memmgr *manager = malloc(sizeof(NL_v_memmgr));
     if (manager != NULL) {
         manager->block_size = block_size;
-        manager->max_pools = 8;
+        manager->max_pools = NL_V_MEMMGR_INIT_POOL_SIZE;
         manager->pools = malloc(sizeof(NL_memmgr*) * manager->max_pools);
         size_t size = 1;
         for (int i=0; i < manager->max_pools; i++) {
@@ -45,27 +45,23 @@ static inline int log2_64 (uint64_t value) {
 
 inline void *NL_allocate_mem_size(NL_v_memmgr *mgr, size_t object_size) {
 
+    if (object_size == 0)
+        return NULL;
+
     int bucket = log2_64((uint64_t) object_size);
+
     if (bucket >= mgr->max_pools) {
-        //printf("I am allocating bucket %d\n", bucket);
         mgr->pools = realloc(mgr->pools, sizeof(NL_memmgr*) * (bucket + 1));
         size_t size = mgr->pools[mgr->max_pools-1]->object_size;
         for (int i=mgr->max_pools; i < bucket + 1; i++) {
             size = size * 2;
-            //printf("Allocating new pool of size %lu at position %d\n",
-            //    size, i);
             mgr->pools[i] = NL_new_memmgr(mgr->block_size, size);
         }
         mgr->max_pools = bucket + 1;
-        //for (int i=0; i < mgr->max_pools; i++) {
-        //    printf("%lu, ", mgr->pools[i]->object_size);
-        //}
-       // printf("\n");
-
     }
 
-    //printf("%lu : %d slot with size %lu\n", 
-    //    object_size, bucket, mgr->pools[bucket]->object_size);    
+    if (bucket > 0 && mgr->pools[bucket-1]->object_size == object_size)
+        bucket--;
     return NL_allocate_mem(mgr->pools[bucket]);
 
 }
@@ -78,12 +74,12 @@ inline void *NL_allocate_32_mem(NL_v_memmgr *mgr) {
     return NL_allocate_mem(mgr->pools[4]);
 }
 
-inline void NL_deallocate_v_mem(NL_v_memmgr *mgr, void *data) {
+inline void NL_deallocate_v_mem(NL_v_memmgr *mgr, void **data) {
 
     size_t object_size;
     for (int i=0; i < mgr->max_pools; i++) {
         object_size = mgr->pools[i]->object_size;
-        unsigned char * guard_byte = ((unsigned char *) data) + object_size;
+        unsigned char * guard_byte = ((unsigned char *) *data) + object_size;
         if (*guard_byte == 0xDE && *(guard_byte + 1) == 0xAD) {
             return NL_deallocate_mem(mgr->pools[i], data);   
         }
@@ -129,7 +125,6 @@ inline NL_memmgr *NL_new_memmgr(size_t block_size, size_t object_size) {
 
 
 inline void __NL_allocate_block(NL_memmgr *mgr) {
-    //void *block = malloc(mgr->actual_block_size);
     void *block = calloc(1, mgr->actual_block_size);
     NL_mem_list *block_container = malloc(sizeof(NL_mem_list));
 
@@ -140,7 +135,6 @@ inline void __NL_allocate_block(NL_memmgr *mgr) {
 
     block_container->data = block;
     size_t guard_start = mgr->object_size; 
-    //size_t block_size = mgr->block_size;
     
 
     for (int i=0; i < mgr->actual_block_size; i+=mgr->actual_object_size) {
@@ -149,13 +143,6 @@ inline void __NL_allocate_block(NL_memmgr *mgr) {
         *guard_byte = 0xde;
         guard_byte++; 
         *guard_byte = 0xad;   //end of block
-        //guard_byte++;
-        /*guard_byte = 0x00;   //block is available
-        guard_byte = (block_size & 0xFF);
-        guard_byte++;
-        *guard_byte = 0x00;   //block is available
-        guard_byte = ((block_size >> 8) & 0xFF);
-    */
         NL_mem_list *object_container = malloc(sizeof(NL_mem_list));
 
         if (object_container == NULL) {
@@ -170,7 +157,6 @@ inline void __NL_allocate_block(NL_memmgr *mgr) {
 
     block_container->next = mgr->mem_list;
     mgr->mem_list = block_container;
-    
     mgr->available += mgr->block_size;
 }
 

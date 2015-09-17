@@ -47,8 +47,8 @@
       }                                                                       \
       NL_free_span(&tokens[i], mgr);                                          \
   }                                                                           \
-  NL_deallocate_v_mem(mgr, tokens);                                           \
-  NL_deallocate_v_mem(mgr, cfg);                                              \
+  NL_deallocate_v_mem(mgr,(void **) &tokens);                                           \
+  NL_deallocate_v_mem(mgr, (void **) &cfg);                                              \
                                                                               \
   if (*num_tokens != gold_num_tokens) {                                       \
       *num_errors += 1;                                                       \
@@ -64,7 +64,7 @@
                                                                               \
   }                                                                           \
                                                                               \
-  NL_deallocate_v_mem(mgr, num_tokens);                                       \
+  NL_deallocate_v_mem(mgr, (void **) &num_tokens);                                       \
                                                                               \
   int pool_size = 2;                                                          \
   for (int i=0; i < mgr->max_pools; i++) {                                    \

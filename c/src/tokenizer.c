@@ -28701,9 +28701,9 @@ _again:
             current_out = &current_out[BUFSIZE] ;
         }
          
-        NL_deallocate_v_mem(mgr, head->tokens);
+        NL_deallocate_v_mem(mgr, (void **) &head->tokens);
         next = head->next;
-        NL_deallocate_v_mem(mgr, head);
+        NL_deallocate_v_mem(mgr, (void **) &head);
 
     }
 

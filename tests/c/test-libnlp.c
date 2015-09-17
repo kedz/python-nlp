@@ -1,5 +1,6 @@
 #include "ptb_inputs_test.h"
 #include "memmgr_test.h"
+#include "tokenizer_utils_tests.h"
 
 int run_tests(test_func *test_funcs, size_t num_tests, int verbose) {
     for (int i=0; i < num_tests; i++) {
@@ -48,8 +49,10 @@ int main(int argc, char *argv[]) {
     }
 
     MEMMGR_TESTS(memmgr_tests);
-//    PTB_INPUTS_TESTS(ptb_inputs_tests);
-//    run_tests((test_func *) &ptb_inputs_tests, NUM_PTB_INPUTS_TESTS, verbose);
     run_tests((test_func *) &memmgr_tests, NUM_MEMMGR_TESTS, verbose);
+    TOK_UTILS_TESTS(tok_utils_tests);
+    run_tests((test_func *) &tok_utils_tests, NUM_TOK_UTILS_TESTS, verbose);
+    PTB_INPUTS_TESTS(ptb_inputs_tests);
+    run_tests((test_func *) &ptb_inputs_tests, NUM_PTB_INPUTS_TESTS, verbose);
 
 }

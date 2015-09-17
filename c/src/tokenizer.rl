@@ -1868,9 +1868,9 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
             current_out = &current_out[BUFSIZE] ;
         }
          
-        NL_deallocate_v_mem(mgr, head->tokens);
+        NL_deallocate_v_mem(mgr, (void **) &head->tokens);
         next = head->next;
-        NL_deallocate_v_mem(mgr, head);
+        NL_deallocate_v_mem(mgr, (void **) &head);
 
     }
 
