@@ -76,6 +76,9 @@ inline void *NL_allocate_32_mem(NL_v_memmgr *mgr) {
 
 inline void NL_deallocate_v_mem(NL_v_memmgr *mgr, void **data) {
 
+    if ( *data == NULL)
+        return;
+
     size_t object_size;
     for (int i=0; i < mgr->max_pools; i++) {
         object_size = mgr->pools[i]->object_size;
