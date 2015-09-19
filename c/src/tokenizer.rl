@@ -1044,13 +1044,13 @@ action HandleQuotesProbablyRight {
    #     FULLURL => NextToken; # TODO add escaping for these
    #     LIKELYURL => NextToken;
    #     EMAIL => NextToken; # TODO: can't get this to work
-#
+
         TWITTER => NextToken;
         REDAUX %MarkIntermediate2 [^A-Za-z] => 
             NextIntermediateHandleProbablyRightQuotes2;
         SREDAUX %MarkIntermediate1 [^A-Za-z] => 
             NextIntermediateHandleProbablyRightQuotes1;
-#
+
         DATE => NextToken; #TODO escape slashes
         NUMBER => NextToken;
         SUBSUPNUM => NextToken;
@@ -1362,46 +1362,6 @@ action HandleQuotesProbablyRight {
                     label_str, label_size - 1);
             }
         };
-#        
-#        DBLQUOT => NextToken;
-#        
-#
-#        GREATERTHAN => NextToken;
-#        LESSTHAN => NextToken;
-#
-#
-#
-#
-#
-
-#        #LDOTS => NextToken;
-#        #FNMARKS => NextToken;         
-#        #ASTS => NextToken;
-#
-#
-        "." => NextToken; # add other sentence final punc and add a test.
-#
-#        "="+ => NextToken;
-#
-#        "/" => NextToken;
-#
-#
-#
-##        WORD => NextToken;
-##        FILENAME => NextToken;
-#        #test THINGs ?
-##        APOWORD2 => NextToken;
-##        FULLURL => NextToken;
-##        LIKELYURL => NextToken;
-##        TWITTER => NextToken;
-##        ABBREV1 => NextToken;
-##        ABBREV2 => NextToken;
-##        ACRONYM => NextToken;
-# #       EMAIL => NextToken;
-#     #   all_word => NextToken;
-#
-##        SMILEY => NextToken;
-
 
     ACRONYM %MarkIntermediate1 SPACENLS (
           [A] /bout/i | [A] /ccording/i | [A] /dditionally/i | [A] /fter/i
@@ -1641,9 +1601,74 @@ action HandleQuotesProbablyRight {
 
 %% write data nofinal;
 
-#define BUFSIZE 32
+
+#ifdef NLDBG
+#define NEXT_TOKEN                                                          \
+    if (span_pos == BUFSIZE) {                                              \
+        printf("Allocating __token_list *next_slab of size %lu\n",          \
+            sizeof(__token_list));                                          \
+        __token_list *next_slab = NL_allocate_mem_size(                     \
+            mgr, sizeof(__token_list));                                     \
+        next_slab->next = NULL;                                             \
+        printf("Allocating NL_span **next_slab->tokens of size %lu\n",      \
+            sizeof(NL_span *) * BUFSIZE);                                   \
+        next_slab->tokens = NL_allocate_mem_size(                           \
+            mgr, sizeof(NL_span *) * BUFSIZE);                              \
+        tail->next = next_slab;                                             \
+        tail = tail->next;                                                  \
+        num_lists++;                                                        \
+        span_pos = 0;                                                       \
+        tokens = next_slab->tokens;                                         \
+    }                                                                       \
+    tokens[span_pos++] = NL_new_span(ts, te - ts, mgr);                     \
+                                                                            \
+    if (alert_soft_hyphen > 0) {                                            \
+        size_t size_label = te - ts - alert_soft_hyphen * 2 + 1;            \
+        unsigned char *label_str = NULL;                                    \
+                                                                            \
+        if (size_label > 1) {                                               \
+            label_str = NL_allocate_mem_size(mgr, size_label);              \
+            NL_copy_no_softhyphen(ts, te - ts, label_str);                  \
+        } else {                                                            \
+            size_label = 2;                                                 \
+            label_str = NL_allocate_mem_size(mgr, size_label);              \
+            label_str[0] = '-';                                             \
+        }                                                                   \
+        label_str[size_label - 1] = 0x01;                                   \
+        NL_set_span_label(tokens[span_pos-1], label_str, size_label - 1);   \
+    }                                                                       \
+    alert_soft_hyphen = 0;                                                  \
+
+#define SPLIT_ASSIM(PREFIX)                              \
+    if (span_pos == BUFSIZE) {                           \
+        __token_list *next_slab = NL_allocate_mem_size(  \
+            mgr, sizeof(__token_list));                  \
+        next_slab->next = NULL;                          \
+        next_slab->tokens = NL_allocate_mem_size(        \
+            mgr, sizeof(NL_span *) * BUFSIZE);           \
+        tail->next = next_slab;                          \
+        tail = tail->next;                               \
+        num_lists++;                                     \
+        span_pos = 0;                                    \
+        tokens = next_slab->tokens;                      \
+    }                                                    \
+    tokens[span_pos++] = NL_new_span(ts, PREFIX, mgr);   \
+    if (span_pos == BUFSIZE) {                           \
+        __token_list *next_slab = NL_allocate_mem_size(  \
+            mgr, sizeof(__token_list));                  \
+        next_slab->next = NULL;                          \
+        next_slab->tokens = NL_allocate_mem_size(        \
+            mgr, sizeof(NL_span *) * BUFSIZE);           \
+        tail->next = next_slab;                          \
+        tail = tail->next;                               \
+        num_lists++;                                     \
+        span_pos = 0;                                    \
+        tokens = next_slab->tokens;                      \
+    }                                                    \
+    tokens[span_pos++] = NL_new_span(ts + PREFIX, te - (ts + PREFIX), mgr);  \
 
 
+#else
 #define NEXT_TOKEN                                                          \
     if (span_pos == BUFSIZE) {                                              \
         __token_list *next_slab = NL_allocate_mem_size(                     \
@@ -1704,6 +1729,9 @@ action HandleQuotesProbablyRight {
     }                                                    \
     tokens[span_pos++] = NL_new_span(ts + PREFIX, te - (ts + PREFIX), mgr);  \
 
+#endif
+
+
 const static NL_label ptb3dash = (NL_label) "--\x00";
 #define PTB3DASH_LEN 2
 
@@ -1762,11 +1790,17 @@ const static NL_label greaterthan_label = (NL_label) ">\x00";
 NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len, 
         size_t *num_tokens, NL_PTBTokConfig *cfg, NL_v_memmgr *mgr) {
 
+    #ifdef NLDBG
+    printf("ALLOCATING MEM SIZE %lu\n",  sizeof(__token_list));
+    #endif
     __token_list *head = NL_allocate_mem_size(mgr, sizeof(__token_list));
     head->next = NULL;
     __token_list *tail = head;
     size_t num_lists = 1;
 
+    #ifdef NLDBG
+    printf("ALLOCATING MEM SIZE %lu\n", sizeof(NL_span *) * BUFSIZE);
+    #endif
     NL_span **tokens = NL_allocate_mem_size(mgr, sizeof(NL_span *) * BUFSIZE);
     head->tokens = tokens;
 
@@ -1848,18 +1882,41 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
         normalize_fractions = cfg->normalize_fractions;
     }
 
+    #ifdef NLDBG
     printf("STARTING TO TOKENIZE\n");
+    #endif
 
     %% write init;
 
     %% write exec;
 
     *num_tokens = BUFSIZE * (num_lists - 1) + span_pos;
+
+
+    
+
+    #ifdef NLDBG
+    printf("Tokenized %lu tokens\n", *num_tokens);
+    for (int j=0; j < mgr->max_pools; j++) {
+        printf("Pool %lu, %d allocs\n", mgr->pools[j]->object_size, mgr->pools[j]->allocs);
+    }
+    printf("NL_span **\tout_tokens\t%lu\t%lu bytes\n", 
+        *num_tokens, sizeof(NL_span *) * (*num_tokens));
+    printf("__token_list *\tnext_slab\t%lu\t%lu\n",        
+            num_lists, sizeof(__token_list));
+    printf("NL_span **\tnext_slab->tokens\t%lu\t%lu\n",    
+            num_lists, sizeof(NL_span *) * BUFSIZE);     
+
+    int num_slab_deallocs = 0;
+    #endif
     NL_span **out_tokens = NL_allocate_mem_size(
         mgr, sizeof(NL_span *) * (*num_tokens));
+
     NL_span **current_out = out_tokens;
     __token_list *next;
 
+
+    
     for (;head; head=next) {
         if (head->next == NULL) {
             memcpy(current_out, head->tokens, span_pos * sizeof(NL_span*));
@@ -1868,13 +1925,25 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
             current_out = &current_out[BUFSIZE] ;
         }
          
+        #ifdef NLDBG
+            printf("head->tokens -- deallocating (expected) %lu\n",
+                sizeof(NL_span *) * BUFSIZE);
+        #endif
         NL_deallocate_v_mem(mgr, (void **) &head->tokens);
         next = head->next;
+        #ifdef NLDBG
+            printf("head -- deallocating (expected) %lu\n",
+                sizeof(__token_list));
+            printf("%d deallocations of slabs and token lists\n", 
+                ++num_slab_deallocs);
+        #endif
         NL_deallocate_v_mem(mgr, (void **) &head);
 
     }
 
+    #ifdef NLDBG
     printf("FINISHED TOKENIZE\n");
+    #endif
     return out_tokens;
 
 }

@@ -378,7 +378,146 @@ class Tok_Test:
 
     # do fracs
 
-    
+    def frac_NO_normalize_NO_escape_test(self):
+        cfg = nlp.get_global_PTB_config()
+        cfg.normalize_spaces = False
+        cfg.escape_forward_slash_asterisk = False
+        cfg.strict_ptb3 = False
+        string = u"1234 1234/1234 1234-1234/1234 1234\u00A01234/1234 " \
+            u"1234 1234\\/1234 1234-1234\\/1234 1234\u00A01234\\/1234 " \
+            u"1234 1234\u20441234 1234-1234\u20441234 " \
+            u"1234\u00A01234\u20441234"
+        gold = [u"1234 1234/1234", u"1234-1234/1234", u"1234\u00A01234/1234",
+                u"1234 1234\\/1234", u"1234-1234\\/1234", 
+                u"1234\u00A01234\\/1234", u"1234 1234\u20441234", 
+                u"1234-1234\u20441234", u"1234\u00A01234\u20441234"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        print gold
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)       
+
+
+    def frac_normalize_NO_escape_test(self):
+        cfg = nlp.get_global_PTB_config()
+        cfg.normalize_spaces = True
+        cfg.escape_forward_slash_asterisk = False
+        cfg.strict_ptb3 = False
+        string = u"1234 1234/1234 1234-1234/1234 1234\u00A01234/1234 " \
+            u"1234 1234\\/1234 1234-1234\\/1234 1234\u00A01234\\/1234 " \
+            u"1234 1234\u20441234 1234-1234\u20441234 " \
+            u"1234\u00A01234\u20441234"
+        gold = [u"1234\u00A01234/1234", u"1234-1234/1234", 
+                u"1234\u00A01234/1234", u"1234\u00A01234\\/1234", 
+                u"1234-1234\\/1234", u"1234\u00A01234\\/1234", 
+                u"1234\u00A01234\u20441234", u"1234-1234\u20441234", 
+                u"1234\u00A01234\u20441234"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        print gold
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)       
+
+    def frac_NO_normalize_escape_test(self):
+        cfg = nlp.get_global_PTB_config()
+        cfg.normalize_spaces = False
+        cfg.escape_forward_slash_asterisk = True
+        cfg.strict_ptb3 = False
+        string = u"1234 1234/1234 1234-1234/1234 1234\u00A01234/1234 " \
+            u"1234 1234\\/1234 1234-1234\\/1234 1234\u00A01234\\/1234 " \
+            u"1234 1234\u20441234 1234-1234\u20441234 " \
+            u"1234\u00A01234\u20441234"
+        gold = [u"1234 1234\\/1234", u"1234-1234\\/1234", 
+                u"1234\u00A01234\\/1234",
+                u"1234 1234\\/1234", u"1234-1234\\/1234", 
+                u"1234\u00A01234\\/1234", u"1234 1234\u20441234", 
+                u"1234-1234\u20441234", u"1234\u00A01234\u20441234"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        print gold
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)       
+
+    def frac_normalize_escape_test(self):
+        cfg = nlp.get_global_PTB_config()
+        cfg.normalize_spaces = True
+        cfg.escape_forward_slash_asterisk = True
+        cfg.strict_ptb3 = False
+        string = u"1234 1234/1234 1234-1234/1234 1234\u00A01234/1234 " \
+            u"1234 1234\\/1234 1234-1234\\/1234 1234\u00A01234\\/1234 " \
+            u"1234 1234\u20441234 1234-1234\u20441234 " \
+            u"1234\u00A01234\u20441234"
+        gold = [u"1234\u00A01234\\/1234", u"1234-1234\\/1234", 
+                u"1234\u00A01234\\/1234", u"1234\u00A01234\\/1234", 
+                u"1234-1234\\/1234", u"1234\u00A01234\\/1234", 
+                u"1234\u00A01234\u20441234", u"1234-1234\u20441234", 
+                u"1234\u00A01234\u20441234"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        print gold
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)       
+
+
+    def frac2_NO_normalize_NO_escape_test(self):
+        nlp.get_global_PTB_config().normalize_fractions = False
+        nlp.get_global_PTB_config().escape_forward_slash_asterisk = False
+        string = u"\u00BC \u00BD \u00BE \u2153 \u2154 \u2155 \u2156 \u2157" \
+                u" \u2158 \u2159 \u215A \u215B \u215C \u215D \u215E"
+        gold = [u"\u00BC", u"\u00BD", u"\u00BE", u"\u2153", u"\u2154",
+                u"\u2155", u"\u2156", u"\u2157", u"\u2158", u"\u2159",
+                u"\u215A", u"\u215B", u"\u215C", u"\u215D", u"\u215E"]
+        tokens = nlp.tokenize(string)
+        print tokens
+        print gold
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)       
+
+    def frac2_normalize_NO_escape_test(self):
+        nlp.get_global_PTB_config().normalize_fractions = True
+        nlp.get_global_PTB_config().escape_forward_slash_asterisk = False
+        string = u"\u00BC \u00BD \u00BE \u2153 \u2154 \u2155 \u2156 \u2157" \
+                u" \u2158 \u2159 \u215A \u215B \u215C \u215D \u215E"
+        gold = [u"1/4", u"1/2", u"3/4", u"1/3", u"2/3",
+                u"1/5", u"2/5", u"3/5", u"4/5", u"1/6",
+                u"5/6", u"1/8", u"3/8", u"5/8", u"7/8"]
+        tokens = nlp.tokenize(string)
+
+        print tokens
+        print gold
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)       
+
+    def frac2_normalize_escape_test(self):
+        nlp.get_global_PTB_config().normalize_fractions = True
+        nlp.get_global_PTB_config().escape_forward_slash_asterisk = True
+        string = u"\u00BC \u00BD \u00BE \u2153 \u2154 \u2155 \u2156 \u2157" \
+                u" \u2158 \u2159 \u215A \u215B \u215C \u215D \u215E"
+        gold = [u"1\\/4", u"1\\/2", u"3\\/4", u"1\\/3", u"2\\/3",
+                u"1\\/5", u"2\\/5", u"3\\/5", u"4\\/5", u"1\\/6",
+                u"5\\/6", u"1\\/8", u"3\\/8", u"5\\/8", u"7\\/8"]
+        tokens = nlp.tokenize(string)
+
+        print tokens
+        print gold
+        for token, gold_token in zip(tokens, gold):
+            print token, gold_token.encode("utf-8")
+            assert token == gold_token.encode("utf-8")
+        assert len(tokens) == len(gold)       
+
+
 
 
     def tbspec_test(self):

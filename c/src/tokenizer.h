@@ -1,3 +1,6 @@
+#ifndef H_NL_PTB_TOKENIZER
+#define H_NL_PTB_TOKENIZER
+
 #include "document.h"
 #include "mem_manager.h"
 #include <stdlib.h>
@@ -56,3 +59,8 @@ NL_span **NL_tokenize_buf(
     unsigned char *buf, size_t buf_len, size_t *num_tokens, 
     NL_PTBTokConfig *cfg, NL_v_memmgr *mgr);
 void uni_right_quote(unsigned char *p, size_t buf_length, unsigned char *cpy);
+
+#define BUFSIZE 64
+#define NL_PTB_TOK_BUFSIZE 64
+
+#endif
