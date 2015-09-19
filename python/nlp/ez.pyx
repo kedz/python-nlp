@@ -41,7 +41,7 @@ def tokenize(object str_or_unicode):
    
     for i in range(num_tokens[0]):
         NL_free_span(&tokens[i], memmgr._mgr)
-    NL_deallocate_v_mem(memmgr._mgr, tokens)
+    NL_deallocate_v_mem(memmgr._mgr, <void **> &tokens)
 
     PyMem_Free(num_tokens);
     PyBuffer_Release(&view)

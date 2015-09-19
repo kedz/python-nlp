@@ -228,6 +228,22 @@ cdef class PTBTokenizerConfigWrapper(object):
             else:
                 self._cfg.normalize_spaces = 0
 
+    property normalize_fractions:
+        u"""When true, tokenizer converts unicode fractions to text.
+        E.g. "\u215E" becomes "7/8"."""
+
+        def __get__(self):
+            if self._cfg.normalize_fractions == 1:
+                return True
+            else:
+                return False
+
+        def __set__(self, value):
+            if bool(value):
+                self._cfg.normalize_fractions = 1
+            else:
+                self._cfg.normalize_fractions = 0
+
 
 
     def default(self):
@@ -243,6 +259,7 @@ cdef class PTBTokenizerConfigWrapper(object):
         self.normalize_brackets = True
         self.strict_ptb3 = False
         self.normalize_spaces = True
+        self.normalize_fractions = False
 
 
     def __str__(self):
@@ -269,8 +286,12 @@ cdef class PTBTokenizerConfigWrapper(object):
                     self.normalize_brackets) \
             + " ::                   strict ptb3: {}\n".format(
                     self.strict_ptb3) \
-            + " ::             normalize spaces : {}".format(
-                    self.normalize_spaces)
+            + " ::             normalize spaces : {}\n".format(
+                    self.normalize_spaces) \
+            + " ::          normalize fractions : {}".format(
+                    self.normalize_fractions)
+
+
 
     def __dealloc__(self):
         print "PTBTokenizerConfigWrapper.__dealloc__()"

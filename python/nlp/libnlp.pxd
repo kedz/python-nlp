@@ -40,6 +40,7 @@ cdef extern from "tokenizer.h":
         int normalize_brackets;
         int strict_ptb3;
         int normalize_spaces;
+        int normalize_fractions;
 
     cdef NL_span **NL_tokenize_buf(
         unsigned char *buf, size_t buf_len, size_t *num_tokens, 

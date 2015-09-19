@@ -477,7 +477,7 @@ static const char *__pyx_f[] = {
 struct __pyx_obj_3nlp_6libnlp_MemoryManagerWrapper;
 struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper;
 
-/* "nlp/libnlp.pxd":48
+/* "nlp/libnlp.pxd":49
  *         NL_PTBTokConfig *cfg, NL_v_memmgr *mgr);
  * 
  * cdef class MemoryManagerWrapper(object):             # <<<<<<<<<<<<<<
@@ -490,7 +490,7 @@ struct __pyx_obj_3nlp_6libnlp_MemoryManagerWrapper {
 };
 
 
-/* "nlp/libnlp.pxd":51
+/* "nlp/libnlp.pxd":52
  *     cdef NL_v_memmgr *_mgr
  * 
  * cdef class PTBTokenizerConfigWrapper(object):             # <<<<<<<<<<<<<<
@@ -934,7 +934,7 @@ static PyObject *__pyx_pf_3nlp_2ez_tokenize(CYTHON_UNUSED PyObject *__pyx_self, 
  * 
  *     for i in range(num_tokens[0]):             # <<<<<<<<<<<<<<
  *         NL_free_span(&tokens[i], memmgr._mgr)
- *     NL_deallocate_v_mem(memmgr._mgr, tokens)
+ *     NL_deallocate_v_mem(memmgr._mgr, <void **> &tokens)
  */
   __pyx_t_6 = (__pyx_v_num_tokens[0]);
   for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_6; __pyx_t_5+=1) {
@@ -944,7 +944,7 @@ static PyObject *__pyx_pf_3nlp_2ez_tokenize(CYTHON_UNUSED PyObject *__pyx_self, 
  * 
  *     for i in range(num_tokens[0]):
  *         NL_free_span(&tokens[i], memmgr._mgr)             # <<<<<<<<<<<<<<
- *     NL_deallocate_v_mem(memmgr._mgr, tokens)
+ *     NL_deallocate_v_mem(memmgr._mgr, <void **> &tokens)
  * 
  */
     NL_free_span((&(__pyx_v_tokens[__pyx_v_i])), __pyx_v_3nlp_6libnlp_memmgr->_mgr);
@@ -953,14 +953,14 @@ static PyObject *__pyx_pf_3nlp_2ez_tokenize(CYTHON_UNUSED PyObject *__pyx_self, 
   /* "nlp/ez.pyx":44
  *     for i in range(num_tokens[0]):
  *         NL_free_span(&tokens[i], memmgr._mgr)
- *     NL_deallocate_v_mem(memmgr._mgr, tokens)             # <<<<<<<<<<<<<<
+ *     NL_deallocate_v_mem(memmgr._mgr, <void **> &tokens)             # <<<<<<<<<<<<<<
  * 
  *     PyMem_Free(num_tokens);
  */
-  NL_deallocate_v_mem(__pyx_v_3nlp_6libnlp_memmgr->_mgr, __pyx_v_tokens);
+  NL_deallocate_v_mem(__pyx_v_3nlp_6libnlp_memmgr->_mgr, ((void **)(&__pyx_v_tokens)));
 
   /* "nlp/ez.pyx":46
- *     NL_deallocate_v_mem(memmgr._mgr, tokens)
+ *     NL_deallocate_v_mem(memmgr._mgr, <void **> &tokens)
  * 
  *     PyMem_Free(num_tokens);             # <<<<<<<<<<<<<<
  *     PyBuffer_Release(&view)
@@ -1199,8 +1199,8 @@ PyMODINIT_FUNC PyInit_ez(void)
   /*--- Function export code ---*/
   /*--- Type init code ---*/
   /*--- Type import code ---*/
-  __pyx_ptype_3nlp_6libnlp_MemoryManagerWrapper = __Pyx_ImportType("nlp.libnlp", "MemoryManagerWrapper", sizeof(struct __pyx_obj_3nlp_6libnlp_MemoryManagerWrapper), 1); if (unlikely(!__pyx_ptype_3nlp_6libnlp_MemoryManagerWrapper)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_ptype_3nlp_6libnlp_PTBTokenizerConfigWrapper = __Pyx_ImportType("nlp.libnlp", "PTBTokenizerConfigWrapper", sizeof(struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper), 1); if (unlikely(!__pyx_ptype_3nlp_6libnlp_PTBTokenizerConfigWrapper)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 51; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_ptype_3nlp_6libnlp_MemoryManagerWrapper = __Pyx_ImportType("nlp.libnlp", "MemoryManagerWrapper", sizeof(struct __pyx_obj_3nlp_6libnlp_MemoryManagerWrapper), 1); if (unlikely(!__pyx_ptype_3nlp_6libnlp_MemoryManagerWrapper)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 49; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_ptype_3nlp_6libnlp_PTBTokenizerConfigWrapper = __Pyx_ImportType("nlp.libnlp", "PTBTokenizerConfigWrapper", sizeof(struct __pyx_obj_3nlp_6libnlp_PTBTokenizerConfigWrapper), 1); if (unlikely(!__pyx_ptype_3nlp_6libnlp_PTBTokenizerConfigWrapper)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   /*--- Variable import code ---*/
   __pyx_t_1 = __Pyx_ImportModule("nlp.libnlp"); if (!__pyx_t_1) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (__Pyx_ImportVoidPtr(__pyx_t_1, "memmgr", (void **)&__pyx_vp_3nlp_6libnlp_memmgr, "struct __pyx_obj_3nlp_6libnlp_MemoryManagerWrapper *") < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
