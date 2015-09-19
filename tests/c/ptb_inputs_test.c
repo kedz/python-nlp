@@ -2,10 +2,9 @@
 
 
 #define TOKEN_TEST                                                            \
-  size_t *num_tokens = NL_allocate_mem_size(mgr, sizeof(size_t));             \
-  *num_tokens = 0;                                                            \
-  NL_span **tokens = NL_tokenize_buf(buf, buf_len, num_tokens, cfg, mgr);    \
-  for (int i=0; i < *num_tokens; i++) {                                       \
+  size_t num_tokens = 0;                                                      \
+  NL_span **tokens = NL_tokenize_buf(buf, buf_len, &num_tokens, cfg, mgr);    \
+  for (int i=0; i < num_tokens; i++) {                                        \
       if (i < gold_num_tokens) {                                              \
           unsigned char *token = NULL;                                        \
           size_t token_length = 0;                                            \
@@ -47,10 +46,11 @@
       }                                                                       \
       NL_free_span(&tokens[i], mgr);                                          \
   }                                                                           \
-  NL_deallocate_v_mem(mgr,(void **) &tokens);                                           \
-  NL_deallocate_v_mem(mgr, (void **) &cfg);                                              \
                                                                               \
-  if (*num_tokens != gold_num_tokens) {                                       \
+  NL_deallocate_v_mem(mgr, (void **) &tokens);                                \
+  NL_deallocate_v_mem(mgr, (void **) &cfg);                                   \
+                                                                              \
+  if (num_tokens != gold_num_tokens) {                                        \
       *num_errors += 1;                                                       \
       errors = realloc(errors, *num_errors * sizeof(error_info *));           \
       errors[*num_errors -1] = malloc(sizeof(error_info));                    \
@@ -60,11 +60,10 @@
       sprintf(                                                                \
           (char *) this_error->msg,                                           \
           "Tokenizer returned %lu tokens, should be %lu.",                    \
-          *num_tokens, gold_num_tokens);                                      \
+          num_tokens, gold_num_tokens);                                       \
                                                                               \
   }                                                                           \
                                                                               \
-  NL_deallocate_v_mem(mgr, (void **) &num_tokens);                                       \
                                                                               \
   int pool_size = 2;                                                          \
   for (int i=0; i < mgr->max_pools; i++) {                                    \

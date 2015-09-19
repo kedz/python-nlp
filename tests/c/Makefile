@@ -1,17 +1,20 @@
 CC = gcc
-CFLAGS = -g -Wall -std=c11 -O9
+CFLAGS = -g -Wall -std=c11 
 INCLUDE = -I../../include
-LIBS = -L../../lib -lnlp
+LIBS = -L../../lib -lnlp -lm
+TEST_SRC = memmgr_test.c  tokenizer_utils_tests.c tokenizer_tests.c \
+		   ptb_inputs_test.c
 
 #all: test sizes var_alloc_test
 all: test-libnlp sizes
 
-test-libnlp: test-libnlp.c memmgr_test.c ptb_inputs_test.c 
-	$(CC) $(CFLAGS) test-libnlp.c memmgr_test.c ptb_inputs_test.c -o test-libnlp $(INCLUDE) \
+test-libnlp: test-libnlp.c $(TEST_SRC)
+	$(CC) $(CFLAGS) test-libnlp.c $(TEST_SRC) -o test-libnlp $(INCLUDE) \
 		$(LIBS)
 
-#large_test: large_test.c
-#	$(CC) $(CFLAGS) large_test.c -o large_test $(INCLUDE) $(LIBS);
+large_test: large_test.c
+	$(CC) $(CFLAGS) large_test.c -o large_test $(INCLUDE) $(LIBS);
+
 sizes: sizes.c
 	$(CC) $(CFLAGS) sizes.c -o sizes $(INCLUDE) $(LIBS)
 

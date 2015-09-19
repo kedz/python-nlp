@@ -7,10 +7,11 @@ error_info **memmgr_test1(char **name, size_t *num_errors) {
 
     size_t block_size = 16;
     size_t object_size = 8;
-    size_t actual_object_size = object_size + 2;
+    size_t actual_object_size = object_size + 1;
     size_t actual_block_size = block_size * actual_object_size;
+    unsigned char id_byte = 1;
 
-    NL_memmgr *mgr = NL_new_memmgr(16, 8);
+    NL_memmgr *mgr = NL_new_memmgr(16, 8, id_byte);
 
     if (mgr == NULL) {
         NEW_ERROR(strlen("NL_memmgr is null.") + 1);
@@ -84,6 +85,13 @@ error_info **memmgr_test1(char **name, size_t *num_errors) {
                 "NL_memmgr->empty_containers should be NULL");
         }
 
+        if (mgr->id_byte != id_byte) {
+            NEW_ERROR(200);
+            sprintf(
+                (char *) this_error->msg, 
+                "NL_memmgr->id_byte = %c, expected %c", mgr->id_byte, id_byte);
+        }
+
         NL_free_memmgr(&mgr);
         if (mgr != NULL) {
 
@@ -105,10 +113,8 @@ error_info **memmgr_test2(char **name, size_t *num_errors) {
     *name = "NL_memmgr test";
 
     size_t block_size = 16;
-    size_t object_size = 8;
-    size_t actual_object_size = object_size + 2;
 
-    NL_memmgr *mgr = NL_new_memmgr(16, 8);
+    NL_memmgr *mgr = NL_new_memmgr(16, 8, 1);
 
     if (mgr == NULL) {
         NEW_ERROR(strlen("NL_memmgr is null.") + 1);
@@ -122,16 +128,12 @@ error_info **memmgr_test2(char **name, size_t *num_errors) {
                 NEW_ERROR(strlen("NL_allocate_mem failed.") + 1);
                 sprintf((char *) this_error->msg, "NL_allocate_mem failed.");
             } else {
-                if (some_mem_arr[i][actual_object_size - 2] != 0xDE ||
-                        some_mem_arr[i][actual_object_size - 1] != 0xAD) {
-
-                    NEW_ERROR(
-                        strlen("NL_allocate_mem guard bytes not set.") + 1);
+                if (*(&some_mem_arr[i][0] - 1) != mgr->id_byte) {
+                    NEW_ERROR(80);
                     sprintf((char *) this_error->msg, 
-                    "NL_allocate_mem guard bytes not set.");
-
+                    "NL_allocate_mem id byte is %c, expected %c",
+                    *(&some_mem_arr[i][0] - 1), mgr->id_byte);
                 }
-
             } 
 
             if (mgr->available != block_size - 1 - i % block_size) {
@@ -174,8 +176,18 @@ error_info **memmgr_test2(char **name, size_t *num_errors) {
 
 
         for (int i=0; i < ALLOCS; i++) {
+            
+            *(&some_mem_arr[i][0] - 1) = mgr->id_byte + 1;
+            NL_deallocate_mem(mgr, (void **) &some_mem_arr[i]);
+            if (some_mem_arr[i] == NULL) {
+                NEW_ERROR(
+                    strlen("NL_allocate_mem should have done nothing.") + 1);
+                sprintf((char *) this_error->msg, 
+                        "NL_allocate_mem should have done nothing.");
+            }
 
-            NL_deallocate_mem(mgr, (void *) &some_mem_arr[i]);
+            *(&some_mem_arr[i][0] - 1) = mgr->id_byte;
+            NL_deallocate_mem(mgr, (void **) &some_mem_arr[i]);
             if (some_mem_arr[i] != NULL) {
                 NEW_ERROR(strlen("NL_allocate_mem failed.") + 1);
                 sprintf((char *) this_error->msg, "NL_allocate_mem failed.");
@@ -233,6 +245,62 @@ error_info **memmgr_test2(char **name, size_t *num_errors) {
 
     return errors;
 }
+
+error_info **memmgr_test3(char **name, size_t *num_errors) {
+    error_info **errors = NULL;
+    *num_errors = 0;
+    *name = "NL_memmgr test3";
+
+    NL_memmgr *mgr = NL_new_memmgr(2, 8, 1);
+
+    if (mgr == NULL) {
+        NEW_ERROR(strlen("NL_memmgr is null.") + 1);
+        sprintf((char *) this_error->msg, "NL_memmgr is null.");
+    } else {
+        unsigned char *some_mem = NULL;
+        some_mem = NL_allocate_mem(mgr);
+        memcpy((char *) some_mem, "12345678", 8);
+        if (memcmp((char *) some_mem, "12345678", 8) != 0) {
+            NEW_ERROR(
+                strlen("Failed to write 8 bytes into memory of size 8.") + 1);
+            sprintf((char *) this_error->msg,
+                "Failed to write 8 bytes into memory of size 8.");
+        }
+
+        NL_deallocate_mem(mgr, (void **) &some_mem);
+        if (some_mem != NULL) {
+            
+            NEW_ERROR(
+                strlen("Deallocation of memory of size 8 failed.") + 1);
+            sprintf((char *) this_error->msg,
+                "Deallocation of memory of size 8 failed.");
+
+        }
+
+        some_mem = NL_allocate_mem(mgr);
+        if (memcmp((char *) some_mem, "12345678", 8) != 0) {
+            NEW_ERROR(
+                strlen("Deallocation failed.") + 1);
+            sprintf((char *) this_error->msg,
+                "Deallocation failed.");
+        }
+
+
+        NL_free_memmgr(&mgr);
+        if (mgr != NULL) {
+
+            NEW_ERROR(strlen("NL_memmgr was not freed.") + 1);
+            sprintf((char *) this_error->msg, "NL_memmgr was not freed.");
+
+        }
+
+
+
+    }
+
+    return errors;
+}
+
 
 error_info **vmemmgr_test1(char **name, size_t *num_errors) {
     error_info **errors = NULL;
@@ -354,12 +422,11 @@ error_info **vmemmgr_test2(char **name, size_t *num_errors) {
                     (char *) this_error->msg, 
                     "NL_v_memmgr failed to allocate memory of size %lu", i);
             } else {
-                if (mems[i][mgr->pools[bin]->object_size] != 0xDE ||
-                        mems[i][mgr->pools[bin]->object_size + 1] != 0xAD) {
+                if (*(&mems[i][0] - 1) != mgr->pools[bin]->id_byte) {
                     NEW_ERROR(200);
                     sprintf(
                         (char *) this_error->msg, 
-                        "Allocation of memory of size %lu missing guard byte", 
+                        "Allocation of memory of size %lu has bad id byte", 
                         i);
 
                 }
@@ -446,9 +513,9 @@ error_info **vmemmgr_test3(char **name, size_t *num_errors) {
             sprintf((char *) this_error->msg, "Allocation failed.");
 
         } else {
-            if (mem[16] != 0xDE || mem[17] != 0xAD) {
-                NEW_ERROR(strlen("Guard bytes not set.") + 1);
-                sprintf((char *) this_error->msg, "Guard bytes not set.");
+            if (*(&mem[0] - 1) != 3) {
+                NEW_ERROR(strlen("ID byte incorrect.") + 1);
+                sprintf((char *) this_error->msg, "ID byte incorrect.");
             }
             
             if (mgr->pools[3]->allocs != 1) {
@@ -500,11 +567,10 @@ error_info **vmemmgr_test4(char **name, size_t *num_errors) {
             sprintf((char *) this_error->msg, "Allocation failed.");
 
         } else {
-            if (mem[32] != 0xDE || mem[33] != 0xAD) {
-                NEW_ERROR(strlen("Guard bytes not set.") + 1);
-                sprintf((char *) this_error->msg, "Guard bytes not set.");
+            if (*(&mem[0] - 1) != 4) {
+                NEW_ERROR(strlen("ID byte incorrect.") + 1);
+                sprintf((char *) this_error->msg, "ID byte incorrect.");
             }
-            
             if (mgr->pools[4]->allocs != 1) {
                 NEW_ERROR(strlen("Allocation from wrong pool.") + 1);
                 sprintf((char *) this_error->msg, 
@@ -576,3 +642,60 @@ error_info **vmemmgr_test5(char **name, size_t *num_errors) {
 
     return errors;
 }
+
+
+error_info **vmemmgr_test6(char **name, size_t *num_errors) {
+    error_info **errors = NULL;
+    *num_errors = 0;
+    *name = "NL_v_memmgr test6";
+
+    NL_v_memmgr *mgr = NL_new_v_memmgr(2);
+
+    if (mgr == NULL) {
+        NEW_ERROR(strlen("NL_v_memmgr is null.") + 1);
+        sprintf((char *) this_error->msg, "NL_v_memmgr is null.");
+    } else {
+        unsigned char *some_mem = NULL;
+        some_mem = NL_allocate_mem_size(mgr, 8);
+        memcpy((char *) some_mem, "12345678", 8);
+        if (memcmp((char *) some_mem, "12345678", 8) != 0) {
+            NEW_ERROR(
+                strlen("Failed to write 8 bytes into memory of size 8.") + 1);
+            sprintf((char *) this_error->msg,
+                "Failed to write 8 bytes into memory of size 8.");
+        }
+
+        NL_deallocate_v_mem(mgr, (void **) &some_mem);
+        if (some_mem != NULL) {
+            
+            NEW_ERROR(
+                strlen("Deallocation of memory of size 8 failed.") + 1);
+            sprintf((char *) this_error->msg,
+                "Deallocation of memory of size 8 failed.");
+
+        }
+
+        some_mem = NL_allocate_mem_size(mgr, 8);
+        if (memcmp((char *) some_mem, "12345678", 8) != 0) {
+            NEW_ERROR(
+                strlen("Deallocation failed.") + 1);
+            sprintf((char *) this_error->msg,
+                "Deallocation failed.");
+        }
+
+
+        NL_free_v_memmgr(&mgr);
+        if (mgr != NULL) {
+
+            NEW_ERROR(strlen("NL_memmgr was not freed.") + 1);
+            sprintf((char *) this_error->msg, "NL_memmgr was not freed.");
+
+        }
+
+
+
+    }
+
+    return errors;
+}
+
