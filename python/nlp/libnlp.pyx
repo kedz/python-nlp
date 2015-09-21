@@ -318,7 +318,6 @@ cdef class BufferDocument(object):
         return (<unsigned char *>self.view.buf)[:self.view.len]
 
     def __len__(self):
-
         return self.view.len
 
     def __dealloc__(self):
@@ -327,3 +326,16 @@ cdef class BufferDocument(object):
             NL_free_span(&self.tokens[i], memmgr._mgr)
         NL_deallocate_v_mem(memmgr._mgr, <void **> &self.tokens)
         PyBuffer_Release(&self.view)
+
+cdef class BufferToken(object):
+    def __cinit__(self, BufferDocument doc, size_t index):
+        self.doc = doc
+        self.index = index
+
+    def __str__(self):
+        if self.doc.tokens[self.index].label_length == 0:
+            return self.doc.tokens[self.index].start[:self.doc.tokens[self.index].length]
+        else:
+            return self.doc.tokens[self.index].label[:self.doc.tokens[self.index].label_length]
+
+

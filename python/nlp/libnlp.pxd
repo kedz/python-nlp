@@ -63,3 +63,7 @@ cdef class BufferDocument(object):
     cdef NL_span **tokens;
     cdef size_t num_tokens;
 
+cdef class BufferToken(object):
+    cdef BufferDocument doc
+    cdef size_t index
+

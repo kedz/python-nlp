@@ -1,7 +1,7 @@
 from nlp.libnlp cimport NL_document, NL_span, NL_v_memmgr, \
     MemoryManagerWrapper, memmgr, NL_tokenize_buf, NL_deallocate_v_mem, \
     NL_PTBTokConfig, PTBTokenizerConfigWrapper, global_ptb_tok_cfg, \
-    NL_free_span, NL_label, BufferDocument
+    NL_free_span, NL_label, BufferDocument, BufferToken
 
 from cpython.buffer cimport PyBUF_SIMPLE, PyObject_CheckBuffer, \
     PyObject_GetBuffer, PyBuffer_Release, Py_buffer
@@ -22,11 +22,6 @@ def tokenize(object str_or_unicode):
 
     doc = BufferDocument(buf);
 
-#    if not PyObject_CheckBuffer(buf):
-#        raise TypeError("argument must follow the buffer protocol")
-    
-#    PyObject_GetBuffer(buf, &view, PyBUF_SIMPLE);
-
     doc.tokens = NL_tokenize_buf(
         <unsigned char *>doc.view.buf,
         <size_t> doc.view.len, 
@@ -34,6 +29,8 @@ def tokenize(object str_or_unicode):
         global_ptb_tok_cfg._cfg, 
         memmgr._mgr)    
 
+    cdef size_t index = 0
+    return [BufferToken(doc, index) for index in xrange(doc.num_tokens)]
 #    py_tokens = []
 #    for i in range(num_tokens[0]):
 #        if tokens[i].label == NULL:
@@ -49,4 +46,4 @@ def tokenize(object str_or_unicode):
 #    PyBuffer_Release(&view)
 #    return py_tokens
 
-    return doc;
+#    return doc;
