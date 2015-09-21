@@ -303,3 +303,27 @@ cdef PTBTokenizerConfigWrapper global_ptb_tok_cfg = PTBTokenizerConfigWrapper()
 def get_global_PTB_config():
     global global_ptb_tok_cfg
     return global_ptb_tok_cfg
+
+cdef class BufferDocument(object):
+    def __cinit__(self, str pystr):
+       
+        self.num_tokens = 0;
+        self.tokens = NULL;
+        if not PyObject_CheckBuffer(pystr):
+            raise TypeError("argument must follow the buffer protocol")
+
+        PyObject_GetBuffer(pystr, &self.view, PyBUF_SIMPLE);
+
+    def __str__(self):
+        return (<unsigned char *>self.view.buf)[:self.view.len]
+
+    def __len__(self):
+
+        return self.view.len
+
+    def __dealloc__(self):
+        
+        for i in range(self.num_tokens):
+            NL_free_span(&self.tokens[i], memmgr._mgr)
+        NL_deallocate_v_mem(memmgr._mgr, <void **> &self.tokens)
+        PyBuffer_Release(&self.view)

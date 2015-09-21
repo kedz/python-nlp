@@ -1,3 +1,6 @@
+from cpython.buffer cimport PyBUF_SIMPLE, PyObject_CheckBuffer, \
+    PyObject_GetBuffer, PyBuffer_Release, Py_buffer
+
 cdef extern from "mem_manager.h":
     ctypedef struct NL_v_memmgr:
         pass
@@ -52,7 +55,11 @@ cdef class MemoryManagerWrapper(object):
 cdef class PTBTokenizerConfigWrapper(object):
     cdef NL_PTBTokConfig *_cfg
 
-
-
 cdef MemoryManagerWrapper memmgr
 cdef PTBTokenizerConfigWrapper global_ptb_tok_cfg
+
+cdef class BufferDocument(object):
+    cdef Py_buffer view;
+    cdef NL_span **tokens;
+    cdef size_t num_tokens;
+
