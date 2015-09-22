@@ -72,19 +72,19 @@ error_info **tokenizer_test2(char **name, size_t *num_errors) {
                 sprintf((char *)&buf[buf_size], "w%d ", i);
                 buf_size = buf_size + word_size;
             } else {
-                printf("HERE\n");
+               // printf("HERE\n");
                 sprintf((char *)&buf[buf_size], "w%d", i);
                 buf_size = buf_size + word_size -1;
             }
-            printf("%s\n", buf);
+           // printf("%s\n", buf);
             gold[i-1] = malloc(sizeof(unsigned char) * word_size);
             gold[i-1][word_size-1] = '\0';
             sprintf((char *)gold[i-1], "w%d", i);
-            printf("%s\n", gold[i-1]);
+           // printf("%s\n", gold[i-1]);
     }
     printf("buf-size = %lu\n", buf_size);
     buf[buf_size] = '\0';
-    printf("%s\n", buf);
+    //printf("%s\n", buf);
     
     size_t num_tokens;
     NL_v_memmgr *mgr = NL_new_v_memmgr(256);
@@ -104,7 +104,7 @@ error_info **tokenizer_test2(char **name, size_t *num_errors) {
 
     //printf("bsize = %lu, bin = %lu\n", tokens_bsize, tokens_bin);
     int *gold_allocs = calloc(sizeof(int), mgr->max_pools);
-    gold_allocs[4] = gold_num_tokens;
+    gold_allocs[5] = gold_num_tokens;
     gold_allocs[tokens_bin]++;
 
     for (int i=0; i < mgr->max_pools; i++) {
@@ -182,11 +182,11 @@ error_info **tokenizer_test3(char **name, size_t *num_errors) {
             } 
                 sprintf((char *)&buf[buf_size], "w%d ", i);
                 buf_size = buf_size + word_size;
-            printf("%s\n", buf);
+            //printf("%s\n", buf);
             gold[i-1] = malloc(sizeof(unsigned char) * word_size);
             gold[i-1][word_size-1] = '\0';
             sprintf((char *)gold[i-1], "w%d", i);
-            printf("%s\n", gold[i-1]);
+            //printf("%s\n", gold[i-1]);
     }
     sprintf((char *)&buf[buf_size], "(");
     buf_size = buf_size + 2;
@@ -196,7 +196,7 @@ error_info **tokenizer_test3(char **name, size_t *num_errors) {
     
     printf("buf-size = %lu\n", buf_size);
     //buf[buf_size] = '\0';
-    printf("%s\n", buf);
+    //printf("%s\n", buf);
     
     size_t num_tokens;
     NL_v_memmgr *mgr = NL_new_v_memmgr(256);
@@ -216,7 +216,7 @@ error_info **tokenizer_test3(char **name, size_t *num_errors) {
 
     printf("bsize = %lu, bin = %lu\n", tokens_bsize, tokens_bin);
     int *gold_allocs = calloc(sizeof(int), mgr->max_pools);
-    gold_allocs[4] = gold_num_tokens;
+    gold_allocs[5] = gold_num_tokens;
     gold_allocs[tokens_bin]++;
 
     for (int i=0; i < mgr->max_pools; i++) {
