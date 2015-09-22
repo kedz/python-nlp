@@ -10,6 +10,7 @@ typedef struct NL_span {
     size_t length;
     NL_label label;
     size_t label_length;
+    unsigned char flags;
     //NL_label**labels;
     //unsigned int num_labels;
     //NLPC_span **spans;
@@ -26,11 +27,11 @@ typedef struct NL_document {
 } NL_document;
 
 
-#define NL_SPAN_SIZE 32
+#define NL_SPAN_SIZE 40
 #define NL_DOC_SIZE 32
 
-NL_span *NL_new_span(unsigned char *buf_start, size_t length,
-        NL_v_memmgr *manager);
+NL_span *NL_new_span(unsigned char *buf_start, size_t length, 
+        unsigned char flags, NL_v_memmgr *manager);
 NL_span **NL_new_spans(size_t num_spans, NL_v_memmgr *manager);
 void NL_free_span(NL_span **span, NL_v_memmgr *manager);
 

@@ -19,6 +19,7 @@ _Static_assert ((size_t) NL_DOC_SIZE == sizeof(NL_document),
 NL_span *NL_new_span(
     unsigned char *buf_start, 
     size_t length, 
+    unsigned char flags,
     NL_v_memmgr *manager) 
 {
     NL_span *span;
@@ -28,14 +29,17 @@ NL_span *NL_new_span(
             span->length = length;
             span->label = NULL;
             span->label_length = 0;
+            span->flags = flags;
         }
     } else {
-        span = VMEM_OBJ_FUNC( NL_SPAN_SIZE )(manager);
+        span = NL_allocate_mem(manager->pools[5]);
+        //span = VMEM_OBJ_FUNC( NL_SPAN_SIZE )(manager);
         if (span != NULL) {
             span->start = buf_start;
             span->length = length;
             span->label = NULL;
             span->label_length = 0;
+            span->flags = flags;
         }
 
     }

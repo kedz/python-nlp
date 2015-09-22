@@ -358,10 +358,9 @@
     ABBREV2 = ABBREV4 ".";
     ACRONYM = ACRO".";
 
- 
-    PUNC =    [?!]+ 
-            | "."
-            | "¡"
+
+    SENT_END_PUNC = "." | [?!]+ ;
+    PUNC =    "¡"
             | "¿"  
             | 0xCD 0xBE # U+037E
             | 0xD6 0x89 # U+0589
@@ -541,6 +540,22 @@ action NextToken {
     NEXT_TOKEN    
 }
 
+action NextTokenSentEnd {
+    if (span_pos == BUFSIZE) {                                              
+        __token_list *next_slab = NL_allocate_mem_size(                     
+            mgr, sizeof(__token_list));                                     
+        next_slab->next = NULL;                                             
+        next_slab->tokens = NL_allocate_mem_size(                           
+            mgr, sizeof(NL_span *) * BUFSIZE);                              
+        tail->next = next_slab;                                             
+        tail = tail->next;                                                  
+        num_lists++;                                                        
+        span_pos = 0;                                                       
+        tokens = next_slab->tokens;                                         
+    }                                                                       
+    tokens[span_pos++] = NL_new_span(ts, te - ts, NL_SENT_END_FLAG, mgr);
+
+}
 
 
 action SplitAssimilation3 {
@@ -658,7 +673,7 @@ action NextIntermediate1 {
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti1 - ts - alert_soft_hyphen * 2 + 1;             
@@ -695,7 +710,7 @@ action NextIntermediate2 {
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -732,7 +747,7 @@ action NextIntermediateHandleProbablyLeftQuotes1 {
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, 0, mgr); 
 
     if (normalize_quotes == QUOTES_LATEX) {
         size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti1 - ts);
@@ -772,7 +787,7 @@ action NextIntermediateHandleProbablyRightQuotes1 {
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, 0, mgr); 
 
     if (normalize_quotes == QUOTES_LATEX) {
         size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti1 - ts);
@@ -813,7 +828,7 @@ action NextIntermediateHandleProbablyLeftQuotes2 {
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (normalize_quotes == QUOTES_LATEX) {
         size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti2 - ts);
@@ -853,7 +868,7 @@ action NextIntermediateHandleProbablyRightQuotes2 {
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (normalize_quotes == QUOTES_LATEX) {
         size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti2 - ts);
@@ -1539,6 +1554,7 @@ action HandleQuotesProbablyRight {
         ASTS => EscapeForwardSlashAsterisk;
 
         INSENTP => NextToken;
+        SENT_END_PUNC => NextTokenSentEnd;
         PUNC => NextToken;
         "="+ => NextToken;
         "\\/" => NextToken;
@@ -1620,7 +1636,7 @@ action HandleQuotesProbablyRight {
         span_pos = 0;                                                       \
         tokens = next_slab->tokens;                                         \
     }                                                                       \
-    tokens[span_pos++] = NL_new_span(ts, te - ts, mgr);                     \
+    tokens[span_pos++] = NL_new_span(ts, te - ts, 0, mgr);                     \
                                                                             \
     if (alert_soft_hyphen > 0) {                                            \
         size_t size_label = te - ts - alert_soft_hyphen * 2 + 1;            \
@@ -1652,7 +1668,7 @@ action HandleQuotesProbablyRight {
         span_pos = 0;                                    \
         tokens = next_slab->tokens;                      \
     }                                                    \
-    tokens[span_pos++] = NL_new_span(ts, PREFIX, mgr);   \
+    tokens[span_pos++] = NL_new_span(ts, PREFIX, 0, mgr);   \
     if (span_pos == BUFSIZE) {                           \
         __token_list *next_slab = NL_allocate_mem_size(  \
             mgr, sizeof(__token_list));                  \
@@ -1665,7 +1681,7 @@ action HandleQuotesProbablyRight {
         span_pos = 0;                                    \
         tokens = next_slab->tokens;                      \
     }                                                    \
-    tokens[span_pos++] = NL_new_span(ts + PREFIX, te - (ts + PREFIX), mgr);  \
+    tokens[span_pos++] = NL_new_span(ts + PREFIX, te - (ts + PREFIX), 0, mgr);  \
 
 
 #else
@@ -1682,7 +1698,7 @@ action HandleQuotesProbablyRight {
         span_pos = 0;                                                       \
         tokens = next_slab->tokens;                                         \
     }                                                                       \
-    tokens[span_pos++] = NL_new_span(ts, te - ts, mgr);                     \
+    tokens[span_pos++] = NL_new_span(ts, te - ts, 0, mgr);                     \
                                                                             \
     if (alert_soft_hyphen > 0) {                                            \
         size_t size_label = te - ts - alert_soft_hyphen * 2 + 1;            \
@@ -1714,7 +1730,7 @@ action HandleQuotesProbablyRight {
         span_pos = 0;                                    \
         tokens = next_slab->tokens;                      \
     }                                                    \
-    tokens[span_pos++] = NL_new_span(ts, PREFIX, mgr);   \
+    tokens[span_pos++] = NL_new_span(ts, PREFIX, 0, mgr);\
     if (span_pos == BUFSIZE) {                           \
         __token_list *next_slab = NL_allocate_mem_size(  \
             mgr, sizeof(__token_list));                  \
@@ -1727,9 +1743,10 @@ action HandleQuotesProbablyRight {
         span_pos = 0;                                    \
         tokens = next_slab->tokens;                      \
     }                                                    \
-    tokens[span_pos++] = NL_new_span(ts + PREFIX, te - (ts + PREFIX), mgr);  \
+    tokens[span_pos++] = NL_new_span(ts + PREFIX, te - (ts + PREFIX), 0, mgr);  \
 
 #endif
+
 
 
 const static NL_label ptb3dash = (NL_label) "--\x00";

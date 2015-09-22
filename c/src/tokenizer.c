@@ -6,7 +6,7 @@
 #include "tokenizer_utils.h"
 
 
-#line 1600 "tokenizer.rl"
+#line 1616 "tokenizer.rl"
 
 
 
@@ -740,7 +740,7 @@ static const unsigned char _tok_trans_keys[] = {
 	73u, 79u, 85u, 97u, 101u, 105u, 111u, 117u, 
 	97u, 103u, 117u, 99u, 117u, 116u, 101u, 59u, 
 	170u, 173u, 181u, 186u, 128u, 150u, 152u, 182u, 
-	184u, 255u, 192u, 255u, 0u, 127u, 128u, 191u, 
+	184u, 255u, 192u, 255u, 128u, 255u, 128u, 191u, 
 	128u, 189u, 140u, 132u, 134u, 136u, 138u, 142u, 
 	161u, 163u, 255u, 130u, 136u, 137u, 166u, 176u, 
 	160u, 151u, 152u, 190u, 136u, 144u, 192u, 255u, 
@@ -1223,7 +1223,7 @@ static const unsigned char _tok_trans_keys[] = {
 	223u, 224u, 225u, 226u, 227u, 228u, 233u, 234u, 
 	237u, 239u, 240u, 48u, 57u, 65u, 90u, 97u, 
 	122u, 196u, 218u, 229u, 236u, 128u, 150u, 152u, 
-	182u, 184u, 255u, 192u, 255u, 0u, 127u, 128u, 
+	182u, 184u, 255u, 192u, 255u, 128u, 255u, 128u, 
 	191u, 128u, 189u, 140u, 132u, 134u, 136u, 138u, 
 	142u, 161u, 163u, 255u, 130u, 136u, 137u, 166u, 
 	176u, 160u, 151u, 152u, 190u, 136u, 144u, 192u, 
@@ -12371,8 +12371,8 @@ static const short _tok_indicies[] = {
 	5, 5, 5, 5, 4, 6, 7, 8, 
 	4, 9, 4, 10, 4, 11, 4, 12, 
 	4, 13, 4, 13, 14, 13, 13, 4, 
-	13, 13, 13, 4, 13, 4, 13, 4, 
-	13, 13, 4, 13, 4, 13, 13, 13, 
+	13, 13, 13, 4, 13, 4, 13, 13, 
+	4, 13, 4, 13, 4, 13, 13, 13, 
 	13, 13, 4, 4, 4, 13, 4, 13, 
 	4, 4, 13, 4, 4, 4, 13, 13, 
 	13, 13, 13, 13, 4, 13, 13, 4, 
@@ -12782,7 +12782,7 @@ static const short _tok_indicies[] = {
 	706, 707, 708, 709, 710, 711, 713, 714, 
 	715, 716, 717, 687, 687, 687, 690, 712, 
 	4, 404, 404, 404, 4, 404, 4, 404, 
-	4, 404, 404, 4, 404, 4, 404, 404, 
+	404, 4, 404, 4, 404, 4, 404, 404, 
 	404, 404, 404, 4, 4, 4, 404, 4, 
 	404, 4, 4, 404, 4, 4, 4, 404, 
 	404, 404, 404, 404, 404, 4, 404, 404, 
@@ -24525,7 +24525,7 @@ static const int tok_error = -1;
 static const int tok_en_main = 4050;
 
 
-#line 1603 "tokenizer.rl"
+#line 1619 "tokenizer.rl"
 
 
 #ifdef NLDBG
@@ -24546,7 +24546,7 @@ static const int tok_en_main = 4050;
         span_pos = 0;                                                       \
         tokens = next_slab->tokens;                                         \
     }                                                                       \
-    tokens[span_pos++] = NL_new_span(ts, te - ts, mgr);                     \
+    tokens[span_pos++] = NL_new_span(ts, te - ts, 0, mgr);                     \
                                                                             \
     if (alert_soft_hyphen > 0) {                                            \
         size_t size_label = te - ts - alert_soft_hyphen * 2 + 1;            \
@@ -24578,7 +24578,7 @@ static const int tok_en_main = 4050;
         span_pos = 0;                                    \
         tokens = next_slab->tokens;                      \
     }                                                    \
-    tokens[span_pos++] = NL_new_span(ts, PREFIX, mgr);   \
+    tokens[span_pos++] = NL_new_span(ts, PREFIX, 0, mgr);   \
     if (span_pos == BUFSIZE) {                           \
         __token_list *next_slab = NL_allocate_mem_size(  \
             mgr, sizeof(__token_list));                  \
@@ -24591,7 +24591,7 @@ static const int tok_en_main = 4050;
         span_pos = 0;                                    \
         tokens = next_slab->tokens;                      \
     }                                                    \
-    tokens[span_pos++] = NL_new_span(ts + PREFIX, te - (ts + PREFIX), mgr);  \
+    tokens[span_pos++] = NL_new_span(ts + PREFIX, te - (ts + PREFIX), 0, mgr);  \
 
 
 #else
@@ -24608,7 +24608,7 @@ static const int tok_en_main = 4050;
         span_pos = 0;                                                       \
         tokens = next_slab->tokens;                                         \
     }                                                                       \
-    tokens[span_pos++] = NL_new_span(ts, te - ts, mgr);                     \
+    tokens[span_pos++] = NL_new_span(ts, te - ts, 0, mgr);                     \
                                                                             \
     if (alert_soft_hyphen > 0) {                                            \
         size_t size_label = te - ts - alert_soft_hyphen * 2 + 1;            \
@@ -24640,7 +24640,7 @@ static const int tok_en_main = 4050;
         span_pos = 0;                                    \
         tokens = next_slab->tokens;                      \
     }                                                    \
-    tokens[span_pos++] = NL_new_span(ts, PREFIX, mgr);   \
+    tokens[span_pos++] = NL_new_span(ts, PREFIX, 0, mgr);\
     if (span_pos == BUFSIZE) {                           \
         __token_list *next_slab = NL_allocate_mem_size(  \
             mgr, sizeof(__token_list));                  \
@@ -24653,9 +24653,10 @@ static const int tok_en_main = 4050;
         span_pos = 0;                                    \
         tokens = next_slab->tokens;                      \
     }                                                    \
-    tokens[span_pos++] = NL_new_span(ts + PREFIX, te - (ts + PREFIX), mgr);  \
+    tokens[span_pos++] = NL_new_span(ts + PREFIX, te - (ts + PREFIX), 0, mgr);  \
 
 #endif
+
 
 
 const static NL_label ptb3dash = (NL_label) "--\x00";
@@ -24813,7 +24814,7 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
     #endif
 
     
-#line 24817 "tokenizer.c"
+#line 24818 "tokenizer.c"
 	{
 	cs = tok_start;
 	ts = 0;
@@ -24821,10 +24822,10 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
 	act = 0;
 	}
 
-#line 1890 "tokenizer.rl"
+#line 1907 "tokenizer.rl"
 
     
-#line 24828 "tokenizer.c"
+#line 24829 "tokenizer.c"
 	{
 	int _klen;
 	unsigned int _trans;
@@ -24843,7 +24844,7 @@ _resume:
 #line 1 "NONE"
 	{ts = p;}
 	break;
-#line 24847 "tokenizer.c"
+#line 24848 "tokenizer.c"
 		}
 	}
 
@@ -24920,13 +24921,13 @@ _eof_trans:
 	{ num_amps++; }
 	break;
 	case 2:
-#line 640 "tokenizer.rl"
+#line 655 "tokenizer.rl"
 	{
     ti1 = p;    
 }
 	break;
 	case 3:
-#line 644 "tokenizer.rl"
+#line 659 "tokenizer.rl"
 	{
     ti2 = p;    
 }
@@ -24936,195 +24937,195 @@ _eof_trans:
 	{te = p+1;}
 	break;
 	case 7:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{act = 2;}
 	break;
 	case 8:
-#line 546 "tokenizer.rl"
+#line 561 "tokenizer.rl"
 	{act = 3;}
 	break;
 	case 9:
-#line 884 "tokenizer.rl"
+#line 899 "tokenizer.rl"
 	{act = 6;}
 	break;
 	case 10:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{act = 10;}
 	break;
 	case 11:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{act = 12;}
 	break;
 	case 12:
-#line 884 "tokenizer.rl"
+#line 899 "tokenizer.rl"
 	{act = 13;}
 	break;
 	case 13:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{act = 14;}
 	break;
 	case 14:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{act = 15;}
 	break;
 	case 15:
-#line 843 "tokenizer.rl"
+#line 858 "tokenizer.rl"
 	{act = 16;}
 	break;
 	case 16:
-#line 762 "tokenizer.rl"
+#line 777 "tokenizer.rl"
 	{act = 17;}
 	break;
 	case 17:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{act = 18;}
 	break;
 	case 18:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{act = 19;}
 	break;
 	case 19:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{act = 20;}
 	break;
 	case 20:
-#line 1061 "tokenizer.rl"
+#line 1076 "tokenizer.rl"
 	{act = 21;}
 	break;
 	case 21:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{act = 37;}
 	break;
 	case 22:
-#line 1292 "tokenizer.rl"
+#line 1307 "tokenizer.rl"
 	{act = 39;}
 	break;
 	case 23:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{act = 40;}
 	break;
 	case 24:
-#line 934 "tokenizer.rl"
+#line 949 "tokenizer.rl"
 	{act = 42;}
 	break;
 	case 25:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{act = 43;}
 	break;
 	case 26:
-#line 1334 "tokenizer.rl"
+#line 1349 "tokenizer.rl"
 	{act = 48;}
 	break;
 	case 27:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{act = 50;}
 	break;
 	case 28:
-#line 1413 "tokenizer.rl"
+#line 1428 "tokenizer.rl"
 	{act = 52;}
 	break;
 	case 29:
-#line 648 "tokenizer.rl"
+#line 663 "tokenizer.rl"
 	{act = 53;}
 	break;
 	case 30:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{act = 55;}
 	break;
 	case 31:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{act = 56;}
 	break;
 	case 32:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{act = 57;}
 	break;
 	case 33:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{act = 59;}
 	break;
 	case 34:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{act = 60;}
 	break;
 	case 35:
-#line 1474 "tokenizer.rl"
+#line 1489 "tokenizer.rl"
 	{act = 63;}
 	break;
 	case 36:
-#line 1480 "tokenizer.rl"
+#line 1495 "tokenizer.rl"
 	{act = 64;}
 	break;
 	case 37:
-#line 1506 "tokenizer.rl"
+#line 1521 "tokenizer.rl"
 	{act = 66;}
 	break;
 	case 38:
-#line 990 "tokenizer.rl"
+#line 1005 "tokenizer.rl"
 	{act = 71;}
 	break;
 	case 39:
-#line 1527 "tokenizer.rl"
+#line 1542 "tokenizer.rl"
 	{act = 73;}
 	break;
 	case 40:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{act = 77;}
 	break;
 	case 41:
-#line 540 "tokenizer.rl"
+#line 543 "tokenizer.rl"
 	{act = 78;}
 	break;
 	case 42:
-#line 540 "tokenizer.rl"
-	{act = 79;}
+#line 539 "tokenizer.rl"
+	{act = 80;}
 	break;
 	case 43:
-#line 540 "tokenizer.rl"
-	{act = 83;}
-	break;
-	case 44:
-#line 685 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{act = 84;}
 	break;
-	case 45:
-#line 540 "tokenizer.rl"
+	case 44:
+#line 700 "tokenizer.rl"
 	{act = 85;}
 	break;
-	case 46:
-#line 576 "tokenizer.rl"
+	case 45:
+#line 539 "tokenizer.rl"
 	{act = 86;}
 	break;
-	case 47:
-#line 803 "tokenizer.rl"
-	{act = 90;}
+	case 46:
+#line 591 "tokenizer.rl"
+	{act = 87;}
 	break;
-	case 48:
-#line 884 "tokenizer.rl"
+	case 47:
+#line 818 "tokenizer.rl"
 	{act = 91;}
 	break;
+	case 48:
+#line 899 "tokenizer.rl"
+	{act = 92;}
+	break;
 	case 49:
-#line 540 "tokenizer.rl"
-	{act = 93;}
+#line 539 "tokenizer.rl"
+	{act = 94;}
 	break;
 	case 50:
-#line 1597 "tokenizer.rl"
-	{act = 101;}
+#line 1613 "tokenizer.rl"
+	{act = 102;}
 	break;
 	case 51:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p+1;{
     NEXT_TOKEN    
 }}
 	break;
 	case 52:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p+1;{
     NEXT_TOKEN    
 }}
 	break;
 	case 53:
-#line 554 "tokenizer.rl"
+#line 569 "tokenizer.rl"
 	{te = p+1;{
     if (split_assimilations == 1) {
         SPLIT_ASSIM(2)
@@ -25134,7 +25135,7 @@ _eof_trans:
 }}
 	break;
 	case 54:
-#line 1017 "tokenizer.rl"
+#line 1032 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_spaces == 1) {
@@ -25150,7 +25151,7 @@ _eof_trans:
         }}
 	break;
 	case 55:
-#line 561 "tokenizer.rl"
+#line 576 "tokenizer.rl"
 	{te = p+1;{
     NEXT_TOKEN
     if (normalize_ptb3_dashes == 1) {
@@ -25160,7 +25161,7 @@ _eof_trans:
 }}
 	break;
 	case 56:
-#line 568 "tokenizer.rl"
+#line 583 "tokenizer.rl"
 	{te = p+1;{
     NEXT_TOKEN
     if (normalize_amp == 1) {
@@ -25170,13 +25171,13 @@ _eof_trans:
 }}
 	break;
 	case 57:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p+1;{
     NEXT_TOKEN    
 }}
 	break;
 	case 58:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{te = p+1;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -25190,7 +25191,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -25215,7 +25216,7 @@ _eof_trans:
 }}
 	break;
 	case 59:
-#line 648 "tokenizer.rl"
+#line 663 "tokenizer.rl"
 	{te = p+1;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -25229,7 +25230,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti1 - ts - alert_soft_hyphen * 2 + 1;             
@@ -25254,7 +25255,7 @@ _eof_trans:
 }}
 	break;
 	case 60:
-#line 884 "tokenizer.rl"
+#line 899 "tokenizer.rl"
 	{te = p+1;{
     NEXT_TOKEN
 
@@ -25280,7 +25281,7 @@ _eof_trans:
 }}
 	break;
 	case 61:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{te = p+1;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -25294,7 +25295,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -25319,7 +25320,7 @@ _eof_trans:
 }}
 	break;
 	case 62:
-#line 843 "tokenizer.rl"
+#line 858 "tokenizer.rl"
 	{te = p+1;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -25333,7 +25334,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (normalize_quotes == QUOTES_LATEX) {
         size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti2 - ts);
@@ -25361,7 +25362,7 @@ _eof_trans:
 }}
 	break;
 	case 63:
-#line 762 "tokenizer.rl"
+#line 777 "tokenizer.rl"
 	{te = p+1;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -25375,7 +25376,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, 0, mgr); 
 
     if (normalize_quotes == QUOTES_LATEX) {
         size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti1 - ts);
@@ -25403,13 +25404,13 @@ _eof_trans:
 }}
 	break;
 	case 64:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p+1;{
     NEXT_TOKEN    
 }}
 	break;
 	case 65:
-#line 1061 "tokenizer.rl"
+#line 1076 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_spaces == 1 && escape_forward_slash_asterisk == 1) {
@@ -25444,7 +25445,7 @@ _eof_trans:
         }}
 	break;
 	case 66:
-#line 1095 "tokenizer.rl"
+#line 1110 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_fractions == 1) {
@@ -25459,7 +25460,7 @@ _eof_trans:
         }}
 	break;
 	case 67:
-#line 1107 "tokenizer.rl"
+#line 1122 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_fractions == 1) {
@@ -25474,7 +25475,7 @@ _eof_trans:
         }}
 	break;
 	case 68:
-#line 1119 "tokenizer.rl"
+#line 1134 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_fractions == 1) {
@@ -25489,7 +25490,7 @@ _eof_trans:
         }}
 	break;
 	case 69:
-#line 1131 "tokenizer.rl"
+#line 1146 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_fractions == 1) {
@@ -25504,7 +25505,7 @@ _eof_trans:
         }}
 	break;
 	case 70:
-#line 1143 "tokenizer.rl"
+#line 1158 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_fractions == 1) {
@@ -25519,7 +25520,7 @@ _eof_trans:
         }}
 	break;
 	case 71:
-#line 1155 "tokenizer.rl"
+#line 1170 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_fractions == 1) {
@@ -25534,7 +25535,7 @@ _eof_trans:
         }}
 	break;
 	case 72:
-#line 1167 "tokenizer.rl"
+#line 1182 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_fractions == 1) {
@@ -25549,7 +25550,7 @@ _eof_trans:
         }}
 	break;
 	case 73:
-#line 1179 "tokenizer.rl"
+#line 1194 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_fractions == 1) {
@@ -25564,7 +25565,7 @@ _eof_trans:
         }}
 	break;
 	case 74:
-#line 1191 "tokenizer.rl"
+#line 1206 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_fractions == 1) {
@@ -25579,7 +25580,7 @@ _eof_trans:
         }}
 	break;
 	case 75:
-#line 1203 "tokenizer.rl"
+#line 1218 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_fractions == 1) {
@@ -25594,7 +25595,7 @@ _eof_trans:
         }}
 	break;
 	case 76:
-#line 1215 "tokenizer.rl"
+#line 1230 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_fractions == 1) {
@@ -25609,7 +25610,7 @@ _eof_trans:
         }}
 	break;
 	case 77:
-#line 1227 "tokenizer.rl"
+#line 1242 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_fractions == 1) {
@@ -25624,7 +25625,7 @@ _eof_trans:
         }}
 	break;
 	case 78:
-#line 1239 "tokenizer.rl"
+#line 1254 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_fractions == 1) {
@@ -25639,7 +25640,7 @@ _eof_trans:
         }}
 	break;
 	case 79:
-#line 1251 "tokenizer.rl"
+#line 1266 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_fractions == 1) {
@@ -25654,7 +25655,7 @@ _eof_trans:
         }}
 	break;
 	case 80:
-#line 1263 "tokenizer.rl"
+#line 1278 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_fractions == 1) {
@@ -25669,13 +25670,13 @@ _eof_trans:
         }}
 	break;
 	case 81:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p+1;{
     NEXT_TOKEN    
 }}
 	break;
 	case 82:
-#line 1277 "tokenizer.rl"
+#line 1292 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN            
             unsigned char *label_str = NL_allocate_mem_size(mgr, 8);
@@ -25692,7 +25693,7 @@ _eof_trans:
         }}
 	break;
 	case 83:
-#line 1292 "tokenizer.rl"
+#line 1307 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             
@@ -25707,7 +25708,7 @@ _eof_trans:
         }}
 	break;
 	case 84:
-#line 648 "tokenizer.rl"
+#line 663 "tokenizer.rl"
 	{te = p+1;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -25721,7 +25722,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti1 - ts - alert_soft_hyphen * 2 + 1;             
@@ -25746,19 +25747,19 @@ _eof_trans:
 }}
 	break;
 	case 85:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p+1;{
     NEXT_TOKEN    
 }}
 	break;
 	case 86:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p+1;{
     NEXT_TOKEN    
 }}
 	break;
 	case 87:
-#line 1311 "tokenizer.rl"
+#line 1326 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_currency == 1) {
@@ -25767,7 +25768,7 @@ _eof_trans:
         }}
 	break;
 	case 88:
-#line 1318 "tokenizer.rl"
+#line 1333 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_currency == 1) {
@@ -25777,7 +25778,7 @@ _eof_trans:
         }}
 	break;
 	case 89:
-#line 1326 "tokenizer.rl"
+#line 1341 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_currency == 1) {
@@ -25787,7 +25788,7 @@ _eof_trans:
         }}
 	break;
 	case 90:
-#line 1334 "tokenizer.rl"
+#line 1349 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_spaces == 1 && normalize_parentheses == 1) {
@@ -25821,7 +25822,7 @@ _eof_trans:
         }}
 	break;
 	case 91:
-#line 1377 "tokenizer.rl"
+#line 1392 "tokenizer.rl"
 	{te = p+1;{
             if (ti1 - ts == 2) { // e.g. "I."
  
@@ -25853,7 +25854,7 @@ _eof_trans:
         }}
 	break;
 	case 92:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{te = p+1;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -25867,7 +25868,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -25892,7 +25893,7 @@ _eof_trans:
 }}
 	break;
 	case 93:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{te = p+1;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -25906,7 +25907,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -25931,7 +25932,7 @@ _eof_trans:
 }}
 	break;
 	case 94:
-#line 1413 "tokenizer.rl"
+#line 1428 "tokenizer.rl"
 	{te = p+1;{
             if (strict_ptb3 && memcmp(ts, "U.S.", 4) != 0) {
                 te = ti1 - 1;
@@ -25956,7 +25957,7 @@ _eof_trans:
         }}
 	break;
 	case 95:
-#line 648 "tokenizer.rl"
+#line 663 "tokenizer.rl"
 	{te = p+1;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -25970,7 +25971,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti1 - ts - alert_soft_hyphen * 2 + 1;             
@@ -25995,7 +25996,7 @@ _eof_trans:
 }}
 	break;
 	case 96:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{te = p+1;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -26009,7 +26010,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -26034,7 +26035,7 @@ _eof_trans:
 }}
 	break;
 	case 97:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{te = p+1;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -26048,7 +26049,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -26073,7 +26074,7 @@ _eof_trans:
 }}
 	break;
 	case 98:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{te = p+1;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -26087,7 +26088,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -26112,7 +26113,7 @@ _eof_trans:
 }}
 	break;
 	case 99:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{te = p+1;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -26126,7 +26127,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -26151,7 +26152,7 @@ _eof_trans:
 }}
 	break;
 	case 100:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{te = p+1;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -26165,7 +26166,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -26190,7 +26191,7 @@ _eof_trans:
 }}
 	break;
 	case 101:
-#line 803 "tokenizer.rl"
+#line 818 "tokenizer.rl"
 	{te = p+1;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -26204,7 +26205,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (normalize_quotes == QUOTES_LATEX) {
         size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti2 - ts);
@@ -26232,7 +26233,7 @@ _eof_trans:
 }}
 	break;
 	case 102:
-#line 1474 "tokenizer.rl"
+#line 1489 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (*ts != '<') {
@@ -26241,7 +26242,7 @@ _eof_trans:
         }}
 	break;
 	case 103:
-#line 1480 "tokenizer.rl"
+#line 1495 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (*ts != '>') {
@@ -26251,7 +26252,7 @@ _eof_trans:
         }}
 	break;
 	case 104:
-#line 1488 "tokenizer.rl"
+#line 1503 "tokenizer.rl"
 	{te = p+1;{
             te = ti2;
             NEXT_TOKEN
@@ -26272,7 +26273,7 @@ _eof_trans:
         }}
 	break;
 	case 105:
-#line 1506 "tokenizer.rl"
+#line 1521 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             if (normalize_parentheses == 1) {
@@ -26288,7 +26289,7 @@ _eof_trans:
         }}
 	break;
 	case 106:
-#line 958 "tokenizer.rl"
+#line 973 "tokenizer.rl"
 	{te = p+1;{ 
         NEXT_TOKEN
         if (normalize_brackets == 1) {
@@ -26298,7 +26299,7 @@ _eof_trans:
     }}
 	break;
 	case 107:
-#line 966 "tokenizer.rl"
+#line 981 "tokenizer.rl"
 	{te = p+1;{ 
         NEXT_TOKEN
         if (normalize_brackets == 1) {
@@ -26308,7 +26309,7 @@ _eof_trans:
     }}
 	break;
 	case 108:
-#line 974 "tokenizer.rl"
+#line 989 "tokenizer.rl"
 	{te = p+1;{ 
         NEXT_TOKEN
         if (normalize_brackets == 1) {
@@ -26318,7 +26319,7 @@ _eof_trans:
     }}
 	break;
 	case 109:
-#line 982 "tokenizer.rl"
+#line 997 "tokenizer.rl"
 	{te = p+1;{ 
         NEXT_TOKEN
         if (normalize_brackets == 1) {
@@ -26328,7 +26329,7 @@ _eof_trans:
     }}
 	break;
 	case 110:
-#line 999 "tokenizer.rl"
+#line 1014 "tokenizer.rl"
 	{te = p+1;{ 
         NEXT_TOKEN
         if (normalize_parentheses == 1) {
@@ -26338,7 +26339,7 @@ _eof_trans:
     }}
 	break;
 	case 111:
-#line 947 "tokenizer.rl"
+#line 962 "tokenizer.rl"
 	{te = p+1;{
         NEXT_TOKEN
         if (normalize_ellipsis == ELLIPSIS_PTB3) {
@@ -26351,7 +26352,7 @@ _eof_trans:
     }}
 	break;
 	case 112:
-#line 934 "tokenizer.rl"
+#line 949 "tokenizer.rl"
 	{te = p+1;{
         NEXT_TOKEN 
         if (escape_forward_slash_asterisk == 1) {
@@ -26366,25 +26367,25 @@ _eof_trans:
     }}
 	break;
 	case 113:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p+1;{
     NEXT_TOKEN    
 }}
 	break;
 	case 114:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p+1;{
     NEXT_TOKEN    
 }}
 	break;
 	case 115:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p+1;{
     NEXT_TOKEN    
 }}
 	break;
 	case 116:
-#line 934 "tokenizer.rl"
+#line 949 "tokenizer.rl"
 	{te = p+1;{
         NEXT_TOKEN 
         if (escape_forward_slash_asterisk == 1) {
@@ -26399,7 +26400,7 @@ _eof_trans:
     }}
 	break;
 	case 117:
-#line 648 "tokenizer.rl"
+#line 663 "tokenizer.rl"
 	{te = p+1;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -26413,7 +26414,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti1 - ts - alert_soft_hyphen * 2 + 1;             
@@ -26438,7 +26439,7 @@ _eof_trans:
 }}
 	break;
 	case 118:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{te = p+1;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -26452,7 +26453,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -26477,7 +26478,7 @@ _eof_trans:
 }}
 	break;
 	case 119:
-#line 843 "tokenizer.rl"
+#line 858 "tokenizer.rl"
 	{te = p+1;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -26491,7 +26492,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (normalize_quotes == QUOTES_LATEX) {
         size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti2 - ts);
@@ -26519,7 +26520,7 @@ _eof_trans:
 }}
 	break;
 	case 120:
-#line 803 "tokenizer.rl"
+#line 818 "tokenizer.rl"
 	{te = p+1;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -26533,7 +26534,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (normalize_quotes == QUOTES_LATEX) {
         size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti2 - ts);
@@ -26561,7 +26562,7 @@ _eof_trans:
 }}
 	break;
 	case 121:
-#line 884 "tokenizer.rl"
+#line 899 "tokenizer.rl"
 	{te = p+1;{
     NEXT_TOKEN
 
@@ -26587,44 +26588,44 @@ _eof_trans:
 }}
 	break;
 	case 122:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p+1;{
     NEXT_TOKEN    
 }}
 	break;
 	case 123:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p+1;{
     NEXT_TOKEN    
 }}
 	break;
 	case 124:
-#line 1574 "tokenizer.rl"
+#line 1590 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             NL_set_span_label(tokens[span_pos-1], uni_bullet, BULLET_LEN);     
         }}
 	break;
 	case 125:
-#line 1578 "tokenizer.rl"
+#line 1594 "tokenizer.rl"
 	{te = p+1;{
             NEXT_TOKEN
             NL_set_span_label(tokens[span_pos-1], uni_tm, TM_LEN);     
         }}
 	break;
 	case 126:
-#line 1583 "tokenizer.rl"
+#line 1599 "tokenizer.rl"
 	{te = p+1;}
 	break;
 	case 127:
-#line 1584 "tokenizer.rl"
+#line 1600 "tokenizer.rl"
 	{te = p+1;{
             fwrite("Warning: tokenizer found null character.\n", 
                    1, 41, stderr);
         }}
 	break;
 	case 128:
-#line 927 "tokenizer.rl"
+#line 942 "tokenizer.rl"
 	{te = p+1;{
         if (tokenize_newlines == 1) {
             NEXT_TOKEN
@@ -26633,15 +26634,15 @@ _eof_trans:
     }}
 	break;
 	case 129:
-#line 1593 "tokenizer.rl"
+#line 1609 "tokenizer.rl"
 	{te = p+1;}
 	break;
 	case 130:
-#line 1597 "tokenizer.rl"
+#line 1613 "tokenizer.rl"
 	{te = p+1;}
 	break;
 	case 131:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{te = p;p--;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -26655,7 +26656,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -26680,13 +26681,13 @@ _eof_trans:
 }}
 	break;
 	case 132:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN    
 }}
 	break;
 	case 133:
-#line 884 "tokenizer.rl"
+#line 899 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN
 
@@ -26712,7 +26713,7 @@ _eof_trans:
 }}
 	break;
 	case 134:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{te = p;p--;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -26726,7 +26727,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -26751,13 +26752,13 @@ _eof_trans:
 }}
 	break;
 	case 135:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN    
 }}
 	break;
 	case 136:
-#line 762 "tokenizer.rl"
+#line 777 "tokenizer.rl"
 	{te = p;p--;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -26771,7 +26772,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, 0, mgr); 
 
     if (normalize_quotes == QUOTES_LATEX) {
         size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti1 - ts);
@@ -26799,25 +26800,25 @@ _eof_trans:
 }}
 	break;
 	case 137:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN    
 }}
 	break;
 	case 138:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN    
 }}
 	break;
 	case 139:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN    
 }}
 	break;
 	case 140:
-#line 1061 "tokenizer.rl"
+#line 1076 "tokenizer.rl"
 	{te = p;p--;{
             NEXT_TOKEN
             if (normalize_spaces == 1 && escape_forward_slash_asterisk == 1) {
@@ -26852,13 +26853,13 @@ _eof_trans:
         }}
 	break;
 	case 141:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN    
 }}
 	break;
 	case 142:
-#line 934 "tokenizer.rl"
+#line 949 "tokenizer.rl"
 	{te = p;p--;{
         NEXT_TOKEN 
         if (escape_forward_slash_asterisk == 1) {
@@ -26873,13 +26874,13 @@ _eof_trans:
     }}
 	break;
 	case 143:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN    
 }}
 	break;
 	case 144:
-#line 1334 "tokenizer.rl"
+#line 1349 "tokenizer.rl"
 	{te = p;p--;{
             NEXT_TOKEN
             if (normalize_spaces == 1 && normalize_parentheses == 1) {
@@ -26913,7 +26914,7 @@ _eof_trans:
         }}
 	break;
 	case 145:
-#line 1377 "tokenizer.rl"
+#line 1392 "tokenizer.rl"
 	{te = p;p--;{
             if (ti1 - ts == 2) { // e.g. "I."
  
@@ -26945,7 +26946,7 @@ _eof_trans:
         }}
 	break;
 	case 146:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{te = p;p--;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -26959,7 +26960,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -26984,7 +26985,7 @@ _eof_trans:
 }}
 	break;
 	case 147:
-#line 1413 "tokenizer.rl"
+#line 1428 "tokenizer.rl"
 	{te = p;p--;{
             if (strict_ptb3 && memcmp(ts, "U.S.", 4) != 0) {
                 te = ti1 - 1;
@@ -27009,7 +27010,7 @@ _eof_trans:
         }}
 	break;
 	case 148:
-#line 648 "tokenizer.rl"
+#line 663 "tokenizer.rl"
 	{te = p;p--;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -27023,7 +27024,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti1 - ts - alert_soft_hyphen * 2 + 1;             
@@ -27048,7 +27049,7 @@ _eof_trans:
 }}
 	break;
 	case 149:
-#line 1438 "tokenizer.rl"
+#line 1453 "tokenizer.rl"
 	{te = p;p--;{
             if (strict_ptb3 && memcmp(ts, "U.S.", 4) != 0) {
                 te = te - 1;
@@ -27072,13 +27073,13 @@ _eof_trans:
         }}
 	break;
 	case 150:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN    
 }}
 	break;
 	case 151:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{te = p;p--;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -27092,7 +27093,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -27117,7 +27118,7 @@ _eof_trans:
 }}
 	break;
 	case 152:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{te = p;p--;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -27131,7 +27132,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -27156,7 +27157,7 @@ _eof_trans:
 }}
 	break;
 	case 153:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{te = p;p--;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -27170,7 +27171,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -27195,7 +27196,7 @@ _eof_trans:
 }}
 	break;
 	case 154:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{te = p;p--;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -27209,7 +27210,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -27234,7 +27235,7 @@ _eof_trans:
 }}
 	break;
 	case 155:
-#line 884 "tokenizer.rl"
+#line 899 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN
 
@@ -27260,7 +27261,7 @@ _eof_trans:
 }}
 	break;
 	case 156:
-#line 1474 "tokenizer.rl"
+#line 1489 "tokenizer.rl"
 	{te = p;p--;{
             NEXT_TOKEN
             if (*ts != '<') {
@@ -27269,7 +27270,7 @@ _eof_trans:
         }}
 	break;
 	case 157:
-#line 1480 "tokenizer.rl"
+#line 1495 "tokenizer.rl"
 	{te = p;p--;{
             NEXT_TOKEN
             if (*ts != '>') {
@@ -27279,7 +27280,7 @@ _eof_trans:
         }}
 	break;
 	case 158:
-#line 990 "tokenizer.rl"
+#line 1005 "tokenizer.rl"
 	{te = p;p--;{ 
         NEXT_TOKEN
         if (normalize_parentheses == 1) {
@@ -27290,7 +27291,7 @@ _eof_trans:
     }}
 	break;
 	case 159:
-#line 1527 "tokenizer.rl"
+#line 1542 "tokenizer.rl"
 	{te = p;p--;{
             NEXT_TOKEN
             size_t num_hyphens = te - ts;
@@ -27302,7 +27303,7 @@ _eof_trans:
         }}
 	break;
 	case 160:
-#line 947 "tokenizer.rl"
+#line 962 "tokenizer.rl"
 	{te = p;p--;{
         NEXT_TOKEN
         if (normalize_ellipsis == ELLIPSIS_PTB3) {
@@ -27315,13 +27316,13 @@ _eof_trans:
     }}
 	break;
 	case 161:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN    
 }}
 	break;
 	case 162:
-#line 934 "tokenizer.rl"
+#line 949 "tokenizer.rl"
 	{te = p;p--;{
         NEXT_TOKEN 
         if (escape_forward_slash_asterisk == 1) {
@@ -27336,37 +27337,50 @@ _eof_trans:
     }}
 	break;
 	case 163:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN    
 }}
 	break;
 	case 164:
-#line 540 "tokenizer.rl"
+#line 543 "tokenizer.rl"
 	{te = p;p--;{
-    NEXT_TOKEN    
+    if (span_pos == BUFSIZE) {                                              
+        __token_list *next_slab = NL_allocate_mem_size(                     
+            mgr, sizeof(__token_list));                                     
+        next_slab->next = NULL;                                             
+        next_slab->tokens = NL_allocate_mem_size(                           
+            mgr, sizeof(NL_span *) * BUFSIZE);                              
+        tail->next = next_slab;                                             
+        tail = tail->next;                                                  
+        num_lists++;                                                        
+        span_pos = 0;                                                       
+        tokens = next_slab->tokens;                                         
+    }                                                                       
+    tokens[span_pos++] = NL_new_span(ts, te - ts, NL_SENT_END_FLAG, mgr);
+
 }}
 	break;
 	case 165:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN    
 }}
 	break;
 	case 166:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN    
 }}
 	break;
 	case 167:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN    
 }}
 	break;
 	case 168:
-#line 576 "tokenizer.rl"
+#line 591 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN
     if (normalize_amp == 1 && num_amps > 0) {
@@ -27379,7 +27393,7 @@ _eof_trans:
 }}
 	break;
 	case 169:
-#line 884 "tokenizer.rl"
+#line 899 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN
 
@@ -27405,7 +27419,7 @@ _eof_trans:
 }}
 	break;
 	case 170:
-#line 884 "tokenizer.rl"
+#line 899 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN
 
@@ -27431,7 +27445,7 @@ _eof_trans:
 }}
 	break;
 	case 171:
-#line 803 "tokenizer.rl"
+#line 818 "tokenizer.rl"
 	{te = p;p--;{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -27445,7 +27459,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (normalize_quotes == QUOTES_LATEX) {
         size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti2 - ts);
@@ -27473,7 +27487,7 @@ _eof_trans:
 }}
 	break;
 	case 172:
-#line 884 "tokenizer.rl"
+#line 899 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN
 
@@ -27499,17 +27513,17 @@ _eof_trans:
 }}
 	break;
 	case 173:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{te = p;p--;{
     NEXT_TOKEN    
 }}
 	break;
 	case 174:
-#line 1583 "tokenizer.rl"
+#line 1599 "tokenizer.rl"
 	{te = p;p--;}
 	break;
 	case 175:
-#line 927 "tokenizer.rl"
+#line 942 "tokenizer.rl"
 	{te = p;p--;{
         if (tokenize_newlines == 1) {
             NEXT_TOKEN
@@ -27518,11 +27532,11 @@ _eof_trans:
     }}
 	break;
 	case 176:
-#line 1597 "tokenizer.rl"
+#line 1613 "tokenizer.rl"
 	{te = p;p--;}
 	break;
 	case 177:
-#line 685 "tokenizer.rl"
+#line 700 "tokenizer.rl"
 	{{p = ((te))-1;}{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -27536,7 +27550,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -27561,13 +27575,13 @@ _eof_trans:
 }}
 	break;
 	case 178:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{{p = ((te))-1;}{
     NEXT_TOKEN    
 }}
 	break;
 	case 179:
-#line 884 "tokenizer.rl"
+#line 899 "tokenizer.rl"
 	{{p = ((te))-1;}{
     NEXT_TOKEN
 
@@ -27593,25 +27607,25 @@ _eof_trans:
 }}
 	break;
 	case 180:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{{p = ((te))-1;}{
     NEXT_TOKEN    
 }}
 	break;
 	case 181:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{{p = ((te))-1;}{
     NEXT_TOKEN    
 }}
 	break;
 	case 182:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{{p = ((te))-1;}{
     NEXT_TOKEN    
 }}
 	break;
 	case 183:
-#line 1061 "tokenizer.rl"
+#line 1076 "tokenizer.rl"
 	{{p = ((te))-1;}{
             NEXT_TOKEN
             if (normalize_spaces == 1 && escape_forward_slash_asterisk == 1) {
@@ -27646,7 +27660,7 @@ _eof_trans:
         }}
 	break;
 	case 184:
-#line 934 "tokenizer.rl"
+#line 949 "tokenizer.rl"
 	{{p = ((te))-1;}{
         NEXT_TOKEN 
         if (escape_forward_slash_asterisk == 1) {
@@ -27661,7 +27675,7 @@ _eof_trans:
     }}
 	break;
 	case 185:
-#line 648 "tokenizer.rl"
+#line 663 "tokenizer.rl"
 	{{p = ((te))-1;}{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -27675,7 +27689,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti1 - ts - alert_soft_hyphen * 2 + 1;             
@@ -27700,7 +27714,7 @@ _eof_trans:
 }}
 	break;
 	case 186:
-#line 1438 "tokenizer.rl"
+#line 1453 "tokenizer.rl"
 	{{p = ((te))-1;}{
             if (strict_ptb3 && memcmp(ts, "U.S.", 4) != 0) {
                 te = te - 1;
@@ -27724,13 +27738,13 @@ _eof_trans:
         }}
 	break;
 	case 187:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{{p = ((te))-1;}{
     NEXT_TOKEN    
 }}
 	break;
 	case 188:
-#line 1474 "tokenizer.rl"
+#line 1489 "tokenizer.rl"
 	{{p = ((te))-1;}{
             NEXT_TOKEN
             if (*ts != '<') {
@@ -27739,7 +27753,7 @@ _eof_trans:
         }}
 	break;
 	case 189:
-#line 990 "tokenizer.rl"
+#line 1005 "tokenizer.rl"
 	{{p = ((te))-1;}{ 
         NEXT_TOKEN
         if (normalize_parentheses == 1) {
@@ -27750,7 +27764,7 @@ _eof_trans:
     }}
 	break;
 	case 190:
-#line 1527 "tokenizer.rl"
+#line 1542 "tokenizer.rl"
 	{{p = ((te))-1;}{
             NEXT_TOKEN
             size_t num_hyphens = te - ts;
@@ -27762,7 +27776,7 @@ _eof_trans:
         }}
 	break;
 	case 191:
-#line 947 "tokenizer.rl"
+#line 962 "tokenizer.rl"
 	{{p = ((te))-1;}{
         NEXT_TOKEN
         if (normalize_ellipsis == ELLIPSIS_PTB3) {
@@ -27775,7 +27789,7 @@ _eof_trans:
     }}
 	break;
 	case 192:
-#line 934 "tokenizer.rl"
+#line 949 "tokenizer.rl"
 	{{p = ((te))-1;}{
         NEXT_TOKEN 
         if (escape_forward_slash_asterisk == 1) {
@@ -27790,25 +27804,38 @@ _eof_trans:
     }}
 	break;
 	case 193:
-#line 540 "tokenizer.rl"
+#line 543 "tokenizer.rl"
 	{{p = ((te))-1;}{
-    NEXT_TOKEN    
+    if (span_pos == BUFSIZE) {                                              
+        __token_list *next_slab = NL_allocate_mem_size(                     
+            mgr, sizeof(__token_list));                                     
+        next_slab->next = NULL;                                             
+        next_slab->tokens = NL_allocate_mem_size(                           
+            mgr, sizeof(NL_span *) * BUFSIZE);                              
+        tail->next = next_slab;                                             
+        tail = tail->next;                                                  
+        num_lists++;                                                        
+        span_pos = 0;                                                       
+        tokens = next_slab->tokens;                                         
+    }                                                                       
+    tokens[span_pos++] = NL_new_span(ts, te - ts, NL_SENT_END_FLAG, mgr);
+
 }}
 	break;
 	case 194:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{{p = ((te))-1;}{
     NEXT_TOKEN    
 }}
 	break;
 	case 195:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{{p = ((te))-1;}{
     NEXT_TOKEN    
 }}
 	break;
 	case 196:
-#line 576 "tokenizer.rl"
+#line 591 "tokenizer.rl"
 	{{p = ((te))-1;}{
     NEXT_TOKEN
     if (normalize_amp == 1 && num_amps > 0) {
@@ -27821,7 +27848,7 @@ _eof_trans:
 }}
 	break;
 	case 197:
-#line 803 "tokenizer.rl"
+#line 818 "tokenizer.rl"
 	{{p = ((te))-1;}{
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -27835,7 +27862,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (normalize_quotes == QUOTES_LATEX) {
         size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti2 - ts);
@@ -27863,7 +27890,7 @@ _eof_trans:
 }}
 	break;
 	case 198:
-#line 884 "tokenizer.rl"
+#line 899 "tokenizer.rl"
 	{{p = ((te))-1;}{
     NEXT_TOKEN
 
@@ -27889,17 +27916,17 @@ _eof_trans:
 }}
 	break;
 	case 199:
-#line 540 "tokenizer.rl"
+#line 539 "tokenizer.rl"
 	{{p = ((te))-1;}{
     NEXT_TOKEN    
 }}
 	break;
 	case 200:
-#line 1583 "tokenizer.rl"
+#line 1599 "tokenizer.rl"
 	{{p = ((te))-1;}}
 	break;
 	case 201:
-#line 1597 "tokenizer.rl"
+#line 1613 "tokenizer.rl"
 	{{p = ((te))-1;}}
 	break;
 	case 202:
@@ -27958,7 +27985,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -28026,7 +28053,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -28069,7 +28096,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (normalize_quotes == QUOTES_LATEX) {
         size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti2 - ts);
@@ -28110,7 +28137,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, 0, mgr); 
 
     if (normalize_quotes == QUOTES_LATEX) {
         size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti1 - ts);
@@ -28276,7 +28303,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -28338,7 +28365,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti1 - ts - alert_soft_hyphen * 2 + 1;             
@@ -28381,7 +28408,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -28419,7 +28446,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -28457,7 +28484,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -28495,7 +28522,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -28579,20 +28606,33 @@ _eof_trans:
 	break;
 	case 78:
 	{{p = ((te))-1;}
-    NEXT_TOKEN    
+    if (span_pos == BUFSIZE) {                                              
+        __token_list *next_slab = NL_allocate_mem_size(                     
+            mgr, sizeof(__token_list));                                     
+        next_slab->next = NULL;                                             
+        next_slab->tokens = NL_allocate_mem_size(                           
+            mgr, sizeof(NL_span *) * BUFSIZE);                              
+        tail->next = next_slab;                                             
+        tail = tail->next;                                                  
+        num_lists++;                                                        
+        span_pos = 0;                                                       
+        tokens = next_slab->tokens;                                         
+    }                                                                       
+    tokens[span_pos++] = NL_new_span(ts, te - ts, NL_SENT_END_FLAG, mgr);
+
 }
 	break;
-	case 79:
-	{{p = ((te))-1;}
-    NEXT_TOKEN    
-}
-	break;
-	case 83:
+	case 80:
 	{{p = ((te))-1;}
     NEXT_TOKEN    
 }
 	break;
 	case 84:
+	{{p = ((te))-1;}
+    NEXT_TOKEN    
+}
+	break;
+	case 85:
 	{{p = ((te))-1;}
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -28606,7 +28646,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
         size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
@@ -28630,12 +28670,12 @@ _eof_trans:
     te = '\0';                                           
 }
 	break;
-	case 85:
+	case 86:
 	{{p = ((te))-1;}
     NEXT_TOKEN    
 }
 	break;
-	case 86:
+	case 87:
 	{{p = ((te))-1;}
     NEXT_TOKEN
     if (normalize_amp == 1 && num_amps > 0) {
@@ -28647,7 +28687,7 @@ _eof_trans:
     num_amps = 0;
 }
 	break;
-	case 90:
+	case 91:
 	{{p = ((te))-1;}
     if (span_pos == BUFSIZE) {                           
         __token_list *next_slab = NL_allocate_mem_size(  
@@ -28661,7 +28701,7 @@ _eof_trans:
         span_pos = 0;                                    
         tokens = next_slab->tokens;                      
     }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, mgr); 
+    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (normalize_quotes == QUOTES_LATEX) {
         size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti2 - ts);
@@ -28688,7 +28728,7 @@ _eof_trans:
     te = '\0';                                           
 }
 	break;
-	case 91:
+	case 92:
 	{{p = ((te))-1;}
     NEXT_TOKEN
 
@@ -28713,7 +28753,7 @@ _eof_trans:
     }
 }
 	break;
-	case 93:
+	case 94:
 	{{p = ((te))-1;}
     NEXT_TOKEN    
 }
@@ -28724,7 +28764,7 @@ _eof_trans:
 	}
 	}
 	break;
-#line 28728 "tokenizer.c"
+#line 28768 "tokenizer.c"
 		}
 	}
 
@@ -28737,7 +28777,7 @@ _again:
 #line 1 "NONE"
 	{ts = 0;}
 	break;
-#line 28741 "tokenizer.c"
+#line 28781 "tokenizer.c"
 		}
 	}
 
@@ -28754,7 +28794,7 @@ _again:
 
 	}
 
-#line 1892 "tokenizer.rl"
+#line 1909 "tokenizer.rl"
 
     *num_tokens = BUFSIZE * (num_lists - 1) + span_pos;
 
