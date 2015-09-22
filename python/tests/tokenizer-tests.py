@@ -15,7 +15,7 @@ class Tok_Test:
 
         for token, gold_token in zip(tokens, gold):
             print token, gold_token
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
 
         assert len(tokens) == len(gold)
 
@@ -27,7 +27,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
 
         assert len(tokens) == len(gold)
 
@@ -40,7 +40,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
 
         assert len(tokens) == len(gold)
 
@@ -54,7 +54,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
 
         assert len(tokens) == len(gold)
 
@@ -68,7 +68,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
 
         assert len(tokens) == len(gold)
                     
@@ -81,7 +81,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         print tokens
         for token, gold_token in zip(tokens, gold):
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def spmdash_NO_normalize_test(self):
@@ -93,7 +93,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         print tokens
         for token, gold_token in zip(tokens, gold):
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def spamp_normalize_test(self):
@@ -104,7 +104,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         print tokens
         for token, gold_token in zip(tokens, gold):
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
      
     def spamp_NO_normalize_test(self):
@@ -115,7 +115,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         print tokens
         for token, gold_token in zip(tokens, gold):
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def sppunc_test(self):
@@ -125,7 +125,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         print tokens
         for token, gold_token in zip(tokens, gold):
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -139,10 +139,10 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         print tokens
         for token in tokens:
-            print token.decode("utf-8"),
+            print str(token).decode("utf-8"),
         print
         for token, gold_token in zip(tokens, gold):
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def word_redaux_test_UNICODE_normalize_quotes(self):
@@ -153,10 +153,10 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         print tokens
         for token in tokens:
-            print token.decode("utf-8"),
+            print str(token).decode("utf-8"),
         print
         for token, gold_token in zip(tokens, gold):
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def word_redaux_test_LATEX_normalize_quotes(self):
@@ -167,10 +167,10 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         print tokens
         for token in tokens:
-            print token.decode("utf-8"),
+            print str(token).decode("utf-8"),
         print
         for token, gold_token in zip(tokens, gold):
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def word_redaux_test_ASCII_normalize_quotes(self):
@@ -181,10 +181,10 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         print tokens
         for token in tokens:
-            print token.decode("utf-8"),
+            print str(token).decode("utf-8"),
         print
         for token, gold_token in zip(tokens, gold):
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def word_sredaux_test_ASCII_normalize_quotes(self):
@@ -194,10 +194,10 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         print tokens
         for token in tokens:
-            print token.decode("utf-8")
+            print str(token).decode("utf-8")
         print
         for token, gold_token in zip(tokens, gold):
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def soft_hyphen_remove_test(self):
@@ -208,10 +208,10 @@ class Tok_Test:
                 u"-", u"'ll"]
         tokens = nlp.tokenize(string)
         for token in tokens:
-            print token.decode("utf-8"),
+            print str(token).decode("utf-8"),
         print
         for token, gold_token in zip(tokens, gold):
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
       
@@ -230,7 +230,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def apoword_test_UNICODE_normalize_quotes(self):
@@ -250,7 +250,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def apoword_test_ASCII_normalize_quotes(self):
@@ -270,7 +270,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def apoword_test_LATEX_normalize_quotes(self):
@@ -290,7 +290,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def apoword2_test(self):
@@ -300,7 +300,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     #def full_or_likely_url_NO_escape_test(self):
@@ -315,7 +315,7 @@ class Tok_Test:
     #    tokens = nlp.tokenize(string)
     #    for token, gold_token in zip(tokens, gold):
     #        print token, gold_token.encode("utf-8")
-    #        assert token == gold_token.encode("utf-8")
+    #        assert str(token) == gold_token.encode("utf-8")
     #    assert len(tokens) == len(gold)
 
     #def email_test(self):
@@ -329,7 +329,7 @@ class Tok_Test:
     #    print tokens
     #    for token, gold_token in zip(tokens, gold):
     #        print token, gold_token.encode("utf-8")
-    #        assert token == gold_token.encode("utf-8")
+    #        assert str(token) == gold_token.encode("utf-8")
     #    assert len(tokens) == len(gold)
     #    print nlp.tokenize("ked zie@gmail.com")
     #    print nlp.tokenize(u"ked\u00A0zie@gmail.com".encode("utf-8"))
@@ -341,7 +341,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def date_test_NO_escapeing(self):
@@ -350,7 +350,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def number_test(self):
@@ -360,7 +360,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def subsupnum_test(self):
@@ -372,7 +372,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -396,7 +396,7 @@ class Tok_Test:
         print gold
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)       
 
 
@@ -419,7 +419,7 @@ class Tok_Test:
         print gold
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)       
 
     def frac_NO_normalize_escape_test(self):
@@ -441,7 +441,7 @@ class Tok_Test:
         print gold
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)       
 
     def frac_normalize_escape_test(self):
@@ -463,7 +463,7 @@ class Tok_Test:
         print gold
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)       
 
 
@@ -480,7 +480,7 @@ class Tok_Test:
         print gold
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)       
 
     def frac2_normalize_NO_escape_test(self):
@@ -497,7 +497,7 @@ class Tok_Test:
         print gold
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)       
 
     def frac2_normalize_escape_test(self):
@@ -514,7 +514,7 @@ class Tok_Test:
         print gold
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)       
 
 
@@ -529,7 +529,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def bangwords_test(self):
@@ -538,7 +538,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def thing3_test_NO_escaping(self):
@@ -548,7 +548,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def thing3_test_escaping(self):
@@ -558,7 +558,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -570,7 +570,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -584,7 +584,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -600,7 +600,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -612,7 +612,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def pty_ltd_test(self):
@@ -622,7 +622,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def abbrev1_sentend_STRICT_test(self):
@@ -633,7 +633,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def abbrev1_sentend_test(self):
@@ -644,7 +644,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def abbrev1_any_any_test(self):
@@ -654,7 +654,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def abbrev1_STRICT_test(self):
@@ -665,7 +665,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -677,7 +677,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def abbrev2_test(self):
@@ -687,7 +687,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def abbrev4_space_test(self):
@@ -697,7 +697,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def acro_space_test(self):
@@ -707,7 +707,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def tbspec_space_test(self):
@@ -717,7 +717,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def filename_spacepunc_test(self):
@@ -727,7 +727,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def word_per_insentp_test(self):
@@ -737,7 +737,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def phone_NO_normalize_space_NO_normalize_par_test(self):
@@ -749,7 +749,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def phone_normalize_space_NO_normalize_par_test(self):
@@ -761,7 +761,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def phone_NO_normalize_space_normalize_par_test(self):
@@ -773,7 +773,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def phone_normalize_space_normalize_par_test(self):
@@ -783,7 +783,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -795,7 +795,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def double_quotes_LATEX_normalize_test(self):
@@ -806,7 +806,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def double_quotes_unicode_normalize_test(self):
@@ -817,7 +817,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def double_quotes_ASCII_normalize_test(self):
@@ -828,7 +828,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def gt_lt_test(self):
@@ -838,7 +838,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)   
 
     def smiley_NO_normalize_test(self):
@@ -849,7 +849,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def smiley_normalize_test(self):
@@ -860,7 +860,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -874,7 +874,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -887,7 +887,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -900,7 +900,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def test_brackets_normalize(self):
@@ -911,7 +911,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def hyphens_NO_normalize_test(self):
@@ -921,7 +921,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def hyphens_normalize_test(self):
@@ -931,7 +931,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -944,7 +944,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ldots_ptb3_normalize_test(self):
@@ -954,7 +954,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ldots_unicode_normalize_test(self):
@@ -965,7 +965,7 @@ class Tok_Test:
         print tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -977,7 +977,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -988,7 +988,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -998,7 +998,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def asts_escape_test(self):
@@ -1009,7 +1009,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -1026,7 +1026,7 @@ class Tok_Test:
         print "ACTUAL", tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def qmark_exclam_test(self):
@@ -1038,7 +1038,7 @@ class Tok_Test:
         print "ACTUAL", tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def punc_test(self):
@@ -1050,7 +1050,7 @@ class Tok_Test:
         print "ACTUAL", tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def equals_test(self):
@@ -1061,7 +1061,7 @@ class Tok_Test:
         print "ACTUAL", tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def slash_NO_escape_test(self):
@@ -1072,7 +1072,7 @@ class Tok_Test:
         print "ACTUAL", tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def slash_escape_test(self):
@@ -1084,7 +1084,7 @@ class Tok_Test:
         print "ACTUAL", tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -1096,7 +1096,7 @@ class Tok_Test:
         print "ACTUAL", tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -1110,7 +1110,7 @@ class Tok_Test:
         print "ACTUAL", tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def thing_per_insentp_test(self):
@@ -1121,7 +1121,7 @@ class Tok_Test:
         print "ACTUAL", tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -1134,7 +1134,7 @@ class Tok_Test:
         print "ACTUAL", tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -1149,7 +1149,7 @@ class Tok_Test:
         print "ACTUAL", tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def thinga_normalize_amp_test(self):
@@ -1162,7 +1162,7 @@ class Tok_Test:
         print "ACTUAL", tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -1183,7 +1183,7 @@ class Tok_Test:
         print "ACTUAL", tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def right_quote_weirdness_LATEX_normalize_test(self):
@@ -1198,7 +1198,7 @@ class Tok_Test:
         print "ACTUAL", tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def right_quote_weirdness_UNICODE_normalize_test(self):
@@ -1213,7 +1213,7 @@ class Tok_Test:
         print "ACTUAL", tokens
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def terminal_redaux_test(self):
@@ -1224,7 +1224,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def terminal_sredaux_test(self):
@@ -1234,12 +1234,8 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
-
-
-    def quotes_test(self):
-        raise Exception("IMPLEMENT ME!!!")
 
     def test_fake_duckfeet(self):
         string = u"duck<<feet >>"
@@ -1248,7 +1244,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def test_misc_symbols(self):
@@ -1287,7 +1283,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def cp1252_bullet_tm_test(self):
@@ -1297,7 +1293,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -1310,7 +1306,7 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def tokenize_nl_test(self):
@@ -1322,5 +1318,5 @@ class Tok_Test:
         tokens = nlp.tokenize(string)
         for token, gold_token in zip(tokens, gold):
             print token, gold_token.encode("utf-8")
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)

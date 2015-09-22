@@ -918,7 +918,7 @@ static PyObject *__pyx_codeobj__4;
  * cdef class MemoryManagerWrapper(object):
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
  *         print "MemoryManagerWrapper.__cinit__()"
- *         self._mgr = NL_new_v_memmgr(256);
+ *         self._mgr = NL_new_v_memmgr(1024);
  */
 
 /* Python wrapper */
@@ -949,7 +949,7 @@ static int __pyx_pf_3nlp_6libnlp_20MemoryManagerWrapper___cinit__(struct __pyx_o
  * cdef class MemoryManagerWrapper(object):
  *     def __cinit__(self):
  *         print "MemoryManagerWrapper.__cinit__()"             # <<<<<<<<<<<<<<
- *         self._mgr = NL_new_v_memmgr(256);
+ *         self._mgr = NL_new_v_memmgr(1024);
  * 
  */
   if (__Pyx_PrintOne(0, __pyx_kp_s_MemoryManagerWrapper___cinit) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -957,18 +957,18 @@ static int __pyx_pf_3nlp_6libnlp_20MemoryManagerWrapper___cinit__(struct __pyx_o
   /* "nlp/libnlp.pyx":6
  *     def __cinit__(self):
  *         print "MemoryManagerWrapper.__cinit__()"
- *         self._mgr = NL_new_v_memmgr(256);             # <<<<<<<<<<<<<<
+ *         self._mgr = NL_new_v_memmgr(1024);             # <<<<<<<<<<<<<<
  * 
  *     def __str__(self):
  */
-  __pyx_v_self->_mgr = NL_new_v_memmgr(256);
+  __pyx_v_self->_mgr = NL_new_v_memmgr(1024);
 
   /* "nlp/libnlp.pyx":4
  * 
  * cdef class MemoryManagerWrapper(object):
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
  *         print "MemoryManagerWrapper.__cinit__()"
- *         self._mgr = NL_new_v_memmgr(256);
+ *         self._mgr = NL_new_v_memmgr(1024);
  */
 
   /* function exit code */
@@ -983,7 +983,7 @@ static int __pyx_pf_3nlp_6libnlp_20MemoryManagerWrapper___cinit__(struct __pyx_o
 }
 
 /* "nlp/libnlp.pyx":8
- *         self._mgr = NL_new_v_memmgr(256);
+ *         self._mgr = NL_new_v_memmgr(1024);
  * 
  *     def __str__(self):             # <<<<<<<<<<<<<<
  *         return "MemoryManagerWrapper object (don't mess with me!)"
@@ -1021,7 +1021,7 @@ static PyObject *__pyx_pf_3nlp_6libnlp_20MemoryManagerWrapper_2__str__(CYTHON_UN
   goto __pyx_L0;
 
   /* "nlp/libnlp.pyx":8
- *         self._mgr = NL_new_v_memmgr(256);
+ *         self._mgr = NL_new_v_memmgr(1024);
  * 
  *     def __str__(self):             # <<<<<<<<<<<<<<
  *         return "MemoryManagerWrapper object (don't mess with me!)"

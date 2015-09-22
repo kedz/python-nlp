@@ -15,7 +15,7 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test2(self):
@@ -28,7 +28,7 @@ class PTB_Tokenizer_Test:
         print "SYSTEM:", tokens
         print "GOLD  :", gold
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test3(self):
@@ -45,7 +45,7 @@ class PTB_Tokenizer_Test:
         print "GOLD  :", gold
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
     def ptb_inputs_test4(self):
         string = u"The Iron Age (ca. 1300 – ca. 300 BC)."
@@ -54,7 +54,7 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test5(self):
@@ -63,7 +63,7 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test6(self):
@@ -73,7 +73,7 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test7(self):
@@ -89,7 +89,7 @@ class PTB_Tokenizer_Test:
 
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -101,7 +101,7 @@ class PTB_Tokenizer_Test:
         print "GOLD  :", gold
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 
@@ -115,7 +115,7 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test10(self):
@@ -125,7 +125,7 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test11(self):
@@ -136,7 +136,7 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test12(self):
@@ -148,7 +148,7 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test13(self):
@@ -161,7 +161,7 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test14(self):
@@ -171,7 +171,7 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test15(self):
@@ -183,7 +183,7 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test16(self):
@@ -193,7 +193,7 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test17(self):
@@ -205,7 +205,7 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test18(self):
@@ -215,7 +215,7 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test19(self):
@@ -229,7 +229,7 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test20(self):
@@ -239,7 +239,7 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test21(self):
@@ -250,7 +250,7 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test22(self):
@@ -262,19 +262,19 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test23(self):
         string = u"I don't give a f**k about your sh*tty life."
-        gold = [u"I", u"do", u"n't", u"give", u"a", u"f**k", u"about", u"your",
-                u"sh*tty", u"life", u"."]
+        gold = [u"I", u"do", u"n't", u"give", u"a", u"f", u"**", u"k", 
+                u"about", u"your", u"sh", u"*", u"tty", u"life", u"."]
         tokens = nlp.tokenize(string)
         print "SYSTEM:", tokens
         print "GOLD  :", gold
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test24(self):
@@ -286,7 +286,7 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test25(self):
@@ -299,7 +299,7 @@ class PTB_Tokenizer_Test:
         print "SYSTEM:", tokens
         print "GOLD  :", gold
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
     def ptb_inputs_test26(self):
@@ -312,7 +312,7 @@ class PTB_Tokenizer_Test:
         tokens = nlp.tokenize(string)
 
         for token, gold_token in zip(tokens, gold):        
-            assert token == gold_token.encode("utf-8")
+            assert str(token) == gold_token.encode("utf-8")
         assert len(tokens) == len(gold)
 
 #
@@ -322,7 +322,7 @@ def tokenize_simple_test_1():
     string = u"test"
     tokens = nlp.tokenize(string)
     assert len(tokens) == 1
-    assert tokens[0] == u"test"
+    assert str(tokens[0]) == u"test"
 
 def tokenize_simple_test_2():
     string = u"this is a simple test"
@@ -330,25 +330,27 @@ def tokenize_simple_test_2():
     tokens = nlp.tokenize(string)
     assert len(tokens) == len(gold)
     for token, gold_token in zip(tokens, gold):
-        assert token == gold_token
+        assert str(token) == gold_token
 
-#def tokenize_sgml_test_1_no_normalize():
-#    sent1 = u"Significant improvements in peak FEV1 were demonstrated " \
-#            u"with tiotropium/olodaterol 5/2 μg (p = 0.008), 5/5 μg " \
-#            u"(p = 0.012), and 5/10 μg (p < 0.0001) versus tiotropium " \
-#            u"monotherapy [51]."
-#    gold = [u"Significant", u"improvements", u"in", u"peak", u"FEV1", u"were",
-#            u"demonstrated", u"with", u"tiotropium/olodaterol", u"5/2", u"μg",
-#            u"(", u"p", u"=", u"0.008", u")", u",", u"5/5", u"μg", 
-#            u"(", u"p", u"=", u"0.012", u")", u",", u"and", u"5/10", 
-#            u"μg", u"(", u"p", u"<", u"0.0001", u")", u"versus", 
-#            u"tiotropium", u"monotherapy", u"[", u"51", u"]", u"."]
-#
-#    tokens = nlp.tokenize(sent1)
-#    #assert len(tokens) == len(gold)
-#    for token, gold_token in zip(tokens, gold):
-#        print token, gold_token
-#        assert token == gold_token.encode("utf-8")
+def tokenize_sgml_test_1_no_normalize():
+    nlp.get_global_PTB_config().normalize_parentheses = False
+    nlp.get_global_PTB_config().normalize_brackets = False
+    sent1 = u"Significant improvements in peak FEV1 were demonstrated " \
+            u"with tiotropium/olodaterol 5/2 \u03BCg (p = 0.008), 5/5 \u03BCg " \
+            u"(p = 0.012), and 5/10 \u03BCg (p < 0.0001) versus tiotropium " \
+            u"monotherapy [51]."
+    gold = [u"Significant", u"improvements", u"in", u"peak", u"FEV1", u"were",
+            u"demonstrated", u"with", u"tiotropium/olodaterol", u"5/2", u"\u03BCg",
+            u"(", u"p", u"=", u"0.008", u")", u",", u"5/5", u"\u03BCg", 
+            u"(", u"p", u"=", u"0.012", u")", u",", u"and", u"5/10", 
+            u"\u03BCg", u"(", u"p", u"<", u"0.0001", u")", u"versus", 
+            u"tiotropium", u"monotherapy", u"[", u"51", u"]", u"."]
+
+    tokens = nlp.tokenize(sent1)
+    #assert len(tokens) == len(gold)
+    for token, gold_token in zip(tokens, gold):
+        print token, gold_token.encode("utf-8")
+        assert str(token) == gold_token.encode("utf-8")
 
 
 def tokenize_sgml_test_2_no_normalize():
@@ -362,7 +364,7 @@ def tokenize_sgml_test_2_no_normalize():
     tokens = nlp.tokenize(sent2)
     print tokens
     for token, gold_token in zip(tokens, gold):
-        assert token == gold_token
+        assert str(token) == gold_token
     assert len(tokens) == len(gold)
 
 def tokenize_sgml_test_3_no_normalize():
@@ -379,7 +381,7 @@ def tokenize_sgml_test_3_no_normalize():
     tokens = nlp.tokenize(sent3)
     assert len(tokens) == len(gold)
     for token, gold_token in zip(tokens, gold):
-        assert token == gold_token
+        assert str(token) == gold_token
 
 def tokenize_sgml_test_4_normalize():
     nlp.get_global_PTB_config().normalize_spaces = True
@@ -395,7 +397,7 @@ def tokenize_sgml_test_4_normalize():
     tokens = nlp.tokenize(sent4)
     assert len(tokens) == len(gold)
     for token, gold_token in zip(tokens, gold):
-        assert token == gold_token.encode("utf-8")
+        assert str(token) == gold_token.encode("utf-8")
 
 
 
@@ -412,7 +414,7 @@ def tokenize_sgml_test_4_no_normalize():
     tokens = nlp.tokenize(sent4)
     assert len(tokens) == len(gold)
     for token, gold_token in zip(tokens, gold):
-        assert token == gold_token
+        assert str(token) == gold_token
 
 def tokenize_sgml_test_5_no_normalize():
     sent5 = "Hi! <foo bar=\"baz xy = foo !$*) 422\" > <?PITarget " \
@@ -423,7 +425,7 @@ def tokenize_sgml_test_5_no_normalize():
     tokens = nlp.tokenize(sent5)
     print tokens
     for token, gold_token in zip(tokens, gold):
-        assert token == gold_token
+        assert str(token) == gold_token
     assert len(tokens) == len(gold)
     
 def tokenize_sgml_test_6_no_space_normalize():
@@ -440,7 +442,7 @@ def tokenize_sgml_test_6_no_space_normalize():
     tokens = nlp.tokenize(sent6)
     assert len(tokens) == len(gold)
     for token, gold_token in zip(tokens, gold):
-        assert token == gold_token
+        assert str(token) == gold_token
 
 def tokenize_sgml_test_7_no_normalize():
     sent7 = "<chapter xml:id=\"chapter_1\"><?php echo $a; ?>\n<!-- This " \
@@ -453,7 +455,7 @@ def tokenize_sgml_test_7_no_normalize():
     tokens = nlp.tokenize(sent7)
     assert len(tokens) == len(gold)
     for token, gold_token in zip(tokens, gold):
-        assert token == gold_token
+        assert str(token) == gold_token
 
 def tokenize_sgml_test_8_no_normalize():
     nlp.get_global_PTB_config().escape_forward_slash_asterisk = False
@@ -468,7 +470,7 @@ def tokenize_sgml_test_8_no_normalize():
     print gold
     assert len(tokens) == len(gold)
     for token, gold_token in zip(tokens, gold):
-        assert token == gold_token.encode("utf-8")
+        assert str(token) == gold_token.encode("utf-8")
 
 def tokenize_sgml_test_9_no_normalize():
     sent9 = "<quote previouspost=\"\n" \
@@ -485,7 +487,7 @@ def tokenize_sgml_test_9_no_normalize():
     print tokens
     print gold
     for token, gold_token in zip(tokens, gold):
-        assert token == gold_token.encode("utf-8")
+        assert str(token) == gold_token.encode("utf-8")
     assert len(tokens) == len(gold)
 
 def tokenize_sgml_test_10_no_normalize():
@@ -498,7 +500,7 @@ def tokenize_sgml_test_10_no_normalize():
     tokens = nlp.tokenize(sent10)
     assert len(tokens) == len(gold)
     for token, gold_token in zip(tokens, gold):
-        assert token == gold_token
+        assert str(token) == gold_token
 
 def tokenize_sgml_test_11_no_normalize():
     sent11 = "<DOC> <DOCID> nyt960102.0516 </DOCID><STORYID cat=w " \
@@ -512,4 +514,4 @@ def tokenize_sgml_test_11_no_normalize():
     tokens = nlp.tokenize(sent11)
     assert len(tokens) == len(gold)
     for token, gold_token in zip(tokens, gold):
-        assert token == gold_token
+        assert str(token) == gold_token

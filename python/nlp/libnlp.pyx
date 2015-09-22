@@ -3,7 +3,7 @@ from cpython.mem cimport PyMem_Malloc, PyMem_Free
 cdef class MemoryManagerWrapper(object):
     def __cinit__(self):
         print "MemoryManagerWrapper.__cinit__()"
-        self._mgr = NL_new_v_memmgr(256);
+        self._mgr = NL_new_v_memmgr(1024);
 
     def __str__(self):
         return "MemoryManagerWrapper object (don't mess with me!)"
