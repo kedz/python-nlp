@@ -18,6 +18,11 @@ typedef struct NL_span {
 
 } NL_span;
 
+typedef struct NL_sentence {
+    NL_span **tokens;
+    size_t num_words;
+} NL_sentence;
+
 typedef struct NL_document {
     unsigned char *buffer;
     size_t buffer_length;

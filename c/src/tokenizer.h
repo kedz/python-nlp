@@ -60,6 +60,8 @@ NL_span **NL_tokenize_buf(
     NL_PTBTokConfig *cfg, NL_v_memmgr *mgr);
 void uni_right_quote(unsigned char *p, size_t buf_length, unsigned char *cpy);
 
+NL_sentence **NL_sentence_tokenize(NL_span **tokens, size_t num_tokens);
+
 #define NL_SENT_END_FLAG 0x01
 
 #define BUFSIZE 2048

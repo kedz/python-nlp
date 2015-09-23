@@ -2,6 +2,17 @@
 #include "memmgr_test.h"
 #include "tokenizer_utils_tests.h"
 #include "tokenizer_tests.h"
+#include "sent_tok_tests.h"
+
+#define KNRM  "\x1B[0m"
+#define KRED  "\x1B[31m"
+#define KGRN  "\x1B[32m"
+#define KYEL  "\x1B[33m"
+#define KBLU  "\x1B[34m"
+#define KMAG  "\x1B[35m"
+#define KCYN  "\x1B[36m"
+#define KWHT  "\x1B[37m"
+
 
 int run_tests(test_func *test_funcs, size_t num_tests, int verbose) {
     for (int i=0; i < num_tests; i++) {
@@ -11,9 +22,10 @@ int run_tests(test_func *test_funcs, size_t num_tests, int verbose) {
         errors = (*test_funcs[i]) (name, &num_errors);
         char *status;
         if (num_errors == 0) {
-            status = "OK";
+            
+            status =  KGRN "OK" KNRM;
         } else {
-            status = "FAIL";
+            status = KRED "FAIL" KNRM;
         }
         printf("%s ... %s\n", *name, status);
         for (int e=0; e<num_errors; e++) {
@@ -57,5 +69,8 @@ int main(int argc, char *argv[]) {
     run_tests((test_func *) &ptb_inputs_tests, NUM_PTB_INPUTS_TESTS, verbose);
     TOKENIZER_TESTS(tokenizer_tests);
     run_tests((test_func *) &tokenizer_tests, NUM_TOKENIZER_TESTS, verbose);
+    SENT_TOKENIZER_TESTS(sent_tokenizer_tests);
+    run_tests((test_func *) &sent_tokenizer_tests, NUM_SENT_TOKENIZER_TESTS, 
+            verbose);
 
 }

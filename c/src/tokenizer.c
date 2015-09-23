@@ -28854,6 +28854,24 @@ _again:
 
 }
 
+NL_sentence **NL_sentence_tokenize(NL_span **tokens, size_t num_tokens) {
+
+    unsigned char *start = tokens[0]->start;
+    for (int i=0; i < num_tokens; i++) {
+        if (tokens[i]->flags & NL_SENT_END_FLAG) {
+            fwrite(start, 1, tokens[i]->start + tokens[i]->length - start, 
+                   stdout);
+            printf("\n");
+            if (i + 1 < num_tokens)
+    
+                start = tokens[i + 1]->start;
+        }
+    }
+
+
+    return NULL;
+}
+
 NL_PTBTokConfig *NL_new_PTB_tokenizer_config(NL_v_memmgr *mgr) {
 
     NL_PTBTokConfig *cfg = NL_allocate_mem_size(mgr, sizeof(NL_PTBTokConfig));
