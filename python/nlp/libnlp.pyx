@@ -330,7 +330,15 @@ cdef class BufferDocument(object):
         return (<unsigned char *>self.view.buf)[:self.view.len].decode("utf-8")
 
     def __len__(self):
-        return self.view.len
+        return self.num_tokens
+
+    def __iter__(self):
+        cdef size_t i 
+        for i in range(self.num_tokens):
+            yield BufferToken(self, i)
+
+    def __getitem__(self, i):
+        return BufferToken(self, i)
 
     def __dealloc__(self):
         
@@ -345,9 +353,33 @@ cdef class BufferToken(object):
         self.index = index
 
     def __str__(self):
-        if self.doc.tokens[self.index].label_length == 0:
-            return self.doc.tokens[self.index].start[:self.doc.tokens[self.index].length]
+        cdef NL_span *tok = self.doc.tokens[self.index]
+        if PY_MAJOR_VERSION < 3:
+            if tok.label_length == 0:
+                return (<unsigned char *>tok.start)[:tok.length]
+            else: 
+                return (<unsigned char *>tok.label)[:tok.label_length]
         else:
-            return self.doc.tokens[self.index].label[:self.doc.tokens[self.index].label_length]
+            if tok.label_length == 0:
+                return (<unsigned char *>tok.start)[:tok.length].decode(
+                    "utf-8")
+            else: 
+                return (<unsigned char *>tok.label)[:tok.label_length].decode(
+                    "utf-8")
+
+    def __bytes__(self):
+        cdef NL_span *tok = self.doc.tokens[self.index]
+        if tok.label_length == 0:
+            return (<unsigned char *>tok.start)[:tok.length]
+        else: 
+            return (<unsigned char *>tok.label)[:tok.label_length]
+
+    def __unicode__(self):
+        cdef NL_span *tok = self.doc.tokens[self.index]
+        if tok.label_length == 0:
+            return (<unsigned char *>tok.start)[:tok.length].decode("utf-8")
+        else: 
+            return (<unsigned char *>tok.label)[:tok.label_length].decode(
+                "utf-8")
 
 
