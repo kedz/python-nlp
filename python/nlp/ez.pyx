@@ -13,9 +13,6 @@ def tokenize(object str_or_unicode):
     cdef Py_buffer view;
     global memmgr
     global global_ptb_tok_cfg
-    cdef size_t *num_tokens = <size_t *> PyMem_Malloc(sizeof(size_t));
-    cdef NL_span **tokens 
-    cdef int i
 
     if isinstance(str_or_unicode, unicode):
         buf = buf.encode("utf-8")
@@ -29,21 +26,4 @@ def tokenize(object str_or_unicode):
         global_ptb_tok_cfg._cfg, 
         memmgr._mgr)    
 
-    cdef size_t index = 0
-    return [BufferToken(doc, index) for index in xrange(doc.num_tokens)]
-#    py_tokens = []
-#    for i in range(num_tokens[0]):
-#        if tokens[i].label == NULL:
-#            py_tokens.append(tokens[i].start[:tokens[i].length])
-#        else:
-#            py_tokens.append(tokens[i].label[:tokens[i].label_length])
-#   
-#    for i in range(num_tokens[0]):
-#        NL_free_span(&tokens[i], memmgr._mgr)
-#    NL_deallocate_v_mem(memmgr._mgr, <void **> &tokens)
-#
-#    PyMem_Free(num_tokens);
-#    PyBuffer_Release(&view)
-#    return py_tokens
-
-#    return doc;
+    return doc
