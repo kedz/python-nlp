@@ -2,8 +2,6 @@ from __future__ import absolute_import, division, print_function, \
         unicode_literals
 from cpython.version cimport PY_MAJOR_VERSION
 
-from nlp.utils import isstr
-
 from nlp.libnlp cimport BufferDocument
 
 cdef class Pipeline(object):
