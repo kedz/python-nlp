@@ -1056,9 +1056,9 @@ action HandleQuotesProbablyRight {
         APOWORD => HandleQuotesProbablyRight;
         APOWORD2 %MarkIntermediate2 ualpha => NextIntermediate2;
 
-   #     FULLURL => NextToken; # TODO add escaping for these
-   #     LIKELYURL => NextToken;
-   #     EMAIL => NextToken; # TODO: can't get this to work
+        FULLURL => NextToken; # TODO add escaping for these
+        LIKELYURL => NextToken;
+        EMAIL => NextToken; # TODO: can't get this to work
 
         TWITTER => NextToken;
         REDAUX %MarkIntermediate2 [^A-Za-z] => 

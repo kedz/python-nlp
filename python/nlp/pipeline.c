@@ -535,7 +535,7 @@ struct __pyx_obj_3nlp_6libnlp_BufferToken {
 };
 
 
-/* "nlp/pipeline.pyx":9
+/* "nlp/pipeline.pyx":7
  * from nlp.libnlp cimport BufferDocument
  * 
  * cdef class Pipeline(object):             # <<<<<<<<<<<<<<
@@ -549,7 +549,7 @@ struct __pyx_obj_3nlp_8pipeline_Pipeline {
 };
 
 
-/* "nlp/pipeline.pyx":74
+/* "nlp/pipeline.pyx":72
  * 
  * 
  * cdef class Processor(object):             # <<<<<<<<<<<<<<
@@ -562,7 +562,7 @@ struct __pyx_obj_3nlp_8pipeline_Processor {
 };
 
 
-/* "nlp/pipeline.pyx":80
+/* "nlp/pipeline.pyx":78
  *         self.lang = lang
  * 
  * cdef class ObjectProcessor(Processor):             # <<<<<<<<<<<<<<
@@ -707,10 +707,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObjec
 static CYTHON_INLINE int __Pyx_ArgTypeTest(PyObject *obj, PyTypeObject *type, int none_allowed,
     const char *name, int exact);
 
-static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level);
-
-static PyObject* __Pyx_ImportFrom(PyObject* module, PyObject* name);
-
 typedef struct {
     int code_line;
     PyCodeObject* code_object;
@@ -787,18 +783,15 @@ static char __pyx_k_path[] = "path";
 static char __pyx_k_test[] = "__test__";
 static char __pyx_k_files[] = "files";
 static char __pyx_k_input[] = "input";
-static char __pyx_k_isstr[] = "isstr";
 static char __pyx_k_paths[] = "paths";
 static char __pyx_k_print[] = "print";
 static char __pyx_k_utf_8[] = "utf-8";
 static char __pyx_k_encode[] = "encode";
-static char __pyx_k_import[] = "__import__";
 static char __pyx_k_string[] = "string";
 static char __pyx_k_strings[] = "strings";
 static char __pyx_k_Bad_input[] = "Bad input!";
 static char __pyx_k_Exception[] = "Exception";
 static char __pyx_k_TypeError[] = "TypeError";
-static char __pyx_k_nlp_utils[] = "nlp.utils";
 static char __pyx_k_input_type[] = "input_type";
 static char __pyx_k_process_files[] = "process_files";
 static char __pyx_k_process_paths[] = "process_paths";
@@ -816,13 +809,10 @@ static PyObject *__pyx_n_u_en;
 static PyObject *__pyx_n_s_encode;
 static PyObject *__pyx_n_u_file;
 static PyObject *__pyx_n_u_files;
-static PyObject *__pyx_n_s_import;
 static PyObject *__pyx_n_s_input;
 static PyObject *__pyx_n_s_input_type;
-static PyObject *__pyx_n_s_isstr;
 static PyObject *__pyx_n_s_lang;
 static PyObject *__pyx_n_s_main;
-static PyObject *__pyx_n_s_nlp_utils;
 static PyObject *__pyx_n_u_path;
 static PyObject *__pyx_n_u_paths;
 static PyObject *__pyx_n_s_print;
@@ -856,7 +846,7 @@ static PyObject *__pyx_tuple__5;
 static PyObject *__pyx_tuple__6;
 static PyObject *__pyx_tuple__7;
 
-/* "nlp/pipeline.pyx":13
+/* "nlp/pipeline.pyx":11
  *     cdef bint verbose
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -889,14 +879,14 @@ static int __pyx_pf_3nlp_8pipeline_8Pipeline___cinit__(struct __pyx_obj_3nlp_8pi
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "nlp/pipeline.pyx":14
+  /* "nlp/pipeline.pyx":12
  * 
  *     def __cinit__(self):
  *         self.processors = []             # <<<<<<<<<<<<<<
  *         self.verbose = True
  * 
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v_self->processors);
@@ -904,7 +894,7 @@ static int __pyx_pf_3nlp_8pipeline_8Pipeline___cinit__(struct __pyx_obj_3nlp_8pi
   __pyx_v_self->processors = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "nlp/pipeline.pyx":15
+  /* "nlp/pipeline.pyx":13
  *     def __cinit__(self):
  *         self.processors = []
  *         self.verbose = True             # <<<<<<<<<<<<<<
@@ -913,7 +903,7 @@ static int __pyx_pf_3nlp_8pipeline_8Pipeline___cinit__(struct __pyx_obj_3nlp_8pi
  */
   __pyx_v_self->verbose = 1;
 
-  /* "nlp/pipeline.pyx":13
+  /* "nlp/pipeline.pyx":11
  *     cdef bint verbose
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -933,7 +923,7 @@ static int __pyx_pf_3nlp_8pipeline_8Pipeline___cinit__(struct __pyx_obj_3nlp_8pi
   return __pyx_r;
 }
 
-/* "nlp/pipeline.pyx":17
+/* "nlp/pipeline.pyx":15
  *         self.verbose = True
  * 
  *     def register(self, processor):             # <<<<<<<<<<<<<<
@@ -965,19 +955,19 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_2register(struct __pyx_obj_3n
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("register", 0);
 
-  /* "nlp/pipeline.pyx":18
+  /* "nlp/pipeline.pyx":16
  * 
  *     def register(self, processor):
  *         if type(processor) == Processor:             # <<<<<<<<<<<<<<
  *             self.processors.append(processor)
  *         else:
  */
-  __pyx_t_1 = PyObject_RichCompare(((PyObject *)Py_TYPE(__pyx_v_processor)), ((PyObject *)__pyx_ptype_3nlp_8pipeline_Processor), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 18; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 18; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)Py_TYPE(__pyx_v_processor)), ((PyObject *)__pyx_ptype_3nlp_8pipeline_Processor), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 16; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 16; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "nlp/pipeline.pyx":19
+    /* "nlp/pipeline.pyx":17
  *     def register(self, processor):
  *         if type(processor) == Processor:
  *             self.processors.append(processor)             # <<<<<<<<<<<<<<
@@ -986,11 +976,11 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_2register(struct __pyx_obj_3n
  */
     if (unlikely(__pyx_v_self->processors == Py_None)) {
       PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%s'", "append");
-      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 19; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
-    __pyx_t_3 = __Pyx_PyList_Append(__pyx_v_self->processors, __pyx_v_processor); if (unlikely(__pyx_t_3 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 19; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = __Pyx_PyList_Append(__pyx_v_self->processors, __pyx_v_processor); if (unlikely(__pyx_t_3 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-    /* "nlp/pipeline.pyx":18
+    /* "nlp/pipeline.pyx":16
  * 
  *     def register(self, processor):
  *         if type(processor) == Processor:             # <<<<<<<<<<<<<<
@@ -1000,7 +990,7 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_2register(struct __pyx_obj_3n
     goto __pyx_L3;
   }
 
-  /* "nlp/pipeline.pyx":21
+  /* "nlp/pipeline.pyx":19
  *             self.processors.append(processor)
  *         else:
  *             raise Exception(             # <<<<<<<<<<<<<<
@@ -1008,15 +998,15 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_2register(struct __pyx_obj_3n
  * 
  */
   /*else*/ {
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_Exception, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_Exception, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 19; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 19; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_L3:;
 
-  /* "nlp/pipeline.pyx":17
+  /* "nlp/pipeline.pyx":15
  *         self.verbose = True
  * 
  *     def register(self, processor):             # <<<<<<<<<<<<<<
@@ -1037,7 +1027,7 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_2register(struct __pyx_obj_3n
   return __pyx_r;
 }
 
-/* "nlp/pipeline.pyx":24
+/* "nlp/pipeline.pyx":22
  *                 "Pipeline object can only register Processor objects")
  * 
  *     def process(self, input, input_type="strings"):             # <<<<<<<<<<<<<<
@@ -1081,7 +1071,7 @@ static PyObject *__pyx_pw_3nlp_8pipeline_8Pipeline_5process(PyObject *__pyx_v_se
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "process") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "process") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 22; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -1096,7 +1086,7 @@ static PyObject *__pyx_pw_3nlp_8pipeline_8Pipeline_5process(PyObject *__pyx_v_se
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("process", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("process", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 22; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("nlp.pipeline.Pipeline.process", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -1123,24 +1113,24 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_4process(struct __pyx_obj_3nl
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("process", 0);
 
-  /* "nlp/pipeline.pyx":25
+  /* "nlp/pipeline.pyx":23
  * 
  *     def process(self, input, input_type="strings"):
  *         if input_type == "strings":             # <<<<<<<<<<<<<<
  *             self.process_strings(input)
  *         elif input_type == "string":
  */
-  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_input_type, __pyx_n_u_strings, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 25; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_input_type, __pyx_n_u_strings, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 23; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (__pyx_t_1) {
 
-    /* "nlp/pipeline.pyx":26
+    /* "nlp/pipeline.pyx":24
  *     def process(self, input, input_type="strings"):
  *         if input_type == "strings":
  *             self.process_strings(input)             # <<<<<<<<<<<<<<
  *         elif input_type == "string":
  *             self.process_strings([input])
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_process_strings); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_process_strings); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = NULL;
     if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_3))) {
@@ -1153,23 +1143,23 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_4process(struct __pyx_obj_3nl
       }
     }
     if (!__pyx_t_4) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_input); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_input); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_2);
     } else {
-      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
       __Pyx_INCREF(__pyx_v_input);
       __Pyx_GIVEREF(__pyx_v_input);
       PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_v_input);
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "nlp/pipeline.pyx":25
+    /* "nlp/pipeline.pyx":23
  * 
  *     def process(self, input, input_type="strings"):
  *         if input_type == "strings":             # <<<<<<<<<<<<<<
@@ -1179,26 +1169,26 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_4process(struct __pyx_obj_3nl
     goto __pyx_L3;
   }
 
-  /* "nlp/pipeline.pyx":27
+  /* "nlp/pipeline.pyx":25
  *         if input_type == "strings":
  *             self.process_strings(input)
  *         elif input_type == "string":             # <<<<<<<<<<<<<<
  *             self.process_strings([input])
  *         elif input_type == "paths":
  */
-  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_input_type, __pyx_n_u_string, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 27; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_input_type, __pyx_n_u_string, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 25; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (__pyx_t_1) {
 
-    /* "nlp/pipeline.pyx":28
+    /* "nlp/pipeline.pyx":26
  *             self.process_strings(input)
  *         elif input_type == "string":
  *             self.process_strings([input])             # <<<<<<<<<<<<<<
  *         elif input_type == "paths":
  *             self.process_paths(input)
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_process_strings); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_process_strings); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = PyList_New(1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_5 = PyList_New(1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_INCREF(__pyx_v_input);
     __Pyx_GIVEREF(__pyx_v_input);
@@ -1214,24 +1204,24 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_4process(struct __pyx_obj_3nl
       }
     }
     if (!__pyx_t_4) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_2);
     } else {
-      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __pyx_t_4 = NULL;
       __Pyx_GIVEREF(__pyx_t_5);
       PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_5);
       __pyx_t_5 = 0;
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "nlp/pipeline.pyx":27
+    /* "nlp/pipeline.pyx":25
  *         if input_type == "strings":
  *             self.process_strings(input)
  *         elif input_type == "string":             # <<<<<<<<<<<<<<
@@ -1241,24 +1231,24 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_4process(struct __pyx_obj_3nl
     goto __pyx_L3;
   }
 
-  /* "nlp/pipeline.pyx":29
+  /* "nlp/pipeline.pyx":27
  *         elif input_type == "string":
  *             self.process_strings([input])
  *         elif input_type == "paths":             # <<<<<<<<<<<<<<
  *             self.process_paths(input)
  *         elif input_type == "path":
  */
-  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_input_type, __pyx_n_u_paths, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_input_type, __pyx_n_u_paths, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 27; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (__pyx_t_1) {
 
-    /* "nlp/pipeline.pyx":30
+    /* "nlp/pipeline.pyx":28
  *             self.process_strings([input])
  *         elif input_type == "paths":
  *             self.process_paths(input)             # <<<<<<<<<<<<<<
  *         elif input_type == "path":
  *             self.process_paths([input])
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_process_paths); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_process_paths); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_6 = NULL;
     if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_3))) {
@@ -1271,23 +1261,23 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_4process(struct __pyx_obj_3nl
       }
     }
     if (!__pyx_t_6) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_input); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_input); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_2);
     } else {
-      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_6); __pyx_t_6 = NULL;
       __Pyx_INCREF(__pyx_v_input);
       __Pyx_GIVEREF(__pyx_v_input);
       PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_v_input);
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "nlp/pipeline.pyx":29
+    /* "nlp/pipeline.pyx":27
  *         elif input_type == "string":
  *             self.process_strings([input])
  *         elif input_type == "paths":             # <<<<<<<<<<<<<<
@@ -1297,26 +1287,26 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_4process(struct __pyx_obj_3nl
     goto __pyx_L3;
   }
 
-  /* "nlp/pipeline.pyx":31
+  /* "nlp/pipeline.pyx":29
  *         elif input_type == "paths":
  *             self.process_paths(input)
  *         elif input_type == "path":             # <<<<<<<<<<<<<<
  *             self.process_paths([input])
  *         elif input_type == "files":
  */
-  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_input_type, __pyx_n_u_path, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_input_type, __pyx_n_u_path, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (__pyx_t_1) {
 
-    /* "nlp/pipeline.pyx":32
+    /* "nlp/pipeline.pyx":30
  *             self.process_paths(input)
  *         elif input_type == "path":
  *             self.process_paths([input])             # <<<<<<<<<<<<<<
  *         elif input_type == "files":
  *             self.process_files(input)
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_process_paths); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_process_paths); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = PyList_New(1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_5 = PyList_New(1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_INCREF(__pyx_v_input);
     __Pyx_GIVEREF(__pyx_v_input);
@@ -1332,24 +1322,24 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_4process(struct __pyx_obj_3nl
       }
     }
     if (!__pyx_t_6) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_2);
     } else {
-      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_6); __pyx_t_6 = NULL;
       __Pyx_GIVEREF(__pyx_t_5);
       PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_t_5);
       __pyx_t_5 = 0;
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "nlp/pipeline.pyx":31
+    /* "nlp/pipeline.pyx":29
  *         elif input_type == "paths":
  *             self.process_paths(input)
  *         elif input_type == "path":             # <<<<<<<<<<<<<<
@@ -1359,24 +1349,24 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_4process(struct __pyx_obj_3nl
     goto __pyx_L3;
   }
 
-  /* "nlp/pipeline.pyx":33
+  /* "nlp/pipeline.pyx":31
  *         elif input_type == "path":
  *             self.process_paths([input])
  *         elif input_type == "files":             # <<<<<<<<<<<<<<
  *             self.process_files(input)
  *         elif input_type == "file":
  */
-  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_input_type, __pyx_n_u_files, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_input_type, __pyx_n_u_files, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (__pyx_t_1) {
 
-    /* "nlp/pipeline.pyx":34
+    /* "nlp/pipeline.pyx":32
  *             self.process_paths([input])
  *         elif input_type == "files":
  *             self.process_files(input)             # <<<<<<<<<<<<<<
  *         elif input_type == "file":
  *             self.process_files([input])
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_process_files); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_process_files); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = NULL;
     if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_3))) {
@@ -1389,23 +1379,23 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_4process(struct __pyx_obj_3nl
       }
     }
     if (!__pyx_t_4) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_input); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_input); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_2);
     } else {
-      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
       __Pyx_INCREF(__pyx_v_input);
       __Pyx_GIVEREF(__pyx_v_input);
       PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_v_input);
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "nlp/pipeline.pyx":33
+    /* "nlp/pipeline.pyx":31
  *         elif input_type == "path":
  *             self.process_paths([input])
  *         elif input_type == "files":             # <<<<<<<<<<<<<<
@@ -1415,26 +1405,26 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_4process(struct __pyx_obj_3nl
     goto __pyx_L3;
   }
 
-  /* "nlp/pipeline.pyx":35
+  /* "nlp/pipeline.pyx":33
  *         elif input_type == "files":
  *             self.process_files(input)
  *         elif input_type == "file":             # <<<<<<<<<<<<<<
  *             self.process_files([input])
  *         else:
  */
-  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_input_type, __pyx_n_u_file, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_input_type, __pyx_n_u_file, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (__pyx_t_1) {
 
-    /* "nlp/pipeline.pyx":36
+    /* "nlp/pipeline.pyx":34
  *             self.process_files(input)
  *         elif input_type == "file":
  *             self.process_files([input])             # <<<<<<<<<<<<<<
  *         else:
  *             raise TypeError("Bad input!")
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_process_files); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_process_files); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = PyList_New(1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_5 = PyList_New(1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_INCREF(__pyx_v_input);
     __Pyx_GIVEREF(__pyx_v_input);
@@ -1450,24 +1440,24 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_4process(struct __pyx_obj_3nl
       }
     }
     if (!__pyx_t_4) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_2);
     } else {
-      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __pyx_t_4 = NULL;
       __Pyx_GIVEREF(__pyx_t_5);
       PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_5);
       __pyx_t_5 = 0;
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "nlp/pipeline.pyx":35
+    /* "nlp/pipeline.pyx":33
  *         elif input_type == "files":
  *             self.process_files(input)
  *         elif input_type == "file":             # <<<<<<<<<<<<<<
@@ -1477,7 +1467,7 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_4process(struct __pyx_obj_3nl
     goto __pyx_L3;
   }
 
-  /* "nlp/pipeline.pyx":38
+  /* "nlp/pipeline.pyx":36
  *             self.process_files([input])
  *         else:
  *             raise TypeError("Bad input!")             # <<<<<<<<<<<<<<
@@ -1485,15 +1475,15 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_4process(struct __pyx_obj_3nl
  *     def process_strings(self, list input):
  */
   /*else*/ {
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 38; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 38; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_L3:;
 
-  /* "nlp/pipeline.pyx":24
+  /* "nlp/pipeline.pyx":22
  *                 "Pipeline object can only register Processor objects")
  * 
  *     def process(self, input, input_type="strings"):             # <<<<<<<<<<<<<<
@@ -1518,7 +1508,7 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_4process(struct __pyx_obj_3nl
   return __pyx_r;
 }
 
-/* "nlp/pipeline.pyx":40
+/* "nlp/pipeline.pyx":38
  *             raise TypeError("Bad input!")
  * 
  *     def process_strings(self, list input):             # <<<<<<<<<<<<<<
@@ -1535,7 +1525,7 @@ static PyObject *__pyx_pw_3nlp_8pipeline_8Pipeline_7process_strings(PyObject *__
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("process_strings (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_input), (&PyList_Type), 1, "input", 1))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_input), (&PyList_Type), 1, "input", 1))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 38; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_3nlp_8pipeline_8Pipeline_6process_strings(((struct __pyx_obj_3nlp_8pipeline_Pipeline *)__pyx_v_self), ((PyObject*)__pyx_v_input));
 
   /* function exit code */
@@ -1566,7 +1556,7 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_6process_strings(struct __pyx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("process_strings", 0);
 
-  /* "nlp/pipeline.pyx":41
+  /* "nlp/pipeline.pyx":39
  * 
  *     def process_strings(self, list input):
  *         if self.verbose is True:             # <<<<<<<<<<<<<<
@@ -1576,18 +1566,18 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_6process_strings(struct __pyx
   __pyx_t_1 = ((__pyx_v_self->verbose == 1) != 0);
   if (__pyx_t_1) {
 
-    /* "nlp/pipeline.pyx":42
+    /* "nlp/pipeline.pyx":40
  *     def process_strings(self, list input):
  *         if self.verbose is True:
  *             print("process_strings not implemented.")             # <<<<<<<<<<<<<<
  *         ret = list()
  *         for pyobj in input:
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "nlp/pipeline.pyx":41
+    /* "nlp/pipeline.pyx":39
  * 
  *     def process_strings(self, list input):
  *         if self.verbose is True:             # <<<<<<<<<<<<<<
@@ -1596,19 +1586,19 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_6process_strings(struct __pyx
  */
   }
 
-  /* "nlp/pipeline.pyx":43
+  /* "nlp/pipeline.pyx":41
  *         if self.verbose is True:
  *             print("process_strings not implemented.")
  *         ret = list()             # <<<<<<<<<<<<<<
  *         for pyobj in input:
  *             if type(pyobj) is unicode:
  */
-  __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 43; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_v_ret = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "nlp/pipeline.pyx":44
+  /* "nlp/pipeline.pyx":42
  *             print("process_strings not implemented.")
  *         ret = list()
  *         for pyobj in input:             # <<<<<<<<<<<<<<
@@ -1617,21 +1607,21 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_6process_strings(struct __pyx
  */
   if (unlikely(__pyx_v_input == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not iterable");
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_t_2 = __pyx_v_input; __Pyx_INCREF(__pyx_t_2); __pyx_t_3 = 0;
   for (;;) {
     if (__pyx_t_3 >= PyList_GET_SIZE(__pyx_t_2)) break;
     #if CYTHON_COMPILING_IN_CPYTHON
-    __pyx_t_4 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_4); __pyx_t_3++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_4); __pyx_t_3++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     #else
-    __pyx_t_4 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
     #endif
     __Pyx_XDECREF_SET(__pyx_v_pyobj, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "nlp/pipeline.pyx":45
+    /* "nlp/pipeline.pyx":43
  *         ret = list()
  *         for pyobj in input:
  *             if type(pyobj) is unicode:             # <<<<<<<<<<<<<<
@@ -1642,22 +1632,22 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_6process_strings(struct __pyx
     __pyx_t_5 = (__pyx_t_1 != 0);
     if (__pyx_t_5) {
 
-      /* "nlp/pipeline.pyx":46
+      /* "nlp/pipeline.pyx":44
  *         for pyobj in input:
  *             if type(pyobj) is unicode:
  *                 pyobj = pyobj.encode("utf-8")             # <<<<<<<<<<<<<<
  *             elif PY_MAJOR_VERSION < 3 and isinstance(pyobj, bytes):
  *             # only accept byte strings in Python 2.x, not in Py3
  */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_pyobj, __pyx_n_s_encode); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 46; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_pyobj, __pyx_n_s_encode); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__4, NULL); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 46; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__4, NULL); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF_SET(__pyx_v_pyobj, __pyx_t_6);
       __pyx_t_6 = 0;
 
-      /* "nlp/pipeline.pyx":45
+      /* "nlp/pipeline.pyx":43
  *         ret = list()
  *         for pyobj in input:
  *             if type(pyobj) is unicode:             # <<<<<<<<<<<<<<
@@ -1667,7 +1657,7 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_6process_strings(struct __pyx
       goto __pyx_L6;
     }
 
-    /* "nlp/pipeline.pyx":47
+    /* "nlp/pipeline.pyx":45
  *             if type(pyobj) is unicode:
  *                 pyobj = pyobj.encode("utf-8")
  *             elif PY_MAJOR_VERSION < 3 and isinstance(pyobj, bytes):             # <<<<<<<<<<<<<<
@@ -1686,7 +1676,7 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_6process_strings(struct __pyx
     __pyx_L7_bool_binop_done:;
     if (__pyx_t_5) {
 
-      /* "nlp/pipeline.pyx":49
+      /* "nlp/pipeline.pyx":47
  *             elif PY_MAJOR_VERSION < 3 and isinstance(pyobj, bytes):
  *             # only accept byte strings in Python 2.x, not in Py3
  *                 pyobj = pyobj             # <<<<<<<<<<<<<<
@@ -1696,7 +1686,7 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_6process_strings(struct __pyx
       __Pyx_INCREF(__pyx_v_pyobj);
       __Pyx_DECREF_SET(__pyx_v_pyobj, __pyx_v_pyobj);
 
-      /* "nlp/pipeline.pyx":47
+      /* "nlp/pipeline.pyx":45
  *             if type(pyobj) is unicode:
  *                 pyobj = pyobj.encode("utf-8")
  *             elif PY_MAJOR_VERSION < 3 and isinstance(pyobj, bytes):             # <<<<<<<<<<<<<<
@@ -1706,7 +1696,7 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_6process_strings(struct __pyx
       goto __pyx_L6;
     }
 
-    /* "nlp/pipeline.pyx":51
+    /* "nlp/pipeline.pyx":49
  *                 pyobj = pyobj
  *                 #return (<bytes>s).decode('ascii')
  *             elif isinstance(pyobj, unicode):             # <<<<<<<<<<<<<<
@@ -1717,28 +1707,28 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_6process_strings(struct __pyx
     __pyx_t_7 = (__pyx_t_5 != 0);
     if (__pyx_t_7) {
 
-      /* "nlp/pipeline.pyx":55
+      /* "nlp/pipeline.pyx":53
  *         # depending on what the further processing does.  to be safe,
  *         # we can always create a copy instead
  *                 pyobj = unicode(pyobj).encode("utf-8")             # <<<<<<<<<<<<<<
  *             else:
  *                 raise TypeError("Bad input!")
  */
-      __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 55; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 53; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_INCREF(__pyx_v_pyobj);
       __Pyx_GIVEREF(__pyx_v_pyobj);
       PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_pyobj);
-      __pyx_t_4 = __Pyx_PyObject_Call(((PyObject *)(&PyUnicode_Type)), __pyx_t_6, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 55; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_4 = __Pyx_PyObject_Call(((PyObject *)(&PyUnicode_Type)), __pyx_t_6, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 53; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __pyx_t_6 = PyUnicode_AsUTF8String(((PyObject*)__pyx_t_4)); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 55; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_6 = PyUnicode_AsUTF8String(((PyObject*)__pyx_t_4)); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 53; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF_SET(__pyx_v_pyobj, __pyx_t_6);
       __pyx_t_6 = 0;
 
-      /* "nlp/pipeline.pyx":51
+      /* "nlp/pipeline.pyx":49
  *                 pyobj = pyobj
  *                 #return (<bytes>s).decode('ascii')
  *             elif isinstance(pyobj, unicode):             # <<<<<<<<<<<<<<
@@ -1748,7 +1738,7 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_6process_strings(struct __pyx
       goto __pyx_L6;
     }
 
-    /* "nlp/pipeline.pyx":57
+    /* "nlp/pipeline.pyx":55
  *                 pyobj = unicode(pyobj).encode("utf-8")
  *             else:
  *                 raise TypeError("Bad input!")             # <<<<<<<<<<<<<<
@@ -1756,42 +1746,42 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_6process_strings(struct __pyx
  * 
  */
     /*else*/ {
-      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__5, NULL); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 57; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__5, NULL); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 55; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_Raise(__pyx_t_6, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 57; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 55; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
     __pyx_L6:;
 
-    /* "nlp/pipeline.pyx":58
+    /* "nlp/pipeline.pyx":56
  *             else:
  *                 raise TypeError("Bad input!")
  *             doc = BufferDocument(pyobj)             # <<<<<<<<<<<<<<
  * 
  *             ret.append(doc)
  */
-    __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_6 = PyTuple_New(1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 56; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_INCREF(__pyx_v_pyobj);
     __Pyx_GIVEREF(__pyx_v_pyobj);
     PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_v_pyobj);
-    __pyx_t_4 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_3nlp_6libnlp_BufferDocument), __pyx_t_6, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_3nlp_6libnlp_BufferDocument), __pyx_t_6, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 56; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_XDECREF_SET(__pyx_v_doc, ((struct __pyx_obj_3nlp_6libnlp_BufferDocument *)__pyx_t_4));
     __pyx_t_4 = 0;
 
-    /* "nlp/pipeline.pyx":60
+    /* "nlp/pipeline.pyx":58
  *             doc = BufferDocument(pyobj)
  * 
  *             ret.append(doc)             # <<<<<<<<<<<<<<
  * 
  *         return ret
  */
-    __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_ret, ((PyObject *)__pyx_v_doc)); if (unlikely(__pyx_t_8 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 60; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_ret, ((PyObject *)__pyx_v_doc)); if (unlikely(__pyx_t_8 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-    /* "nlp/pipeline.pyx":44
+    /* "nlp/pipeline.pyx":42
  *             print("process_strings not implemented.")
  *         ret = list()
  *         for pyobj in input:             # <<<<<<<<<<<<<<
@@ -1801,7 +1791,7 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_6process_strings(struct __pyx
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "nlp/pipeline.pyx":62
+  /* "nlp/pipeline.pyx":60
  *             ret.append(doc)
  * 
  *         return ret             # <<<<<<<<<<<<<<
@@ -1813,7 +1803,7 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_6process_strings(struct __pyx
   __pyx_r = __pyx_v_ret;
   goto __pyx_L0;
 
-  /* "nlp/pipeline.pyx":40
+  /* "nlp/pipeline.pyx":38
  *             raise TypeError("Bad input!")
  * 
  *     def process_strings(self, list input):             # <<<<<<<<<<<<<<
@@ -1837,7 +1827,7 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_6process_strings(struct __pyx
   return __pyx_r;
 }
 
-/* "nlp/pipeline.pyx":65
+/* "nlp/pipeline.pyx":63
  * 
  * 
  *     def process_paths(self, input):             # <<<<<<<<<<<<<<
@@ -1868,7 +1858,7 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_8process_paths(struct __pyx_o
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("process_paths", 0);
 
-  /* "nlp/pipeline.pyx":66
+  /* "nlp/pipeline.pyx":64
  * 
  *     def process_paths(self, input):
  *         if self.verbose is True:             # <<<<<<<<<<<<<<
@@ -1878,18 +1868,18 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_8process_paths(struct __pyx_o
   __pyx_t_1 = ((__pyx_v_self->verbose == 1) != 0);
   if (__pyx_t_1) {
 
-    /* "nlp/pipeline.pyx":67
+    /* "nlp/pipeline.pyx":65
  *     def process_paths(self, input):
  *         if self.verbose is True:
  *             print("process_paths not implemented.")             # <<<<<<<<<<<<<<
  * 
  *     def process_files(self, input):
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__6, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 67; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__6, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 65; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "nlp/pipeline.pyx":66
+    /* "nlp/pipeline.pyx":64
  * 
  *     def process_paths(self, input):
  *         if self.verbose is True:             # <<<<<<<<<<<<<<
@@ -1898,7 +1888,7 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_8process_paths(struct __pyx_o
  */
   }
 
-  /* "nlp/pipeline.pyx":65
+  /* "nlp/pipeline.pyx":63
  * 
  * 
  *     def process_paths(self, input):             # <<<<<<<<<<<<<<
@@ -1919,7 +1909,7 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_8process_paths(struct __pyx_o
   return __pyx_r;
 }
 
-/* "nlp/pipeline.pyx":69
+/* "nlp/pipeline.pyx":67
  *             print("process_paths not implemented.")
  * 
  *     def process_files(self, input):             # <<<<<<<<<<<<<<
@@ -1950,7 +1940,7 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_10process_files(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("process_files", 0);
 
-  /* "nlp/pipeline.pyx":70
+  /* "nlp/pipeline.pyx":68
  * 
  *     def process_files(self, input):
  *         if self.verbose is True:             # <<<<<<<<<<<<<<
@@ -1960,18 +1950,18 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_10process_files(struct __pyx_
   __pyx_t_1 = ((__pyx_v_self->verbose == 1) != 0);
   if (__pyx_t_1) {
 
-    /* "nlp/pipeline.pyx":71
+    /* "nlp/pipeline.pyx":69
  *     def process_files(self, input):
  *         if self.verbose is True:
  *             print("process_files not implemented.")             # <<<<<<<<<<<<<<
  * 
  * 
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__7, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__7, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "nlp/pipeline.pyx":70
+    /* "nlp/pipeline.pyx":68
  * 
  *     def process_files(self, input):
  *         if self.verbose is True:             # <<<<<<<<<<<<<<
@@ -1980,7 +1970,7 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_10process_files(struct __pyx_
  */
   }
 
-  /* "nlp/pipeline.pyx":69
+  /* "nlp/pipeline.pyx":67
  *             print("process_paths not implemented.")
  * 
  *     def process_files(self, input):             # <<<<<<<<<<<<<<
@@ -2001,7 +1991,7 @@ static PyObject *__pyx_pf_3nlp_8pipeline_8Pipeline_10process_files(struct __pyx_
   return __pyx_r;
 }
 
-/* "nlp/pipeline.pyx":77
+/* "nlp/pipeline.pyx":75
  *     cdef str lang
  * 
  *     def __cinit__(self, lang="en"):             # <<<<<<<<<<<<<<
@@ -2040,7 +2030,7 @@ static int __pyx_pw_3nlp_8pipeline_9Processor_1__cinit__(PyObject *__pyx_v_self,
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 77; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -2053,7 +2043,7 @@ static int __pyx_pw_3nlp_8pipeline_9Processor_1__cinit__(PyObject *__pyx_v_self,
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 77; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("nlp.pipeline.Processor.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -2075,14 +2065,14 @@ static int __pyx_pf_3nlp_8pipeline_9Processor___cinit__(struct __pyx_obj_3nlp_8p
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "nlp/pipeline.pyx":78
+  /* "nlp/pipeline.pyx":76
  * 
  *     def __cinit__(self, lang="en"):
  *         self.lang = lang             # <<<<<<<<<<<<<<
  * 
  * cdef class ObjectProcessor(Processor):
  */
-  if (!(likely(PyString_CheckExact(__pyx_v_lang))||((__pyx_v_lang) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_v_lang)->tp_name), 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(PyString_CheckExact(__pyx_v_lang))||((__pyx_v_lang) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_v_lang)->tp_name), 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 76; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_t_1 = __pyx_v_lang;
   __Pyx_INCREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
@@ -2091,7 +2081,7 @@ static int __pyx_pf_3nlp_8pipeline_9Processor___cinit__(struct __pyx_obj_3nlp_8p
   __pyx_v_self->lang = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "nlp/pipeline.pyx":77
+  /* "nlp/pipeline.pyx":75
  *     cdef str lang
  * 
  *     def __cinit__(self, lang="en"):             # <<<<<<<<<<<<<<
@@ -2111,7 +2101,7 @@ static int __pyx_pf_3nlp_8pipeline_9Processor___cinit__(struct __pyx_obj_3nlp_8p
   return __pyx_r;
 }
 
-/* "nlp/pipeline.pyx":81
+/* "nlp/pipeline.pyx":79
  * 
  * cdef class ObjectProcessor(Processor):
  *     def __cinit__(self, lang="*"):             # <<<<<<<<<<<<<<
@@ -2150,7 +2140,7 @@ static int __pyx_pw_3nlp_8pipeline_15ObjectProcessor_1__cinit__(PyObject *__pyx_
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 81; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 79; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -2163,7 +2153,7 @@ static int __pyx_pw_3nlp_8pipeline_15ObjectProcessor_1__cinit__(PyObject *__pyx_
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 81; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 79; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("nlp.pipeline.ObjectProcessor.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -2185,14 +2175,14 @@ static int __pyx_pf_3nlp_8pipeline_15ObjectProcessor___cinit__(struct __pyx_obj_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "nlp/pipeline.pyx":82
+  /* "nlp/pipeline.pyx":80
  * cdef class ObjectProcessor(Processor):
  *     def __cinit__(self, lang="*"):
  *         self.lang = lang             # <<<<<<<<<<<<<<
  * 
  *     def processor(self, object obj):
  */
-  if (!(likely(PyString_CheckExact(__pyx_v_lang))||((__pyx_v_lang) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_v_lang)->tp_name), 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 82; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(PyString_CheckExact(__pyx_v_lang))||((__pyx_v_lang) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "str", Py_TYPE(__pyx_v_lang)->tp_name), 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 80; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_t_1 = __pyx_v_lang;
   __Pyx_INCREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
@@ -2201,7 +2191,7 @@ static int __pyx_pf_3nlp_8pipeline_15ObjectProcessor___cinit__(struct __pyx_obj_
   __pyx_v_self->__pyx_base.lang = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "nlp/pipeline.pyx":81
+  /* "nlp/pipeline.pyx":79
  * 
  * cdef class ObjectProcessor(Processor):
  *     def __cinit__(self, lang="*"):             # <<<<<<<<<<<<<<
@@ -2221,7 +2211,7 @@ static int __pyx_pf_3nlp_8pipeline_15ObjectProcessor___cinit__(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "nlp/pipeline.pyx":84
+/* "nlp/pipeline.pyx":82
  *         self.lang = lang
  * 
  *     def processor(self, object obj):             # <<<<<<<<<<<<<<
@@ -2562,13 +2552,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_encode, __pyx_k_encode, sizeof(__pyx_k_encode), 0, 0, 1, 1},
   {&__pyx_n_u_file, __pyx_k_file, sizeof(__pyx_k_file), 0, 1, 0, 1},
   {&__pyx_n_u_files, __pyx_k_files, sizeof(__pyx_k_files), 0, 1, 0, 1},
-  {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
   {&__pyx_n_s_input, __pyx_k_input, sizeof(__pyx_k_input), 0, 0, 1, 1},
   {&__pyx_n_s_input_type, __pyx_k_input_type, sizeof(__pyx_k_input_type), 0, 0, 1, 1},
-  {&__pyx_n_s_isstr, __pyx_k_isstr, sizeof(__pyx_k_isstr), 0, 0, 1, 1},
   {&__pyx_n_s_lang, __pyx_k_lang, sizeof(__pyx_k_lang), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
-  {&__pyx_n_s_nlp_utils, __pyx_k_nlp_utils, sizeof(__pyx_k_nlp_utils), 0, 0, 1, 1},
   {&__pyx_n_u_path, __pyx_k_path, sizeof(__pyx_k_path), 0, 1, 0, 1},
   {&__pyx_n_u_paths, __pyx_k_paths, sizeof(__pyx_k_paths), 0, 1, 0, 1},
   {&__pyx_n_s_print, __pyx_k_print, sizeof(__pyx_k_print), 0, 0, 1, 1},
@@ -2585,9 +2572,9 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_Exception = __Pyx_GetBuiltinName(__pyx_n_s_Exception); if (!__pyx_builtin_Exception) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 38; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_builtin_print = __Pyx_GetBuiltinName(__pyx_n_s_print); if (!__pyx_builtin_print) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_builtin_Exception = __Pyx_GetBuiltinName(__pyx_n_s_Exception); if (!__pyx_builtin_Exception) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 19; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_builtin_print = __Pyx_GetBuiltinName(__pyx_n_s_print); if (!__pyx_builtin_print) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -2597,80 +2584,80 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "nlp/pipeline.pyx":21
+  /* "nlp/pipeline.pyx":19
  *             self.processors.append(processor)
  *         else:
  *             raise Exception(             # <<<<<<<<<<<<<<
  *                 "Pipeline object can only register Processor objects")
  * 
  */
-  __pyx_tuple_ = PyTuple_Pack(1, __pyx_kp_u_Pipeline_object_can_only_registe); if (unlikely(!__pyx_tuple_)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 21; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple_ = PyTuple_Pack(1, __pyx_kp_u_Pipeline_object_can_only_registe); if (unlikely(!__pyx_tuple_)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 19; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
-  /* "nlp/pipeline.pyx":38
+  /* "nlp/pipeline.pyx":36
  *             self.process_files([input])
  *         else:
  *             raise TypeError("Bad input!")             # <<<<<<<<<<<<<<
  * 
  *     def process_strings(self, list input):
  */
-  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_kp_u_Bad_input); if (unlikely(!__pyx_tuple__2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 38; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_kp_u_Bad_input); if (unlikely(!__pyx_tuple__2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
-  /* "nlp/pipeline.pyx":42
+  /* "nlp/pipeline.pyx":40
  *     def process_strings(self, list input):
  *         if self.verbose is True:
  *             print("process_strings not implemented.")             # <<<<<<<<<<<<<<
  *         ret = list()
  *         for pyobj in input:
  */
-  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_u_process_strings_not_implemented); if (unlikely(!__pyx_tuple__3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_u_process_strings_not_implemented); if (unlikely(!__pyx_tuple__3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
 
-  /* "nlp/pipeline.pyx":46
+  /* "nlp/pipeline.pyx":44
  *         for pyobj in input:
  *             if type(pyobj) is unicode:
  *                 pyobj = pyobj.encode("utf-8")             # <<<<<<<<<<<<<<
  *             elif PY_MAJOR_VERSION < 3 and isinstance(pyobj, bytes):
  *             # only accept byte strings in Python 2.x, not in Py3
  */
-  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_kp_u_utf_8); if (unlikely(!__pyx_tuple__4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 46; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_kp_u_utf_8); if (unlikely(!__pyx_tuple__4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__4);
   __Pyx_GIVEREF(__pyx_tuple__4);
 
-  /* "nlp/pipeline.pyx":57
+  /* "nlp/pipeline.pyx":55
  *                 pyobj = unicode(pyobj).encode("utf-8")
  *             else:
  *                 raise TypeError("Bad input!")             # <<<<<<<<<<<<<<
  *             doc = BufferDocument(pyobj)
  * 
  */
-  __pyx_tuple__5 = PyTuple_Pack(1, __pyx_kp_u_Bad_input); if (unlikely(!__pyx_tuple__5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 57; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__5 = PyTuple_Pack(1, __pyx_kp_u_Bad_input); if (unlikely(!__pyx_tuple__5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 55; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
 
-  /* "nlp/pipeline.pyx":67
+  /* "nlp/pipeline.pyx":65
  *     def process_paths(self, input):
  *         if self.verbose is True:
  *             print("process_paths not implemented.")             # <<<<<<<<<<<<<<
  * 
  *     def process_files(self, input):
  */
-  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_kp_u_process_paths_not_implemented); if (unlikely(!__pyx_tuple__6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 67; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_kp_u_process_paths_not_implemented); if (unlikely(!__pyx_tuple__6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 65; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__6);
   __Pyx_GIVEREF(__pyx_tuple__6);
 
-  /* "nlp/pipeline.pyx":71
+  /* "nlp/pipeline.pyx":69
  *     def process_files(self, input):
  *         if self.verbose is True:
  *             print("process_files not implemented.")             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_tuple__7 = PyTuple_Pack(1, __pyx_kp_u_process_files_not_implemented); if (unlikely(!__pyx_tuple__7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__7 = PyTuple_Pack(1, __pyx_kp_u_process_files_not_implemented); if (unlikely(!__pyx_tuple__7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
   __Pyx_RefNannyFinishContext();
@@ -2697,7 +2684,6 @@ PyMODINIT_FUNC PyInit_pipeline(void)
 {
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -2775,18 +2761,18 @@ PyMODINIT_FUNC PyInit_pipeline(void)
   /*--- Variable export code ---*/
   /*--- Function export code ---*/
   /*--- Type init code ---*/
-  if (PyType_Ready(&__pyx_type_3nlp_8pipeline_Pipeline) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 9; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyType_Ready(&__pyx_type_3nlp_8pipeline_Pipeline) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 7; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type_3nlp_8pipeline_Pipeline.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "Pipeline", (PyObject *)&__pyx_type_3nlp_8pipeline_Pipeline) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 9; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetAttrString(__pyx_m, "Pipeline", (PyObject *)&__pyx_type_3nlp_8pipeline_Pipeline) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 7; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_3nlp_8pipeline_Pipeline = &__pyx_type_3nlp_8pipeline_Pipeline;
-  if (PyType_Ready(&__pyx_type_3nlp_8pipeline_Processor) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 74; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyType_Ready(&__pyx_type_3nlp_8pipeline_Processor) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 72; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type_3nlp_8pipeline_Processor.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "Processor", (PyObject *)&__pyx_type_3nlp_8pipeline_Processor) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 74; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetAttrString(__pyx_m, "Processor", (PyObject *)&__pyx_type_3nlp_8pipeline_Processor) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 72; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_3nlp_8pipeline_Processor = &__pyx_type_3nlp_8pipeline_Processor;
   __pyx_type_3nlp_8pipeline_ObjectProcessor.tp_base = __pyx_ptype_3nlp_8pipeline_Processor;
-  if (PyType_Ready(&__pyx_type_3nlp_8pipeline_ObjectProcessor) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 80; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyType_Ready(&__pyx_type_3nlp_8pipeline_ObjectProcessor) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type_3nlp_8pipeline_ObjectProcessor.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "ObjectProcessor", (PyObject *)&__pyx_type_3nlp_8pipeline_ObjectProcessor) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 80; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetAttrString(__pyx_m, "ObjectProcessor", (PyObject *)&__pyx_type_3nlp_8pipeline_ObjectProcessor) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_3nlp_8pipeline_ObjectProcessor = &__pyx_type_3nlp_8pipeline_ObjectProcessor;
   /*--- Type import code ---*/
   __pyx_ptype_3nlp_6libnlp_MemoryManagerWrapper = __Pyx_ImportType("nlp.libnlp", "MemoryManagerWrapper", sizeof(struct __pyx_obj_3nlp_6libnlp_MemoryManagerWrapper), 1); if (unlikely(!__pyx_ptype_3nlp_6libnlp_MemoryManagerWrapper)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -2804,36 +2790,15 @@ PyMODINIT_FUNC PyInit_pipeline(void)
   if (__Pyx_patch_abc() < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   #endif
 
-  /* "nlp/pipeline.pyx":5
- * from cpython.version cimport PY_MAJOR_VERSION
- * 
- * from nlp.utils import isstr             # <<<<<<<<<<<<<<
- * 
- * from nlp.libnlp cimport BufferDocument
- */
-  __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_INCREF(__pyx_n_s_isstr);
-  __Pyx_GIVEREF(__pyx_n_s_isstr);
-  PyList_SET_ITEM(__pyx_t_2, 0, __pyx_n_s_isstr);
-  __pyx_t_3 = __Pyx_Import(__pyx_n_s_nlp_utils, __pyx_t_2, 0); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_3, __pyx_n_s_isstr); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_isstr, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-
   /* "nlp/pipeline.pyx":1
  * from __future__ import absolute_import, division, print_function, \             # <<<<<<<<<<<<<<
  *         unicode_literals
  * from cpython.version cimport PY_MAJOR_VERSION
  */
-  __pyx_t_3 = PyDict_New(); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_3) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /*--- Wrapped vars code ---*/
 
@@ -2841,7 +2806,6 @@ PyMODINIT_FUNC PyInit_pipeline(void)
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
   if (__pyx_m) {
     if (__pyx_d) {
       __Pyx_AddTraceback("init nlp.pipeline", __pyx_clineno, __pyx_lineno, __pyx_filename);
@@ -3470,92 +3434,6 @@ static CYTHON_INLINE int __Pyx_ArgTypeTest(PyObject *obj, PyTypeObject *type, in
     }
     __Pyx_RaiseArgumentTypeInvalid(name, obj, type);
     return 0;
-}
-
-static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level) {
-    PyObject *empty_list = 0;
-    PyObject *module = 0;
-    PyObject *global_dict = 0;
-    PyObject *empty_dict = 0;
-    PyObject *list;
-    #if PY_VERSION_HEX < 0x03030000
-    PyObject *py_import;
-    py_import = __Pyx_PyObject_GetAttrStr(__pyx_b, __pyx_n_s_import);
-    if (!py_import)
-        goto bad;
-    #endif
-    if (from_list)
-        list = from_list;
-    else {
-        empty_list = PyList_New(0);
-        if (!empty_list)
-            goto bad;
-        list = empty_list;
-    }
-    global_dict = PyModule_GetDict(__pyx_m);
-    if (!global_dict)
-        goto bad;
-    empty_dict = PyDict_New();
-    if (!empty_dict)
-        goto bad;
-    {
-        #if PY_MAJOR_VERSION >= 3
-        if (level == -1) {
-            if (strchr(__Pyx_MODULE_NAME, '.')) {
-                #if PY_VERSION_HEX < 0x03030000
-                PyObject *py_level = PyInt_FromLong(1);
-                if (!py_level)
-                    goto bad;
-                module = PyObject_CallFunctionObjArgs(py_import,
-                    name, global_dict, empty_dict, list, py_level, NULL);
-                Py_DECREF(py_level);
-                #else
-                module = PyImport_ImportModuleLevelObject(
-                    name, global_dict, empty_dict, list, 1);
-                #endif
-                if (!module) {
-                    if (!PyErr_ExceptionMatches(PyExc_ImportError))
-                        goto bad;
-                    PyErr_Clear();
-                }
-            }
-            level = 0;
-        }
-        #endif
-        if (!module) {
-            #if PY_VERSION_HEX < 0x03030000
-            PyObject *py_level = PyInt_FromLong(level);
-            if (!py_level)
-                goto bad;
-            module = PyObject_CallFunctionObjArgs(py_import,
-                name, global_dict, empty_dict, list, py_level, NULL);
-            Py_DECREF(py_level);
-            #else
-            module = PyImport_ImportModuleLevelObject(
-                name, global_dict, empty_dict, list, level);
-            #endif
-        }
-    }
-bad:
-    #if PY_VERSION_HEX < 0x03030000
-    Py_XDECREF(py_import);
-    #endif
-    Py_XDECREF(empty_list);
-    Py_XDECREF(empty_dict);
-    return module;
-}
-
-static PyObject* __Pyx_ImportFrom(PyObject* module, PyObject* name) {
-    PyObject* value = __Pyx_PyObject_GetAttrStr(module, name);
-    if (unlikely(!value) && PyErr_ExceptionMatches(PyExc_AttributeError)) {
-        PyErr_Format(PyExc_ImportError,
-        #if PY_MAJOR_VERSION < 3
-            "cannot import name %.230s", PyString_AS_STRING(name));
-        #else
-            "cannot import name %S", name);
-        #endif
-    }
-    return value;
 }
 
 static int __pyx_bisect_code_objects(__Pyx_CodeObjectCacheEntry* entries, int count, int code_line) {
