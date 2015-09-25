@@ -8,6 +8,67 @@
 
 
 #line 11 "tokenizer_utils.c"
+static const char _NonUnicodeQuoteCounter_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1, 
+	3, 1, 4, 1, 5, 1, 6
+};
+
+static const char _NonUnicodeQuoteCounter_key_offsets[] = {
+	0, 1, 2, 3, 4, 5, 6, 7, 
+	11, 13
+};
+
+static const unsigned char _NonUnicodeQuoteCounter_trans_keys[] = {
+	112u, 111u, 115u, 59u, 117u, 111u, 116u, 34u, 
+	38u, 39u, 194u, 97u, 113u, 145u, 148u, 0
+};
+
+static const char _NonUnicodeQuoteCounter_single_lengths[] = {
+	1, 1, 1, 1, 1, 1, 1, 4, 
+	2, 0
+};
+
+static const char _NonUnicodeQuoteCounter_range_lengths[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 1
+};
+
+static const char _NonUnicodeQuoteCounter_index_offsets[] = {
+	0, 2, 4, 6, 8, 10, 12, 14, 
+	19, 22
+};
+
+static const char _NonUnicodeQuoteCounter_trans_targs[] = {
+	1, 7, 2, 7, 3, 7, 7, 7, 
+	5, 7, 6, 7, 3, 7, 7, 8, 
+	7, 9, 7, 0, 4, 7, 7, 7, 
+	7, 7, 7, 7, 7, 7, 7, 7, 
+	7, 0
+};
+
+static const char _NonUnicodeQuoteCounter_trans_actions[] = {
+	0, 13, 0, 13, 0, 13, 7, 13, 
+	0, 13, 0, 13, 0, 13, 7, 5, 
+	7, 0, 9, 0, 0, 11, 7, 11, 
+	13, 13, 13, 13, 13, 13, 13, 11, 
+	11, 0
+};
+
+static const char _NonUnicodeQuoteCounter_to_state_actions[] = {
+	0, 0, 0, 0, 0, 0, 0, 1, 
+	0, 0
+};
+
+static const char _NonUnicodeQuoteCounter_from_state_actions[] = {
+	0, 0, 0, 0, 0, 0, 0, 3, 
+	0, 0
+};
+
+static const char _NonUnicodeQuoteCounter_eof_trans[] = {
+	31, 31, 31, 31, 31, 31, 31, 0, 
+	33, 33
+};
+
 static const int NonUnicodeQuoteCounter_start = 7;
 static const int NonUnicodeQuoteCounter_error = -1;
 
@@ -24,7 +85,7 @@ size_t NL_get_size_unicode_quotes(unsigned char *p, size_t buf_length) {
     size_t size = 0;
 
     
-#line 28 "tokenizer_utils.c"
+#line 89 "tokenizer_utils.c"
 	{
 	cs = NonUnicodeQuoteCounter_start;
 	ts = 0;
@@ -34,139 +95,135 @@ size_t NL_get_size_unicode_quotes(unsigned char *p, size_t buf_length) {
 
 #line 89 "tokenizer_utils.rl"
     
-#line 38 "tokenizer_utils.c"
+#line 99 "tokenizer_utils.c"
 	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
 	if ( p == pe )
 		goto _test_eof;
-	switch ( cs )
-	{
-tr0:
-#line 74 "tokenizer_utils.rl"
-	{{p = ((te))-1;}{size++;}}
-	goto st7;
-tr4:
-#line 73 "tokenizer_utils.rl"
-	{te = p+1;{size += 3;}}
-	goto st7;
-tr7:
-#line 74 "tokenizer_utils.rl"
-	{te = p+1;{size++;}}
-	goto st7;
-tr10:
-#line 74 "tokenizer_utils.rl"
-	{te = p;p--;{size++;}}
-	goto st7;
-st7:
-#line 1 "NONE"
-	{ts = 0;}
-	if ( ++p == pe )
-		goto _test_eof7;
-case 7:
+_resume:
+	_acts = _NonUnicodeQuoteCounter_actions + _NonUnicodeQuoteCounter_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
 #line 1 "NONE"
 	{ts = p;}
-#line 68 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 34u: goto tr4;
-		case 38u: goto tr8;
-		case 39u: goto tr4;
-		case 194u: goto st9;
+	break;
+#line 118 "tokenizer_utils.c"
+		}
 	}
-	goto tr7;
-tr8:
+
+	_keys = _NonUnicodeQuoteCounter_trans_keys + _NonUnicodeQuoteCounter_key_offsets[cs];
+	_trans = _NonUnicodeQuoteCounter_index_offsets[cs];
+
+	_klen = _NonUnicodeQuoteCounter_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _NonUnicodeQuoteCounter_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+_eof_trans:
+	cs = _NonUnicodeQuoteCounter_trans_targs[_trans];
+
+	if ( _NonUnicodeQuoteCounter_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _NonUnicodeQuoteCounter_actions + _NonUnicodeQuoteCounter_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
+	{
+		switch ( *_acts++ )
+		{
+	case 2:
 #line 1 "NONE"
 	{te = p+1;}
-	goto st8;
-st8:
-	if ( ++p == pe )
-		goto _test_eof8;
-case 8:
-#line 84 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 97u: goto st0;
-		case 113u: goto st4;
+	break;
+	case 3:
+#line 73 "tokenizer_utils.rl"
+	{te = p+1;{size += 3;}}
+	break;
+	case 4:
+#line 74 "tokenizer_utils.rl"
+	{te = p+1;{size++;}}
+	break;
+	case 5:
+#line 74 "tokenizer_utils.rl"
+	{te = p;p--;{size++;}}
+	break;
+	case 6:
+#line 74 "tokenizer_utils.rl"
+	{{p = ((te))-1;}{size++;}}
+	break;
+#line 203 "tokenizer_utils.c"
+		}
 	}
-	goto tr10;
-st0:
-	if ( ++p == pe )
-		goto _test_eof0;
-case 0:
-	if ( (*p) == 112u )
-		goto st1;
-	goto tr0;
-st1:
-	if ( ++p == pe )
-		goto _test_eof1;
-case 1:
-	if ( (*p) == 111u )
-		goto st2;
-	goto tr0;
-st2:
-	if ( ++p == pe )
-		goto _test_eof2;
-case 2:
-	if ( (*p) == 115u )
-		goto st3;
-	goto tr0;
-st3:
-	if ( ++p == pe )
-		goto _test_eof3;
-case 3:
-	if ( (*p) == 59u )
-		goto tr4;
-	goto tr0;
-st4:
-	if ( ++p == pe )
-		goto _test_eof4;
-case 4:
-	if ( (*p) == 117u )
-		goto st5;
-	goto tr0;
-st5:
-	if ( ++p == pe )
-		goto _test_eof5;
-case 5:
-	if ( (*p) == 111u )
-		goto st6;
-	goto tr0;
-st6:
-	if ( ++p == pe )
-		goto _test_eof6;
-case 6:
-	if ( (*p) == 116u )
-		goto st3;
-	goto tr0;
-st9:
-	if ( ++p == pe )
-		goto _test_eof9;
-case 9:
-	if ( 145u <= (*p) && (*p) <= 148u )
-		goto tr4;
-	goto tr10;
-	}
-	_test_eof7: cs = 7; goto _test_eof; 
-	_test_eof8: cs = 8; goto _test_eof; 
-	_test_eof0: cs = 0; goto _test_eof; 
-	_test_eof1: cs = 1; goto _test_eof; 
-	_test_eof2: cs = 2; goto _test_eof; 
-	_test_eof3: cs = 3; goto _test_eof; 
-	_test_eof4: cs = 4; goto _test_eof; 
-	_test_eof5: cs = 5; goto _test_eof; 
-	_test_eof6: cs = 6; goto _test_eof; 
-	_test_eof9: cs = 9; goto _test_eof; 
 
+_again:
+	_acts = _NonUnicodeQuoteCounter_actions + _NonUnicodeQuoteCounter_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 0:
+#line 1 "NONE"
+	{ts = 0;}
+	break;
+#line 216 "tokenizer_utils.c"
+		}
+	}
+
+	if ( ++p != pe )
+		goto _resume;
 	_test_eof: {}
 	if ( p == eof )
 	{
-	switch ( cs ) {
-	case 8: goto tr10;
-	case 0: goto tr0;
-	case 1: goto tr0;
-	case 2: goto tr0;
-	case 3: goto tr0;
-	case 4: goto tr0;
-	case 5: goto tr0;
-	case 6: goto tr0;
-	case 9: goto tr10;
+	if ( _NonUnicodeQuoteCounter_eof_trans[cs] > 0 ) {
+		_trans = _NonUnicodeQuoteCounter_eof_trans[cs] - 1;
+		goto _eof_trans;
 	}
 	}
 
@@ -182,7 +239,71 @@ case 9:
 
 
 
-#line 186 "tokenizer_utils.c"
+#line 243 "tokenizer_utils.c"
+static const char _ProbablyLeftUnicodeQuoteTransformer_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1, 
+	3, 1, 4, 1, 5, 1, 6, 1, 
+	7, 1, 8, 1, 9, 1, 10, 1, 
+	11
+};
+
+static const char _ProbablyLeftUnicodeQuoteTransformer_key_offsets[] = {
+	0, 1, 2, 3, 4, 5, 6, 7, 
+	8, 12, 14
+};
+
+static const unsigned char _ProbablyLeftUnicodeQuoteTransformer_trans_keys[] = {
+	112u, 111u, 115u, 59u, 117u, 111u, 116u, 59u, 
+	34u, 38u, 39u, 194u, 97u, 113u, 145u, 146u, 
+	147u, 148u, 0
+};
+
+static const char _ProbablyLeftUnicodeQuoteTransformer_single_lengths[] = {
+	1, 1, 1, 1, 1, 1, 1, 1, 
+	4, 2, 4
+};
+
+static const char _ProbablyLeftUnicodeQuoteTransformer_range_lengths[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 0
+};
+
+static const char _ProbablyLeftUnicodeQuoteTransformer_index_offsets[] = {
+	0, 2, 4, 6, 8, 10, 12, 14, 
+	16, 21, 24
+};
+
+static const char _ProbablyLeftUnicodeQuoteTransformer_trans_targs[] = {
+	1, 8, 2, 8, 3, 8, 8, 8, 
+	5, 8, 6, 8, 7, 8, 8, 8, 
+	8, 9, 8, 10, 8, 0, 4, 8, 
+	8, 8, 8, 8, 8, 8, 8, 8, 
+	8, 8, 8, 8, 8, 8, 8, 0
+};
+
+static const char _ProbablyLeftUnicodeQuoteTransformer_trans_actions[] = {
+	0, 23, 0, 23, 0, 23, 7, 23, 
+	0, 23, 0, 23, 0, 23, 9, 23, 
+	9, 5, 7, 0, 19, 0, 0, 21, 
+	11, 15, 13, 17, 21, 23, 23, 23, 
+	23, 23, 23, 23, 23, 21, 21, 0
+};
+
+static const char _ProbablyLeftUnicodeQuoteTransformer_to_state_actions[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	1, 0, 0
+};
+
+static const char _ProbablyLeftUnicodeQuoteTransformer_from_state_actions[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	3, 0, 0
+};
+
+static const char _ProbablyLeftUnicodeQuoteTransformer_eof_trans[] = {
+	37, 37, 37, 37, 37, 37, 37, 37, 
+	0, 39, 39
+};
+
 static const int ProbablyLeftUnicodeQuoteTransformer_start = 8;
 static const int ProbablyLeftUnicodeQuoteTransformer_error = -1;
 
@@ -199,7 +320,7 @@ void NL_unicode_quotes_probably_left(unsigned char *p, size_t buf_length,
     unsigned char *eof = pe;
 
     
-#line 203 "tokenizer_utils.c"
+#line 324 "tokenizer_utils.c"
 	{
 	cs = ProbablyLeftUnicodeQuoteTransformer_start;
 	ts = 0;
@@ -209,17 +330,95 @@ void NL_unicode_quotes_probably_left(unsigned char *p, size_t buf_length,
 
 #line 165 "tokenizer_utils.rl"
     
-#line 213 "tokenizer_utils.c"
+#line 334 "tokenizer_utils.c"
 	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
 	if ( p == pe )
 		goto _test_eof;
-	switch ( cs )
+_resume:
+	_acts = _ProbablyLeftUnicodeQuoteTransformer_actions + _ProbablyLeftUnicodeQuoteTransformer_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
+#line 1 "NONE"
+	{ts = p;}
+	break;
+#line 353 "tokenizer_utils.c"
+		}
+	}
+
+	_keys = _ProbablyLeftUnicodeQuoteTransformer_trans_keys + _ProbablyLeftUnicodeQuoteTransformer_key_offsets[cs];
+	_trans = _ProbablyLeftUnicodeQuoteTransformer_index_offsets[cs];
+
+	_klen = _ProbablyLeftUnicodeQuoteTransformer_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _ProbablyLeftUnicodeQuoteTransformer_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+_eof_trans:
+	cs = _ProbablyLeftUnicodeQuoteTransformer_trans_targs[_trans];
+
+	if ( _ProbablyLeftUnicodeQuoteTransformer_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _ProbablyLeftUnicodeQuoteTransformer_actions + _ProbablyLeftUnicodeQuoteTransformer_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
 	{
-tr0:
-#line 150 "tokenizer_utils.rl"
-	{{p = ((te))-1;}{ *transform = *p; transform++; }}
-	goto st8;
-tr4:
+		switch ( *_acts++ )
+		{
+	case 2:
+#line 1 "NONE"
+	{te = p+1;}
+	break;
+	case 3:
 #line 107 "tokenizer_utils.rl"
 	{te = p+1;{
         *transform = 0xE2; 
@@ -229,8 +428,8 @@ tr4:
         *transform = 0x98; 
         transform++; 
     }}
-	goto st8;
-tr8:
+	break;
+	case 4:
 #line 125 "tokenizer_utils.rl"
 	{te = p+1;{
         *transform = 0xE2; 
@@ -240,16 +439,8 @@ tr8:
         *transform = 0x9C; 
         transform++; 
     }}
-	goto st8;
-tr9:
-#line 150 "tokenizer_utils.rl"
-	{te = p+1;{ *transform = *p; transform++; }}
-	goto st8;
-tr12:
-#line 150 "tokenizer_utils.rl"
-	{te = p;p--;{ *transform = *p; transform++; }}
-	goto st8;
-tr15:
+	break;
+	case 5:
 #line 107 "tokenizer_utils.rl"
 	{te = p+1;{
         *transform = 0xE2; 
@@ -259,8 +450,19 @@ tr15:
         *transform = 0x98; 
         transform++; 
     }}
-	goto st8;
-tr16:
+	break;
+	case 6:
+#line 125 "tokenizer_utils.rl"
+	{te = p+1;{
+        *transform = 0xE2; 
+        transform++; 
+        *transform = 0x80; 
+        transform++; 
+        *transform = 0x9C; 
+        transform++; 
+    }}
+	break;
+	case 7:
 #line 116 "tokenizer_utils.rl"
 	{te = p+1;{
         *transform = 0xE2; 
@@ -270,19 +472,8 @@ tr16:
         *transform = 0x99; 
         transform++; 
     }}
-	goto st8;
-tr17:
-#line 125 "tokenizer_utils.rl"
-	{te = p+1;{
-        *transform = 0xE2; 
-        transform++; 
-        *transform = 0x80; 
-        transform++; 
-        *transform = 0x9C; 
-        transform++; 
-    }}
-	goto st8;
-tr18:
+	break;
+	case 8:
 #line 134 "tokenizer_utils.rl"
 	{te = p+1;{
         *transform = 0xE2; 
@@ -292,131 +483,44 @@ tr18:
         *transform = 0x9D; 
         transform++; 
     }}
-	goto st8;
-st8:
+	break;
+	case 9:
+#line 150 "tokenizer_utils.rl"
+	{te = p+1;{ *transform = *p; transform++; }}
+	break;
+	case 10:
+#line 150 "tokenizer_utils.rl"
+	{te = p;p--;{ *transform = *p; transform++; }}
+	break;
+	case 11:
+#line 150 "tokenizer_utils.rl"
+	{{p = ((te))-1;}{ *transform = *p; transform++; }}
+	break;
+#line 500 "tokenizer_utils.c"
+		}
+	}
+
+_again:
+	_acts = _ProbablyLeftUnicodeQuoteTransformer_actions + _ProbablyLeftUnicodeQuoteTransformer_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 0:
 #line 1 "NONE"
 	{ts = 0;}
-	if ( ++p == pe )
-		goto _test_eof8;
-case 8:
-#line 1 "NONE"
-	{ts = p;}
-#line 305 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 34u: goto tr8;
-		case 38u: goto tr10;
-		case 39u: goto tr4;
-		case 194u: goto st10;
+	break;
+#line 513 "tokenizer_utils.c"
+		}
 	}
-	goto tr9;
-tr10:
-#line 1 "NONE"
-	{te = p+1;}
-	goto st9;
-st9:
-	if ( ++p == pe )
-		goto _test_eof9;
-case 9:
-#line 321 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 97u: goto st0;
-		case 113u: goto st4;
-	}
-	goto tr12;
-st0:
-	if ( ++p == pe )
-		goto _test_eof0;
-case 0:
-	if ( (*p) == 112u )
-		goto st1;
-	goto tr0;
-st1:
-	if ( ++p == pe )
-		goto _test_eof1;
-case 1:
-	if ( (*p) == 111u )
-		goto st2;
-	goto tr0;
-st2:
-	if ( ++p == pe )
-		goto _test_eof2;
-case 2:
-	if ( (*p) == 115u )
-		goto st3;
-	goto tr0;
-st3:
-	if ( ++p == pe )
-		goto _test_eof3;
-case 3:
-	if ( (*p) == 59u )
-		goto tr4;
-	goto tr0;
-st4:
-	if ( ++p == pe )
-		goto _test_eof4;
-case 4:
-	if ( (*p) == 117u )
-		goto st5;
-	goto tr0;
-st5:
-	if ( ++p == pe )
-		goto _test_eof5;
-case 5:
-	if ( (*p) == 111u )
-		goto st6;
-	goto tr0;
-st6:
-	if ( ++p == pe )
-		goto _test_eof6;
-case 6:
-	if ( (*p) == 116u )
-		goto st7;
-	goto tr0;
-st7:
-	if ( ++p == pe )
-		goto _test_eof7;
-case 7:
-	if ( (*p) == 59u )
-		goto tr8;
-	goto tr0;
-st10:
-	if ( ++p == pe )
-		goto _test_eof10;
-case 10:
-	switch( (*p) ) {
-		case 145u: goto tr15;
-		case 146u: goto tr16;
-		case 147u: goto tr17;
-		case 148u: goto tr18;
-	}
-	goto tr12;
-	}
-	_test_eof8: cs = 8; goto _test_eof; 
-	_test_eof9: cs = 9; goto _test_eof; 
-	_test_eof0: cs = 0; goto _test_eof; 
-	_test_eof1: cs = 1; goto _test_eof; 
-	_test_eof2: cs = 2; goto _test_eof; 
-	_test_eof3: cs = 3; goto _test_eof; 
-	_test_eof4: cs = 4; goto _test_eof; 
-	_test_eof5: cs = 5; goto _test_eof; 
-	_test_eof6: cs = 6; goto _test_eof; 
-	_test_eof7: cs = 7; goto _test_eof; 
-	_test_eof10: cs = 10; goto _test_eof; 
 
+	if ( ++p != pe )
+		goto _resume;
 	_test_eof: {}
 	if ( p == eof )
 	{
-	switch ( cs ) {
-	case 9: goto tr12;
-	case 0: goto tr0;
-	case 1: goto tr0;
-	case 2: goto tr0;
-	case 3: goto tr0;
-	case 4: goto tr0;
-	case 5: goto tr0;
-	case 6: goto tr0;
-	case 7: goto tr0;
-	case 10: goto tr12;
+	if ( _ProbablyLeftUnicodeQuoteTransformer_eof_trans[cs] > 0 ) {
+		_trans = _ProbablyLeftUnicodeQuoteTransformer_eof_trans[cs] - 1;
+		goto _eof_trans;
 	}
 	}
 
@@ -430,7 +534,71 @@ case 10:
 
 
 
-#line 434 "tokenizer_utils.c"
+#line 538 "tokenizer_utils.c"
+static const char _ProbablyRightUnicodeQuoteTransformer_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1, 
+	3, 1, 4, 1, 5, 1, 6, 1, 
+	7, 1, 8, 1, 9, 1, 10, 1, 
+	11
+};
+
+static const char _ProbablyRightUnicodeQuoteTransformer_key_offsets[] = {
+	0, 1, 2, 3, 4, 5, 6, 7, 
+	8, 12, 14
+};
+
+static const unsigned char _ProbablyRightUnicodeQuoteTransformer_trans_keys[] = {
+	112u, 111u, 115u, 59u, 117u, 111u, 116u, 59u, 
+	34u, 38u, 39u, 194u, 97u, 113u, 145u, 146u, 
+	147u, 148u, 0
+};
+
+static const char _ProbablyRightUnicodeQuoteTransformer_single_lengths[] = {
+	1, 1, 1, 1, 1, 1, 1, 1, 
+	4, 2, 4
+};
+
+static const char _ProbablyRightUnicodeQuoteTransformer_range_lengths[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 0
+};
+
+static const char _ProbablyRightUnicodeQuoteTransformer_index_offsets[] = {
+	0, 2, 4, 6, 8, 10, 12, 14, 
+	16, 21, 24
+};
+
+static const char _ProbablyRightUnicodeQuoteTransformer_trans_targs[] = {
+	1, 8, 2, 8, 3, 8, 8, 8, 
+	5, 8, 6, 8, 7, 8, 8, 8, 
+	8, 9, 8, 10, 8, 0, 4, 8, 
+	8, 8, 8, 8, 8, 8, 8, 8, 
+	8, 8, 8, 8, 8, 8, 8, 0
+};
+
+static const char _ProbablyRightUnicodeQuoteTransformer_trans_actions[] = {
+	0, 23, 0, 23, 0, 23, 7, 23, 
+	0, 23, 0, 23, 0, 23, 9, 23, 
+	9, 5, 7, 0, 19, 0, 0, 21, 
+	11, 15, 13, 17, 21, 23, 23, 23, 
+	23, 23, 23, 23, 23, 21, 21, 0
+};
+
+static const char _ProbablyRightUnicodeQuoteTransformer_to_state_actions[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	1, 0, 0
+};
+
+static const char _ProbablyRightUnicodeQuoteTransformer_from_state_actions[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	3, 0, 0
+};
+
+static const char _ProbablyRightUnicodeQuoteTransformer_eof_trans[] = {
+	37, 37, 37, 37, 37, 37, 37, 37, 
+	0, 39, 39
+};
+
 static const int ProbablyRightUnicodeQuoteTransformer_start = 8;
 static const int ProbablyRightUnicodeQuoteTransformer_error = -1;
 
@@ -447,7 +615,7 @@ void NL_unicode_quotes_probably_right(unsigned char *p, size_t buf_length,
     unsigned char *eof = pe;
 
     
-#line 451 "tokenizer_utils.c"
+#line 619 "tokenizer_utils.c"
 	{
 	cs = ProbablyRightUnicodeQuoteTransformer_start;
 	ts = 0;
@@ -457,17 +625,95 @@ void NL_unicode_quotes_probably_right(unsigned char *p, size_t buf_length,
 
 #line 239 "tokenizer_utils.rl"
     
-#line 461 "tokenizer_utils.c"
+#line 629 "tokenizer_utils.c"
 	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
 	if ( p == pe )
 		goto _test_eof;
-	switch ( cs )
+_resume:
+	_acts = _ProbablyRightUnicodeQuoteTransformer_actions + _ProbablyRightUnicodeQuoteTransformer_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
+#line 1 "NONE"
+	{ts = p;}
+	break;
+#line 648 "tokenizer_utils.c"
+		}
+	}
+
+	_keys = _ProbablyRightUnicodeQuoteTransformer_trans_keys + _ProbablyRightUnicodeQuoteTransformer_key_offsets[cs];
+	_trans = _ProbablyRightUnicodeQuoteTransformer_index_offsets[cs];
+
+	_klen = _ProbablyRightUnicodeQuoteTransformer_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _ProbablyRightUnicodeQuoteTransformer_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+_eof_trans:
+	cs = _ProbablyRightUnicodeQuoteTransformer_trans_targs[_trans];
+
+	if ( _ProbablyRightUnicodeQuoteTransformer_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _ProbablyRightUnicodeQuoteTransformer_actions + _ProbablyRightUnicodeQuoteTransformer_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
 	{
-tr0:
-#line 224 "tokenizer_utils.rl"
-	{{p = ((te))-1;}{ *transform = *p; transform++; }}
-	goto st8;
-tr4:
+		switch ( *_acts++ )
+		{
+	case 2:
+#line 1 "NONE"
+	{te = p+1;}
+	break;
+	case 3:
 #line 190 "tokenizer_utils.rl"
 	{te = p+1;{
         *transform = 0xE2; 
@@ -477,8 +723,8 @@ tr4:
         *transform = 0x99; 
         transform++; 
     }}
-	goto st8;
-tr8:
+	break;
+	case 4:
 #line 208 "tokenizer_utils.rl"
 	{te = p+1;{
         *transform = 0xE2; 
@@ -488,16 +734,8 @@ tr8:
         *transform = 0x9D; 
         transform++; 
     }}
-	goto st8;
-tr9:
-#line 224 "tokenizer_utils.rl"
-	{te = p+1;{ *transform = *p; transform++; }}
-	goto st8;
-tr12:
-#line 224 "tokenizer_utils.rl"
-	{te = p;p--;{ *transform = *p; transform++; }}
-	goto st8;
-tr15:
+	break;
+	case 5:
 #line 181 "tokenizer_utils.rl"
 	{te = p+1;{
         *transform = 0xE2; 
@@ -507,19 +745,8 @@ tr15:
         *transform = 0x98; 
         transform++; 
     }}
-	goto st8;
-tr16:
-#line 190 "tokenizer_utils.rl"
-	{te = p+1;{
-        *transform = 0xE2; 
-        transform++; 
-        *transform = 0x80; 
-        transform++; 
-        *transform = 0x99; 
-        transform++; 
-    }}
-	goto st8;
-tr17:
+	break;
+	case 6:
 #line 199 "tokenizer_utils.rl"
 	{te = p+1;{
         *transform = 0xE2; 
@@ -529,8 +756,19 @@ tr17:
         *transform = 0x9C; 
         transform++; 
     }}
-	goto st8;
-tr18:
+	break;
+	case 7:
+#line 190 "tokenizer_utils.rl"
+	{te = p+1;{
+        *transform = 0xE2; 
+        transform++; 
+        *transform = 0x80; 
+        transform++; 
+        *transform = 0x99; 
+        transform++; 
+    }}
+	break;
+	case 8:
 #line 208 "tokenizer_utils.rl"
 	{te = p+1;{
         *transform = 0xE2; 
@@ -540,131 +778,44 @@ tr18:
         *transform = 0x9D; 
         transform++; 
     }}
-	goto st8;
-st8:
+	break;
+	case 9:
+#line 224 "tokenizer_utils.rl"
+	{te = p+1;{ *transform = *p; transform++; }}
+	break;
+	case 10:
+#line 224 "tokenizer_utils.rl"
+	{te = p;p--;{ *transform = *p; transform++; }}
+	break;
+	case 11:
+#line 224 "tokenizer_utils.rl"
+	{{p = ((te))-1;}{ *transform = *p; transform++; }}
+	break;
+#line 795 "tokenizer_utils.c"
+		}
+	}
+
+_again:
+	_acts = _ProbablyRightUnicodeQuoteTransformer_actions + _ProbablyRightUnicodeQuoteTransformer_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 0:
 #line 1 "NONE"
 	{ts = 0;}
-	if ( ++p == pe )
-		goto _test_eof8;
-case 8:
-#line 1 "NONE"
-	{ts = p;}
-#line 553 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 34u: goto tr8;
-		case 38u: goto tr10;
-		case 39u: goto tr4;
-		case 194u: goto st10;
+	break;
+#line 808 "tokenizer_utils.c"
+		}
 	}
-	goto tr9;
-tr10:
-#line 1 "NONE"
-	{te = p+1;}
-	goto st9;
-st9:
-	if ( ++p == pe )
-		goto _test_eof9;
-case 9:
-#line 569 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 97u: goto st0;
-		case 113u: goto st4;
-	}
-	goto tr12;
-st0:
-	if ( ++p == pe )
-		goto _test_eof0;
-case 0:
-	if ( (*p) == 112u )
-		goto st1;
-	goto tr0;
-st1:
-	if ( ++p == pe )
-		goto _test_eof1;
-case 1:
-	if ( (*p) == 111u )
-		goto st2;
-	goto tr0;
-st2:
-	if ( ++p == pe )
-		goto _test_eof2;
-case 2:
-	if ( (*p) == 115u )
-		goto st3;
-	goto tr0;
-st3:
-	if ( ++p == pe )
-		goto _test_eof3;
-case 3:
-	if ( (*p) == 59u )
-		goto tr4;
-	goto tr0;
-st4:
-	if ( ++p == pe )
-		goto _test_eof4;
-case 4:
-	if ( (*p) == 117u )
-		goto st5;
-	goto tr0;
-st5:
-	if ( ++p == pe )
-		goto _test_eof5;
-case 5:
-	if ( (*p) == 111u )
-		goto st6;
-	goto tr0;
-st6:
-	if ( ++p == pe )
-		goto _test_eof6;
-case 6:
-	if ( (*p) == 116u )
-		goto st7;
-	goto tr0;
-st7:
-	if ( ++p == pe )
-		goto _test_eof7;
-case 7:
-	if ( (*p) == 59u )
-		goto tr8;
-	goto tr0;
-st10:
-	if ( ++p == pe )
-		goto _test_eof10;
-case 10:
-	switch( (*p) ) {
-		case 145u: goto tr15;
-		case 146u: goto tr16;
-		case 147u: goto tr17;
-		case 148u: goto tr18;
-	}
-	goto tr12;
-	}
-	_test_eof8: cs = 8; goto _test_eof; 
-	_test_eof9: cs = 9; goto _test_eof; 
-	_test_eof0: cs = 0; goto _test_eof; 
-	_test_eof1: cs = 1; goto _test_eof; 
-	_test_eof2: cs = 2; goto _test_eof; 
-	_test_eof3: cs = 3; goto _test_eof; 
-	_test_eof4: cs = 4; goto _test_eof; 
-	_test_eof5: cs = 5; goto _test_eof; 
-	_test_eof6: cs = 6; goto _test_eof; 
-	_test_eof7: cs = 7; goto _test_eof; 
-	_test_eof10: cs = 10; goto _test_eof; 
 
+	if ( ++p != pe )
+		goto _resume;
 	_test_eof: {}
 	if ( p == eof )
 	{
-	switch ( cs ) {
-	case 9: goto tr12;
-	case 0: goto tr0;
-	case 1: goto tr0;
-	case 2: goto tr0;
-	case 3: goto tr0;
-	case 4: goto tr0;
-	case 5: goto tr0;
-	case 6: goto tr0;
-	case 7: goto tr0;
-	case 10: goto tr12;
+	if ( _ProbablyRightUnicodeQuoteTransformer_eof_trans[cs] > 0 ) {
+		_trans = _ProbablyRightUnicodeQuoteTransformer_eof_trans[cs] - 1;
+		goto _eof_trans;
 	}
 	}
 
@@ -679,7 +830,72 @@ case 10:
 
 
 
-#line 683 "tokenizer_utils.c"
+#line 834 "tokenizer_utils.c"
+static const char _NonAsciiQuoteCounter_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1, 
+	3, 1, 4, 1, 5, 1, 6
+};
+
+static const char _NonAsciiQuoteCounter_key_offsets[] = {
+	0, 1, 2, 3, 4, 5, 6, 7, 
+	9, 13, 16, 18, 23
+};
+
+static const unsigned char _NonAsciiQuoteCounter_trans_keys[] = {
+	112u, 111u, 115u, 59u, 117u, 111u, 116u, 157u, 
+	158u, 152u, 156u, 185u, 186u, 38u, 194u, 226u, 
+	97u, 113u, 128u, 171u, 187u, 145u, 148u, 128u, 
+	0
+};
+
+static const char _NonAsciiQuoteCounter_single_lengths[] = {
+	1, 1, 1, 1, 1, 1, 1, 0, 
+	0, 3, 2, 3, 1
+};
+
+static const char _NonAsciiQuoteCounter_range_lengths[] = {
+	0, 0, 0, 0, 0, 0, 0, 1, 
+	2, 0, 0, 1, 0
+};
+
+static const char _NonAsciiQuoteCounter_index_offsets[] = {
+	0, 2, 4, 6, 8, 10, 12, 14, 
+	16, 19, 23, 26, 31
+};
+
+static const char _NonAsciiQuoteCounter_indicies[] = {
+	1, 0, 2, 0, 3, 0, 4, 0, 
+	5, 0, 6, 0, 3, 0, 4, 0, 
+	4, 4, 0, 8, 9, 10, 7, 12, 
+	13, 11, 14, 4, 4, 4, 11, 15, 
+	11, 0
+};
+
+static const char _NonAsciiQuoteCounter_trans_targs[] = {
+	9, 1, 2, 3, 9, 5, 6, 9, 
+	10, 11, 12, 9, 0, 4, 7, 8
+};
+
+static const char _NonAsciiQuoteCounter_trans_actions[] = {
+	13, 0, 0, 0, 7, 0, 0, 9, 
+	5, 5, 5, 11, 0, 0, 0, 0
+};
+
+static const char _NonAsciiQuoteCounter_to_state_actions[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 1, 0, 0, 0
+};
+
+static const char _NonAsciiQuoteCounter_from_state_actions[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 3, 0, 0, 0
+};
+
+static const char _NonAsciiQuoteCounter_eof_trans[] = {
+	1, 1, 1, 1, 1, 1, 1, 1, 
+	1, 0, 12, 12, 12
+};
+
 static const int NonAsciiQuoteCounter_start = 9;
 static const int NonAsciiQuoteCounter_error = -1;
 
@@ -696,7 +912,7 @@ size_t NL_get_size_ascii_quotes(unsigned char *p, size_t buf_length) {
     size_t size = 0;
 
     
-#line 700 "tokenizer_utils.c"
+#line 916 "tokenizer_utils.c"
 	{
 	cs = NonAsciiQuoteCounter_start;
 	ts = 0;
@@ -706,183 +922,136 @@ size_t NL_get_size_ascii_quotes(unsigned char *p, size_t buf_length) {
 
 #line 288 "tokenizer_utils.rl"
     
-#line 710 "tokenizer_utils.c"
+#line 926 "tokenizer_utils.c"
 	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
 	if ( p == pe )
 		goto _test_eof;
-	switch ( cs )
-	{
-tr0:
-#line 273 "tokenizer_utils.rl"
-	{{p = ((te))-1;}{size++;}}
-	goto st9;
-tr4:
-#line 272 "tokenizer_utils.rl"
-	{te = p+1;{size++;}}
-	goto st9;
-tr7:
-#line 273 "tokenizer_utils.rl"
-	{te = p+1;{size++;}}
-	goto st9;
-tr11:
-#line 273 "tokenizer_utils.rl"
-	{te = p;p--;{size++;}}
-	goto st9;
-st9:
-#line 1 "NONE"
-	{ts = 0;}
-	if ( ++p == pe )
-		goto _test_eof9;
-case 9:
+_resume:
+	_acts = _NonAsciiQuoteCounter_actions + _NonAsciiQuoteCounter_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
 #line 1 "NONE"
 	{ts = p;}
-#line 740 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 38u: goto tr8;
-		case 194u: goto tr9;
-		case 226u: goto tr10;
+	break;
+#line 945 "tokenizer_utils.c"
+		}
 	}
-	goto tr7;
-tr8:
-#line 1 "NONE"
-	{te = p+1;}
-	goto st10;
-st10:
-	if ( ++p == pe )
-		goto _test_eof10;
-case 10:
-#line 755 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 97u: goto st0;
-		case 113u: goto st4;
-	}
-	goto tr11;
-st0:
-	if ( ++p == pe )
-		goto _test_eof0;
-case 0:
-	if ( (*p) == 112u )
-		goto st1;
-	goto tr0;
-st1:
-	if ( ++p == pe )
-		goto _test_eof1;
-case 1:
-	if ( (*p) == 111u )
-		goto st2;
-	goto tr0;
-st2:
-	if ( ++p == pe )
-		goto _test_eof2;
-case 2:
-	if ( (*p) == 115u )
-		goto st3;
-	goto tr0;
-st3:
-	if ( ++p == pe )
-		goto _test_eof3;
-case 3:
-	if ( (*p) == 59u )
-		goto tr4;
-	goto tr0;
-st4:
-	if ( ++p == pe )
-		goto _test_eof4;
-case 4:
-	if ( (*p) == 117u )
-		goto st5;
-	goto tr0;
-st5:
-	if ( ++p == pe )
-		goto _test_eof5;
-case 5:
-	if ( (*p) == 111u )
-		goto st6;
-	goto tr0;
-st6:
-	if ( ++p == pe )
-		goto _test_eof6;
-case 6:
-	if ( (*p) == 116u )
-		goto st3;
-	goto tr0;
-tr9:
-#line 1 "NONE"
-	{te = p+1;}
-	goto st11;
-st11:
-	if ( ++p == pe )
-		goto _test_eof11;
-case 11:
-#line 818 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 128u: goto st7;
-		case 171u: goto tr4;
-		case 187u: goto tr4;
-	}
-	if ( 145u <= (*p) && (*p) <= 148u )
-		goto tr4;
-	goto tr11;
-st7:
-	if ( ++p == pe )
-		goto _test_eof7;
-case 7:
-	if ( 157u <= (*p) && (*p) <= 158u )
-		goto tr4;
-	goto tr0;
-tr10:
-#line 1 "NONE"
-	{te = p+1;}
-	goto st12;
-st12:
-	if ( ++p == pe )
-		goto _test_eof12;
-case 12:
-#line 842 "tokenizer_utils.c"
-	if ( (*p) == 128u )
-		goto st8;
-	goto tr11;
-st8:
-	if ( ++p == pe )
-		goto _test_eof8;
-case 8:
-	if ( (*p) > 156u ) {
-		if ( 185u <= (*p) && (*p) <= 186u )
-			goto tr4;
-	} else if ( (*p) >= 152u )
-		goto tr4;
-	goto tr0;
-	}
-	_test_eof9: cs = 9; goto _test_eof; 
-	_test_eof10: cs = 10; goto _test_eof; 
-	_test_eof0: cs = 0; goto _test_eof; 
-	_test_eof1: cs = 1; goto _test_eof; 
-	_test_eof2: cs = 2; goto _test_eof; 
-	_test_eof3: cs = 3; goto _test_eof; 
-	_test_eof4: cs = 4; goto _test_eof; 
-	_test_eof5: cs = 5; goto _test_eof; 
-	_test_eof6: cs = 6; goto _test_eof; 
-	_test_eof11: cs = 11; goto _test_eof; 
-	_test_eof7: cs = 7; goto _test_eof; 
-	_test_eof12: cs = 12; goto _test_eof; 
-	_test_eof8: cs = 8; goto _test_eof; 
 
+	_keys = _NonAsciiQuoteCounter_trans_keys + _NonAsciiQuoteCounter_key_offsets[cs];
+	_trans = _NonAsciiQuoteCounter_index_offsets[cs];
+
+	_klen = _NonAsciiQuoteCounter_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _NonAsciiQuoteCounter_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+	_trans = _NonAsciiQuoteCounter_indicies[_trans];
+_eof_trans:
+	cs = _NonAsciiQuoteCounter_trans_targs[_trans];
+
+	if ( _NonAsciiQuoteCounter_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _NonAsciiQuoteCounter_actions + _NonAsciiQuoteCounter_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
+	{
+		switch ( *_acts++ )
+		{
+	case 2:
+#line 1 "NONE"
+	{te = p+1;}
+	break;
+	case 3:
+#line 272 "tokenizer_utils.rl"
+	{te = p+1;{size++;}}
+	break;
+	case 4:
+#line 273 "tokenizer_utils.rl"
+	{te = p+1;{size++;}}
+	break;
+	case 5:
+#line 273 "tokenizer_utils.rl"
+	{te = p;p--;{size++;}}
+	break;
+	case 6:
+#line 273 "tokenizer_utils.rl"
+	{{p = ((te))-1;}{size++;}}
+	break;
+#line 1031 "tokenizer_utils.c"
+		}
+	}
+
+_again:
+	_acts = _NonAsciiQuoteCounter_actions + _NonAsciiQuoteCounter_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 0:
+#line 1 "NONE"
+	{ts = 0;}
+	break;
+#line 1044 "tokenizer_utils.c"
+		}
+	}
+
+	if ( ++p != pe )
+		goto _resume;
 	_test_eof: {}
 	if ( p == eof )
 	{
-	switch ( cs ) {
-	case 10: goto tr11;
-	case 0: goto tr0;
-	case 1: goto tr0;
-	case 2: goto tr0;
-	case 3: goto tr0;
-	case 4: goto tr0;
-	case 5: goto tr0;
-	case 6: goto tr0;
-	case 11: goto tr11;
-	case 7: goto tr0;
-	case 12: goto tr11;
-	case 8: goto tr0;
+	if ( _NonAsciiQuoteCounter_eof_trans[cs] > 0 ) {
+		_trans = _NonAsciiQuoteCounter_eof_trans[cs] - 1;
+		goto _eof_trans;
 	}
 	}
 
@@ -898,7 +1067,75 @@ case 8:
 
 
 
-#line 902 "tokenizer_utils.c"
+#line 1071 "tokenizer_utils.c"
+static const char _AsciiQuoteTransformer_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1, 
+	3, 1, 4, 1, 5, 1, 6, 1, 
+	7
+};
+
+static const char _AsciiQuoteTransformer_key_offsets[] = {
+	0, 1, 2, 3, 4, 5, 6, 7, 
+	8, 10, 15, 18, 20, 27
+};
+
+static const unsigned char _AsciiQuoteTransformer_trans_keys[] = {
+	112u, 111u, 115u, 59u, 117u, 111u, 116u, 59u, 
+	157u, 158u, 156u, 152u, 155u, 185u, 186u, 38u, 
+	194u, 226u, 97u, 113u, 128u, 171u, 187u, 145u, 
+	146u, 147u, 148u, 128u, 0
+};
+
+static const char _AsciiQuoteTransformer_single_lengths[] = {
+	1, 1, 1, 1, 1, 1, 1, 1, 
+	0, 1, 3, 2, 3, 1
+};
+
+static const char _AsciiQuoteTransformer_range_lengths[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	1, 2, 0, 0, 2, 0
+};
+
+static const char _AsciiQuoteTransformer_index_offsets[] = {
+	0, 2, 4, 6, 8, 10, 12, 14, 
+	16, 18, 22, 26, 29, 35
+};
+
+static const char _AsciiQuoteTransformer_indicies[] = {
+	1, 0, 2, 0, 3, 0, 4, 0, 
+	5, 0, 6, 0, 7, 0, 8, 0, 
+	8, 0, 8, 4, 4, 0, 10, 11, 
+	12, 9, 14, 15, 13, 16, 8, 8, 
+	4, 8, 13, 17, 13, 0
+};
+
+static const char _AsciiQuoteTransformer_trans_targs[] = {
+	10, 1, 2, 3, 10, 5, 6, 7, 
+	10, 10, 11, 12, 13, 10, 0, 4, 
+	8, 9
+};
+
+static const char _AsciiQuoteTransformer_trans_actions[] = {
+	15, 0, 0, 0, 7, 0, 0, 0, 
+	9, 11, 5, 5, 5, 13, 0, 0, 
+	0, 0
+};
+
+static const char _AsciiQuoteTransformer_to_state_actions[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 1, 0, 0, 0
+};
+
+static const char _AsciiQuoteTransformer_from_state_actions[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 3, 0, 0, 0
+};
+
+static const char _AsciiQuoteTransformer_eof_trans[] = {
+	1, 1, 1, 1, 1, 1, 1, 1, 
+	1, 1, 0, 14, 14, 14
+};
+
 static const int AsciiQuoteTransformer_start = 10;
 static const int AsciiQuoteTransformer_error = -1;
 
@@ -915,7 +1152,7 @@ void NL_ascii_quotes(unsigned char *p, size_t buf_length,
     unsigned char *eof = pe;
 
     
-#line 919 "tokenizer_utils.c"
+#line 1156 "tokenizer_utils.c"
 	{
 	cs = AsciiQuoteTransformer_start;
 	ts = 0;
@@ -925,201 +1162,140 @@ void NL_ascii_quotes(unsigned char *p, size_t buf_length,
 
 #line 337 "tokenizer_utils.rl"
     
-#line 929 "tokenizer_utils.c"
+#line 1166 "tokenizer_utils.c"
 	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
 	if ( p == pe )
 		goto _test_eof;
-	switch ( cs )
-	{
-tr0:
-#line 322 "tokenizer_utils.rl"
-	{{p = ((te))-1;}{ *transform = *p; transform++; }}
-	goto st10;
-tr4:
-#line 320 "tokenizer_utils.rl"
-	{te = p+1;{ *transform = '\''; transform++; }}
-	goto st10;
-tr8:
-#line 321 "tokenizer_utils.rl"
-	{te = p+1;{ *transform = '"'; transform++; }}
-	goto st10;
-tr9:
-#line 322 "tokenizer_utils.rl"
-	{te = p+1;{ *transform = *p; transform++; }}
-	goto st10;
-tr13:
-#line 322 "tokenizer_utils.rl"
-	{te = p;p--;{ *transform = *p; transform++; }}
-	goto st10;
-st10:
-#line 1 "NONE"
-	{ts = 0;}
-	if ( ++p == pe )
-		goto _test_eof10;
-case 10:
+_resume:
+	_acts = _AsciiQuoteTransformer_actions + _AsciiQuoteTransformer_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
 #line 1 "NONE"
 	{ts = p;}
-#line 963 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 38u: goto tr10;
-		case 194u: goto tr11;
-		case 226u: goto tr12;
+	break;
+#line 1185 "tokenizer_utils.c"
+		}
 	}
-	goto tr9;
-tr10:
-#line 1 "NONE"
-	{te = p+1;}
-	goto st11;
-st11:
-	if ( ++p == pe )
-		goto _test_eof11;
-case 11:
-#line 978 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 97u: goto st0;
-		case 113u: goto st4;
-	}
-	goto tr13;
-st0:
-	if ( ++p == pe )
-		goto _test_eof0;
-case 0:
-	if ( (*p) == 112u )
-		goto st1;
-	goto tr0;
-st1:
-	if ( ++p == pe )
-		goto _test_eof1;
-case 1:
-	if ( (*p) == 111u )
-		goto st2;
-	goto tr0;
-st2:
-	if ( ++p == pe )
-		goto _test_eof2;
-case 2:
-	if ( (*p) == 115u )
-		goto st3;
-	goto tr0;
-st3:
-	if ( ++p == pe )
-		goto _test_eof3;
-case 3:
-	if ( (*p) == 59u )
-		goto tr4;
-	goto tr0;
-st4:
-	if ( ++p == pe )
-		goto _test_eof4;
-case 4:
-	if ( (*p) == 117u )
-		goto st5;
-	goto tr0;
-st5:
-	if ( ++p == pe )
-		goto _test_eof5;
-case 5:
-	if ( (*p) == 111u )
-		goto st6;
-	goto tr0;
-st6:
-	if ( ++p == pe )
-		goto _test_eof6;
-case 6:
-	if ( (*p) == 116u )
-		goto st7;
-	goto tr0;
-st7:
-	if ( ++p == pe )
-		goto _test_eof7;
-case 7:
-	if ( (*p) == 59u )
-		goto tr8;
-	goto tr0;
-tr11:
-#line 1 "NONE"
-	{te = p+1;}
-	goto st12;
-st12:
-	if ( ++p == pe )
-		goto _test_eof12;
-case 12:
-#line 1048 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 128u: goto st8;
-		case 171u: goto tr8;
-		case 187u: goto tr8;
-	}
-	if ( (*p) > 146u ) {
-		if ( 147u <= (*p) && (*p) <= 148u )
-			goto tr8;
-	} else if ( (*p) >= 145u )
-		goto tr4;
-	goto tr13;
-st8:
-	if ( ++p == pe )
-		goto _test_eof8;
-case 8:
-	if ( 157u <= (*p) && (*p) <= 158u )
-		goto tr8;
-	goto tr0;
-tr12:
-#line 1 "NONE"
-	{te = p+1;}
-	goto st13;
-st13:
-	if ( ++p == pe )
-		goto _test_eof13;
-case 13:
-#line 1075 "tokenizer_utils.c"
-	if ( (*p) == 128u )
-		goto st9;
-	goto tr13;
-st9:
-	if ( ++p == pe )
-		goto _test_eof9;
-case 9:
-	if ( (*p) == 156u )
-		goto tr8;
-	if ( (*p) > 155u ) {
-		if ( 185u <= (*p) && (*p) <= 186u )
-			goto tr4;
-	} else if ( (*p) >= 152u )
-		goto tr4;
-	goto tr0;
-	}
-	_test_eof10: cs = 10; goto _test_eof; 
-	_test_eof11: cs = 11; goto _test_eof; 
-	_test_eof0: cs = 0; goto _test_eof; 
-	_test_eof1: cs = 1; goto _test_eof; 
-	_test_eof2: cs = 2; goto _test_eof; 
-	_test_eof3: cs = 3; goto _test_eof; 
-	_test_eof4: cs = 4; goto _test_eof; 
-	_test_eof5: cs = 5; goto _test_eof; 
-	_test_eof6: cs = 6; goto _test_eof; 
-	_test_eof7: cs = 7; goto _test_eof; 
-	_test_eof12: cs = 12; goto _test_eof; 
-	_test_eof8: cs = 8; goto _test_eof; 
-	_test_eof13: cs = 13; goto _test_eof; 
-	_test_eof9: cs = 9; goto _test_eof; 
 
+	_keys = _AsciiQuoteTransformer_trans_keys + _AsciiQuoteTransformer_key_offsets[cs];
+	_trans = _AsciiQuoteTransformer_index_offsets[cs];
+
+	_klen = _AsciiQuoteTransformer_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _AsciiQuoteTransformer_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+	_trans = _AsciiQuoteTransformer_indicies[_trans];
+_eof_trans:
+	cs = _AsciiQuoteTransformer_trans_targs[_trans];
+
+	if ( _AsciiQuoteTransformer_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _AsciiQuoteTransformer_actions + _AsciiQuoteTransformer_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
+	{
+		switch ( *_acts++ )
+		{
+	case 2:
+#line 1 "NONE"
+	{te = p+1;}
+	break;
+	case 3:
+#line 320 "tokenizer_utils.rl"
+	{te = p+1;{ *transform = '\''; transform++; }}
+	break;
+	case 4:
+#line 321 "tokenizer_utils.rl"
+	{te = p+1;{ *transform = '"'; transform++; }}
+	break;
+	case 5:
+#line 322 "tokenizer_utils.rl"
+	{te = p+1;{ *transform = *p; transform++; }}
+	break;
+	case 6:
+#line 322 "tokenizer_utils.rl"
+	{te = p;p--;{ *transform = *p; transform++; }}
+	break;
+	case 7:
+#line 322 "tokenizer_utils.rl"
+	{{p = ((te))-1;}{ *transform = *p; transform++; }}
+	break;
+#line 1275 "tokenizer_utils.c"
+		}
+	}
+
+_again:
+	_acts = _AsciiQuoteTransformer_actions + _AsciiQuoteTransformer_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 0:
+#line 1 "NONE"
+	{ts = 0;}
+	break;
+#line 1288 "tokenizer_utils.c"
+		}
+	}
+
+	if ( ++p != pe )
+		goto _resume;
 	_test_eof: {}
 	if ( p == eof )
 	{
-	switch ( cs ) {
-	case 11: goto tr13;
-	case 0: goto tr0;
-	case 1: goto tr0;
-	case 2: goto tr0;
-	case 3: goto tr0;
-	case 4: goto tr0;
-	case 5: goto tr0;
-	case 6: goto tr0;
-	case 7: goto tr0;
-	case 12: goto tr13;
-	case 8: goto tr0;
-	case 13: goto tr13;
-	case 9: goto tr0;
+	if ( _AsciiQuoteTransformer_eof_trans[cs] > 0 ) {
+		_trans = _AsciiQuoteTransformer_eof_trans[cs] - 1;
+		goto _eof_trans;
 	}
 	}
 
@@ -1135,7 +1311,75 @@ case 9:
 
 
 
-#line 1139 "tokenizer_utils.c"
+#line 1315 "tokenizer_utils.c"
+static const char _NonLatexQuoteCounter_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1, 
+	3, 1, 4, 1, 5, 1, 6, 1, 
+	7
+};
+
+static const char _NonLatexQuoteCounter_key_offsets[] = {
+	0, 1, 2, 3, 4, 5, 6, 7, 
+	8, 9, 14, 19, 21, 28
+};
+
+static const unsigned char _NonLatexQuoteCounter_trans_keys[] = {
+	112u, 111u, 115u, 59u, 117u, 111u, 116u, 59u, 
+	157u, 156u, 152u, 155u, 185u, 186u, 34u, 38u, 
+	39u, 194u, 226u, 97u, 113u, 128u, 171u, 187u, 
+	145u, 146u, 147u, 148u, 128u, 0
+};
+
+static const char _NonLatexQuoteCounter_single_lengths[] = {
+	1, 1, 1, 1, 1, 1, 1, 1, 
+	1, 1, 5, 2, 3, 1
+};
+
+static const char _NonLatexQuoteCounter_range_lengths[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 2, 0, 0, 2, 0
+};
+
+static const char _NonLatexQuoteCounter_index_offsets[] = {
+	0, 2, 4, 6, 8, 10, 12, 14, 
+	16, 18, 22, 28, 31, 37
+};
+
+static const char _NonLatexQuoteCounter_indicies[] = {
+	1, 0, 2, 0, 3, 0, 4, 0, 
+	5, 0, 6, 0, 7, 0, 8, 0, 
+	8, 0, 8, 4, 4, 0, 8, 10, 
+	4, 11, 12, 9, 14, 15, 13, 16, 
+	8, 8, 4, 8, 13, 17, 13, 0
+};
+
+static const char _NonLatexQuoteCounter_trans_targs[] = {
+	10, 1, 2, 3, 10, 5, 6, 7, 
+	10, 10, 11, 12, 13, 10, 0, 4, 
+	8, 9
+};
+
+static const char _NonLatexQuoteCounter_trans_actions[] = {
+	15, 0, 0, 0, 7, 0, 0, 0, 
+	9, 11, 5, 5, 5, 13, 0, 0, 
+	0, 0
+};
+
+static const char _NonLatexQuoteCounter_to_state_actions[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 1, 0, 0, 0
+};
+
+static const char _NonLatexQuoteCounter_from_state_actions[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 3, 0, 0, 0
+};
+
+static const char _NonLatexQuoteCounter_eof_trans[] = {
+	1, 1, 1, 1, 1, 1, 1, 1, 
+	1, 1, 0, 14, 14, 14
+};
+
 static const int NonLatexQuoteCounter_start = 10;
 static const int NonLatexQuoteCounter_error = -1;
 
@@ -1152,7 +1396,7 @@ size_t NL_get_size_latex_quotes(unsigned char *p, size_t buf_length) {
     size_t size = 0;
 
     
-#line 1156 "tokenizer_utils.c"
+#line 1400 "tokenizer_utils.c"
 	{
 	cs = NonLatexQuoteCounter_start;
 	ts = 0;
@@ -1162,203 +1406,140 @@ size_t NL_get_size_latex_quotes(unsigned char *p, size_t buf_length) {
 
 #line 389 "tokenizer_utils.rl"
     
-#line 1166 "tokenizer_utils.c"
+#line 1410 "tokenizer_utils.c"
 	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
 	if ( p == pe )
 		goto _test_eof;
-	switch ( cs )
-	{
-tr0:
-#line 374 "tokenizer_utils.rl"
-	{{p = ((te))-1;}{size++;}}
-	goto st10;
-tr4:
-#line 372 "tokenizer_utils.rl"
-	{te = p+1;{size++;}}
-	goto st10;
-tr8:
-#line 373 "tokenizer_utils.rl"
-	{te = p+1;{size += 2;}}
-	goto st10;
-tr9:
-#line 374 "tokenizer_utils.rl"
-	{te = p+1;{size++;}}
-	goto st10;
-tr13:
-#line 374 "tokenizer_utils.rl"
-	{te = p;p--;{size++;}}
-	goto st10;
-st10:
-#line 1 "NONE"
-	{ts = 0;}
-	if ( ++p == pe )
-		goto _test_eof10;
-case 10:
+_resume:
+	_acts = _NonLatexQuoteCounter_actions + _NonLatexQuoteCounter_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
 #line 1 "NONE"
 	{ts = p;}
-#line 1200 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 34u: goto tr8;
-		case 38u: goto tr10;
-		case 39u: goto tr4;
-		case 194u: goto tr11;
-		case 226u: goto tr12;
+	break;
+#line 1429 "tokenizer_utils.c"
+		}
 	}
-	goto tr9;
-tr10:
-#line 1 "NONE"
-	{te = p+1;}
-	goto st11;
-st11:
-	if ( ++p == pe )
-		goto _test_eof11;
-case 11:
-#line 1217 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 97u: goto st0;
-		case 113u: goto st4;
-	}
-	goto tr13;
-st0:
-	if ( ++p == pe )
-		goto _test_eof0;
-case 0:
-	if ( (*p) == 112u )
-		goto st1;
-	goto tr0;
-st1:
-	if ( ++p == pe )
-		goto _test_eof1;
-case 1:
-	if ( (*p) == 111u )
-		goto st2;
-	goto tr0;
-st2:
-	if ( ++p == pe )
-		goto _test_eof2;
-case 2:
-	if ( (*p) == 115u )
-		goto st3;
-	goto tr0;
-st3:
-	if ( ++p == pe )
-		goto _test_eof3;
-case 3:
-	if ( (*p) == 59u )
-		goto tr4;
-	goto tr0;
-st4:
-	if ( ++p == pe )
-		goto _test_eof4;
-case 4:
-	if ( (*p) == 117u )
-		goto st5;
-	goto tr0;
-st5:
-	if ( ++p == pe )
-		goto _test_eof5;
-case 5:
-	if ( (*p) == 111u )
-		goto st6;
-	goto tr0;
-st6:
-	if ( ++p == pe )
-		goto _test_eof6;
-case 6:
-	if ( (*p) == 116u )
-		goto st7;
-	goto tr0;
-st7:
-	if ( ++p == pe )
-		goto _test_eof7;
-case 7:
-	if ( (*p) == 59u )
-		goto tr8;
-	goto tr0;
-tr11:
-#line 1 "NONE"
-	{te = p+1;}
-	goto st12;
-st12:
-	if ( ++p == pe )
-		goto _test_eof12;
-case 12:
-#line 1287 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 128u: goto st8;
-		case 171u: goto tr8;
-		case 187u: goto tr8;
-	}
-	if ( (*p) > 146u ) {
-		if ( 147u <= (*p) && (*p) <= 148u )
-			goto tr8;
-	} else if ( (*p) >= 145u )
-		goto tr4;
-	goto tr13;
-st8:
-	if ( ++p == pe )
-		goto _test_eof8;
-case 8:
-	if ( (*p) == 157u )
-		goto tr8;
-	goto tr0;
-tr12:
-#line 1 "NONE"
-	{te = p+1;}
-	goto st13;
-st13:
-	if ( ++p == pe )
-		goto _test_eof13;
-case 13:
-#line 1314 "tokenizer_utils.c"
-	if ( (*p) == 128u )
-		goto st9;
-	goto tr13;
-st9:
-	if ( ++p == pe )
-		goto _test_eof9;
-case 9:
-	if ( (*p) == 156u )
-		goto tr8;
-	if ( (*p) > 155u ) {
-		if ( 185u <= (*p) && (*p) <= 186u )
-			goto tr4;
-	} else if ( (*p) >= 152u )
-		goto tr4;
-	goto tr0;
-	}
-	_test_eof10: cs = 10; goto _test_eof; 
-	_test_eof11: cs = 11; goto _test_eof; 
-	_test_eof0: cs = 0; goto _test_eof; 
-	_test_eof1: cs = 1; goto _test_eof; 
-	_test_eof2: cs = 2; goto _test_eof; 
-	_test_eof3: cs = 3; goto _test_eof; 
-	_test_eof4: cs = 4; goto _test_eof; 
-	_test_eof5: cs = 5; goto _test_eof; 
-	_test_eof6: cs = 6; goto _test_eof; 
-	_test_eof7: cs = 7; goto _test_eof; 
-	_test_eof12: cs = 12; goto _test_eof; 
-	_test_eof8: cs = 8; goto _test_eof; 
-	_test_eof13: cs = 13; goto _test_eof; 
-	_test_eof9: cs = 9; goto _test_eof; 
 
+	_keys = _NonLatexQuoteCounter_trans_keys + _NonLatexQuoteCounter_key_offsets[cs];
+	_trans = _NonLatexQuoteCounter_index_offsets[cs];
+
+	_klen = _NonLatexQuoteCounter_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _NonLatexQuoteCounter_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+	_trans = _NonLatexQuoteCounter_indicies[_trans];
+_eof_trans:
+	cs = _NonLatexQuoteCounter_trans_targs[_trans];
+
+	if ( _NonLatexQuoteCounter_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _NonLatexQuoteCounter_actions + _NonLatexQuoteCounter_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
+	{
+		switch ( *_acts++ )
+		{
+	case 2:
+#line 1 "NONE"
+	{te = p+1;}
+	break;
+	case 3:
+#line 372 "tokenizer_utils.rl"
+	{te = p+1;{size++;}}
+	break;
+	case 4:
+#line 373 "tokenizer_utils.rl"
+	{te = p+1;{size += 2;}}
+	break;
+	case 5:
+#line 374 "tokenizer_utils.rl"
+	{te = p+1;{size++;}}
+	break;
+	case 6:
+#line 374 "tokenizer_utils.rl"
+	{te = p;p--;{size++;}}
+	break;
+	case 7:
+#line 374 "tokenizer_utils.rl"
+	{{p = ((te))-1;}{size++;}}
+	break;
+#line 1519 "tokenizer_utils.c"
+		}
+	}
+
+_again:
+	_acts = _NonLatexQuoteCounter_actions + _NonLatexQuoteCounter_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 0:
+#line 1 "NONE"
+	{ts = 0;}
+	break;
+#line 1532 "tokenizer_utils.c"
+		}
+	}
+
+	if ( ++p != pe )
+		goto _resume;
 	_test_eof: {}
 	if ( p == eof )
 	{
-	switch ( cs ) {
-	case 11: goto tr13;
-	case 0: goto tr0;
-	case 1: goto tr0;
-	case 2: goto tr0;
-	case 3: goto tr0;
-	case 4: goto tr0;
-	case 5: goto tr0;
-	case 6: goto tr0;
-	case 7: goto tr0;
-	case 12: goto tr13;
-	case 8: goto tr0;
-	case 13: goto tr13;
-	case 9: goto tr0;
+	if ( _NonLatexQuoteCounter_eof_trans[cs] > 0 ) {
+		_trans = _NonLatexQuoteCounter_eof_trans[cs] - 1;
+		goto _eof_trans;
 	}
 	}
 
@@ -1374,7 +1555,78 @@ case 9:
 
 
 
-#line 1378 "tokenizer_utils.c"
+#line 1559 "tokenizer_utils.c"
+static const char _ProbablyLeftLatexQuoteCounter_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1, 
+	3, 1, 4, 1, 5, 1, 6, 1, 
+	7, 1, 8, 1, 9, 1, 10, 1, 
+	11
+};
+
+static const char _ProbablyLeftLatexQuoteCounter_key_offsets[] = {
+	0, 1, 2, 3, 4, 5, 6, 7, 
+	8, 9, 16, 21, 23, 30
+};
+
+static const unsigned char _ProbablyLeftLatexQuoteCounter_trans_keys[] = {
+	112u, 111u, 115u, 59u, 117u, 111u, 116u, 59u, 
+	157u, 152u, 155u, 156u, 185u, 186u, 153u, 154u, 
+	34u, 38u, 39u, 194u, 226u, 97u, 113u, 128u, 
+	145u, 146u, 147u, 148u, 171u, 187u, 128u, 0
+};
+
+static const char _ProbablyLeftLatexQuoteCounter_single_lengths[] = {
+	1, 1, 1, 1, 1, 1, 1, 1, 
+	1, 5, 5, 2, 7, 1
+};
+
+static const char _ProbablyLeftLatexQuoteCounter_range_lengths[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 1, 0, 0, 0, 0
+};
+
+static const char _ProbablyLeftLatexQuoteCounter_index_offsets[] = {
+	0, 2, 4, 6, 8, 10, 12, 14, 
+	16, 18, 25, 31, 34, 42
+};
+
+static const char _ProbablyLeftLatexQuoteCounter_trans_targs[] = {
+	1, 10, 2, 10, 3, 10, 10, 10, 
+	5, 10, 6, 10, 7, 10, 10, 10, 
+	10, 10, 10, 10, 10, 10, 10, 10, 
+	10, 10, 11, 10, 12, 13, 10, 0, 
+	4, 10, 8, 10, 10, 10, 10, 10, 
+	10, 10, 9, 10, 10, 10, 10, 10, 
+	10, 10, 10, 10, 10, 10, 10, 10, 
+	10, 0
+};
+
+static const char _ProbablyLeftLatexQuoteCounter_trans_actions[] = {
+	0, 23, 0, 23, 0, 23, 7, 23, 
+	0, 23, 0, 23, 0, 23, 9, 23, 
+	17, 23, 11, 11, 15, 11, 13, 13, 
+	23, 9, 5, 7, 5, 5, 19, 0, 
+	0, 21, 0, 11, 13, 15, 17, 15, 
+	17, 21, 0, 21, 23, 23, 23, 23, 
+	23, 23, 23, 23, 23, 23, 21, 21, 
+	21, 0
+};
+
+static const char _ProbablyLeftLatexQuoteCounter_to_state_actions[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 1, 0, 0, 0
+};
+
+static const char _ProbablyLeftLatexQuoteCounter_from_state_actions[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 3, 0, 0, 0
+};
+
+static const char _ProbablyLeftLatexQuoteCounter_eof_trans[] = {
+	54, 54, 54, 54, 54, 54, 54, 54, 
+	54, 54, 0, 57, 57, 57
+};
+
 static const int ProbablyLeftLatexQuoteCounter_start = 10;
 static const int ProbablyLeftLatexQuoteCounter_error = -1;
 
@@ -1391,7 +1643,7 @@ void NL_latex_quotes_probably_left(unsigned char *p, size_t buf_length,
     unsigned char *eof = pe;
 
     
-#line 1395 "tokenizer_utils.c"
+#line 1647 "tokenizer_utils.c"
 	{
 	cs = ProbablyLeftLatexQuoteCounter_start;
 	ts = 0;
@@ -1401,223 +1653,158 @@ void NL_latex_quotes_probably_left(unsigned char *p, size_t buf_length,
 
 #line 453 "tokenizer_utils.rl"
     
-#line 1405 "tokenizer_utils.c"
+#line 1657 "tokenizer_utils.c"
 	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
 	if ( p == pe )
 		goto _test_eof;
-	switch ( cs )
+_resume:
+	_acts = _ProbablyLeftLatexQuoteCounter_actions + _ProbablyLeftLatexQuoteCounter_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
+#line 1 "NONE"
+	{ts = p;}
+	break;
+#line 1676 "tokenizer_utils.c"
+		}
+	}
+
+	_keys = _ProbablyLeftLatexQuoteCounter_trans_keys + _ProbablyLeftLatexQuoteCounter_key_offsets[cs];
+	_trans = _ProbablyLeftLatexQuoteCounter_index_offsets[cs];
+
+	_klen = _ProbablyLeftLatexQuoteCounter_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _ProbablyLeftLatexQuoteCounter_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+_eof_trans:
+	cs = _ProbablyLeftLatexQuoteCounter_trans_targs[_trans];
+
+	if ( _ProbablyLeftLatexQuoteCounter_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _ProbablyLeftLatexQuoteCounter_actions + _ProbablyLeftLatexQuoteCounter_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
 	{
-tr0:
-#line 438 "tokenizer_utils.rl"
-	{{p = ((te))-1;}{*transform = *p; transform++;}}
-	goto st10;
-tr4:
+		switch ( *_acts++ )
+		{
+	case 2:
+#line 1 "NONE"
+	{te = p+1;}
+	break;
+	case 3:
 #line 426 "tokenizer_utils.rl"
 	{te = p+1;{ *transform = '`'; transform++; }}
-	goto st10;
-tr8:
+	break;
+	case 4:
 #line 427 "tokenizer_utils.rl"
 	{te = p+1;{ *transform = '`'; transform++; 
                            *transform = '`'; transform++; }}
-	goto st10;
-tr9:
-#line 436 "tokenizer_utils.rl"
-	{te = p+1;{ *transform = '\''; transform++; 
-                                 *transform = '\''; transform++; }}
-	goto st10;
-tr10:
+	break;
+	case 5:
 #line 430 "tokenizer_utils.rl"
 	{te = p+1;{ *transform = '`'; transform++; }}
-	goto st10;
-tr11:
+	break;
+	case 6:
 #line 431 "tokenizer_utils.rl"
 	{te = p+1;{ *transform = '\''; transform++; }}
-	goto st10;
-tr12:
+	break;
+	case 7:
 #line 433 "tokenizer_utils.rl"
 	{te = p+1;{ *transform = '`'; transform++; 
                            *transform = '`'; transform++; }}
-	goto st10;
-tr13:
+	break;
+	case 8:
+#line 436 "tokenizer_utils.rl"
+	{te = p+1;{ *transform = '\''; transform++; 
+                                 *transform = '\''; transform++; }}
+	break;
+	case 9:
 #line 438 "tokenizer_utils.rl"
 	{te = p+1;{*transform = *p; transform++;}}
-	goto st10;
-tr17:
+	break;
+	case 10:
 #line 438 "tokenizer_utils.rl"
 	{te = p;p--;{*transform = *p; transform++;}}
-	goto st10;
-st10:
+	break;
+	case 11:
+#line 438 "tokenizer_utils.rl"
+	{{p = ((te))-1;}{*transform = *p; transform++;}}
+	break;
+#line 1784 "tokenizer_utils.c"
+		}
+	}
+
+_again:
+	_acts = _ProbablyLeftLatexQuoteCounter_actions + _ProbablyLeftLatexQuoteCounter_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 0:
 #line 1 "NONE"
 	{ts = 0;}
-	if ( ++p == pe )
-		goto _test_eof10;
-case 10:
-#line 1 "NONE"
-	{ts = p;}
-#line 1458 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 34u: goto tr8;
-		case 38u: goto tr14;
-		case 39u: goto tr4;
-		case 194u: goto tr15;
-		case 226u: goto tr16;
+	break;
+#line 1797 "tokenizer_utils.c"
+		}
 	}
-	goto tr13;
-tr14:
-#line 1 "NONE"
-	{te = p+1;}
-	goto st11;
-st11:
-	if ( ++p == pe )
-		goto _test_eof11;
-case 11:
-#line 1475 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 97u: goto st0;
-		case 113u: goto st4;
-	}
-	goto tr17;
-st0:
-	if ( ++p == pe )
-		goto _test_eof0;
-case 0:
-	if ( (*p) == 112u )
-		goto st1;
-	goto tr0;
-st1:
-	if ( ++p == pe )
-		goto _test_eof1;
-case 1:
-	if ( (*p) == 111u )
-		goto st2;
-	goto tr0;
-st2:
-	if ( ++p == pe )
-		goto _test_eof2;
-case 2:
-	if ( (*p) == 115u )
-		goto st3;
-	goto tr0;
-st3:
-	if ( ++p == pe )
-		goto _test_eof3;
-case 3:
-	if ( (*p) == 59u )
-		goto tr4;
-	goto tr0;
-st4:
-	if ( ++p == pe )
-		goto _test_eof4;
-case 4:
-	if ( (*p) == 117u )
-		goto st5;
-	goto tr0;
-st5:
-	if ( ++p == pe )
-		goto _test_eof5;
-case 5:
-	if ( (*p) == 111u )
-		goto st6;
-	goto tr0;
-st6:
-	if ( ++p == pe )
-		goto _test_eof6;
-case 6:
-	if ( (*p) == 116u )
-		goto st7;
-	goto tr0;
-st7:
-	if ( ++p == pe )
-		goto _test_eof7;
-case 7:
-	if ( (*p) == 59u )
-		goto tr8;
-	goto tr0;
-tr15:
-#line 1 "NONE"
-	{te = p+1;}
-	goto st12;
-st12:
-	if ( ++p == pe )
-		goto _test_eof12;
-case 12:
-#line 1545 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 128u: goto st8;
-		case 145u: goto tr10;
-		case 146u: goto tr11;
-		case 147u: goto tr12;
-		case 148u: goto tr9;
-		case 171u: goto tr12;
-		case 187u: goto tr9;
-	}
-	goto tr17;
-st8:
-	if ( ++p == pe )
-		goto _test_eof8;
-case 8:
-	if ( (*p) == 157u )
-		goto tr9;
-	goto tr0;
-tr16:
-#line 1 "NONE"
-	{te = p+1;}
-	goto st13;
-st13:
-	if ( ++p == pe )
-		goto _test_eof13;
-case 13:
-#line 1571 "tokenizer_utils.c"
-	if ( (*p) == 128u )
-		goto st9;
-	goto tr17;
-st9:
-	if ( ++p == pe )
-		goto _test_eof9;
-case 9:
-	switch( (*p) ) {
-		case 152u: goto tr10;
-		case 155u: goto tr10;
-		case 156u: goto tr12;
-		case 185u: goto tr10;
-		case 186u: goto tr11;
-	}
-	if ( 153u <= (*p) && (*p) <= 154u )
-		goto tr11;
-	goto tr0;
-	}
-	_test_eof10: cs = 10; goto _test_eof; 
-	_test_eof11: cs = 11; goto _test_eof; 
-	_test_eof0: cs = 0; goto _test_eof; 
-	_test_eof1: cs = 1; goto _test_eof; 
-	_test_eof2: cs = 2; goto _test_eof; 
-	_test_eof3: cs = 3; goto _test_eof; 
-	_test_eof4: cs = 4; goto _test_eof; 
-	_test_eof5: cs = 5; goto _test_eof; 
-	_test_eof6: cs = 6; goto _test_eof; 
-	_test_eof7: cs = 7; goto _test_eof; 
-	_test_eof12: cs = 12; goto _test_eof; 
-	_test_eof8: cs = 8; goto _test_eof; 
-	_test_eof13: cs = 13; goto _test_eof; 
-	_test_eof9: cs = 9; goto _test_eof; 
 
+	if ( ++p != pe )
+		goto _resume;
 	_test_eof: {}
 	if ( p == eof )
 	{
-	switch ( cs ) {
-	case 11: goto tr17;
-	case 0: goto tr0;
-	case 1: goto tr0;
-	case 2: goto tr0;
-	case 3: goto tr0;
-	case 4: goto tr0;
-	case 5: goto tr0;
-	case 6: goto tr0;
-	case 7: goto tr0;
-	case 12: goto tr17;
-	case 8: goto tr0;
-	case 13: goto tr17;
-	case 9: goto tr0;
+	if ( _ProbablyLeftLatexQuoteCounter_eof_trans[cs] > 0 ) {
+		_trans = _ProbablyLeftLatexQuoteCounter_eof_trans[cs] - 1;
+		goto _eof_trans;
 	}
 	}
 
@@ -1632,7 +1819,78 @@ case 9:
 
 
 
-#line 1636 "tokenizer_utils.c"
+#line 1823 "tokenizer_utils.c"
+static const char _ProbablyRightLatexQuoteCounter_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1, 
+	3, 1, 4, 1, 5, 1, 6, 1, 
+	7, 1, 8, 1, 9, 1, 10, 1, 
+	11
+};
+
+static const char _ProbablyRightLatexQuoteCounter_key_offsets[] = {
+	0, 1, 2, 3, 4, 5, 6, 7, 
+	8, 9, 16, 21, 23, 30
+};
+
+static const unsigned char _ProbablyRightLatexQuoteCounter_trans_keys[] = {
+	112u, 111u, 115u, 59u, 117u, 111u, 116u, 59u, 
+	157u, 152u, 155u, 156u, 185u, 186u, 153u, 154u, 
+	34u, 38u, 39u, 194u, 226u, 97u, 113u, 128u, 
+	145u, 146u, 147u, 148u, 171u, 187u, 128u, 0
+};
+
+static const char _ProbablyRightLatexQuoteCounter_single_lengths[] = {
+	1, 1, 1, 1, 1, 1, 1, 1, 
+	1, 5, 5, 2, 7, 1
+};
+
+static const char _ProbablyRightLatexQuoteCounter_range_lengths[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 1, 0, 0, 0, 0
+};
+
+static const char _ProbablyRightLatexQuoteCounter_index_offsets[] = {
+	0, 2, 4, 6, 8, 10, 12, 14, 
+	16, 18, 25, 31, 34, 42
+};
+
+static const char _ProbablyRightLatexQuoteCounter_trans_targs[] = {
+	1, 10, 2, 10, 3, 10, 10, 10, 
+	5, 10, 6, 10, 7, 10, 10, 10, 
+	10, 10, 10, 10, 10, 10, 10, 10, 
+	10, 10, 11, 10, 12, 13, 10, 0, 
+	4, 10, 8, 10, 10, 10, 10, 10, 
+	10, 10, 9, 10, 10, 10, 10, 10, 
+	10, 10, 10, 10, 10, 10, 10, 10, 
+	10, 0
+};
+
+static const char _ProbablyRightLatexQuoteCounter_trans_actions[] = {
+	0, 23, 0, 23, 0, 23, 7, 23, 
+	0, 23, 0, 23, 0, 23, 9, 23, 
+	17, 23, 11, 11, 15, 11, 13, 13, 
+	23, 9, 5, 7, 5, 5, 19, 0, 
+	0, 21, 0, 11, 13, 15, 17, 15, 
+	17, 21, 0, 21, 23, 23, 23, 23, 
+	23, 23, 23, 23, 23, 23, 21, 21, 
+	21, 0
+};
+
+static const char _ProbablyRightLatexQuoteCounter_to_state_actions[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 1, 0, 0, 0
+};
+
+static const char _ProbablyRightLatexQuoteCounter_from_state_actions[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 3, 0, 0, 0
+};
+
+static const char _ProbablyRightLatexQuoteCounter_eof_trans[] = {
+	54, 54, 54, 54, 54, 54, 54, 54, 
+	54, 54, 0, 57, 57, 57
+};
+
 static const int ProbablyRightLatexQuoteCounter_start = 10;
 static const int ProbablyRightLatexQuoteCounter_error = -1;
 
@@ -1649,7 +1907,7 @@ void NL_latex_quotes_probably_right(unsigned char *p, size_t buf_length,
     unsigned char *eof = pe;
 
     
-#line 1653 "tokenizer_utils.c"
+#line 1911 "tokenizer_utils.c"
 	{
 	cs = ProbablyRightLatexQuoteCounter_start;
 	ts = 0;
@@ -1659,223 +1917,158 @@ void NL_latex_quotes_probably_right(unsigned char *p, size_t buf_length,
 
 #line 515 "tokenizer_utils.rl"
     
-#line 1663 "tokenizer_utils.c"
+#line 1921 "tokenizer_utils.c"
 	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
 	if ( p == pe )
 		goto _test_eof;
-	switch ( cs )
+_resume:
+	_acts = _ProbablyRightLatexQuoteCounter_actions + _ProbablyRightLatexQuoteCounter_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
+#line 1 "NONE"
+	{ts = p;}
+	break;
+#line 1940 "tokenizer_utils.c"
+		}
+	}
+
+	_keys = _ProbablyRightLatexQuoteCounter_trans_keys + _ProbablyRightLatexQuoteCounter_key_offsets[cs];
+	_trans = _ProbablyRightLatexQuoteCounter_index_offsets[cs];
+
+	_klen = _ProbablyRightLatexQuoteCounter_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _ProbablyRightLatexQuoteCounter_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+_eof_trans:
+	cs = _ProbablyRightLatexQuoteCounter_trans_targs[_trans];
+
+	if ( _ProbablyRightLatexQuoteCounter_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _ProbablyRightLatexQuoteCounter_actions + _ProbablyRightLatexQuoteCounter_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
 	{
-tr0:
-#line 500 "tokenizer_utils.rl"
-	{{p = ((te))-1;}{*transform = *p; transform++;}}
-	goto st10;
-tr4:
+		switch ( *_acts++ )
+		{
+	case 2:
+#line 1 "NONE"
+	{te = p+1;}
+	break;
+	case 3:
 #line 488 "tokenizer_utils.rl"
 	{te = p+1;{ *transform = '\''; transform++; }}
-	goto st10;
-tr8:
+	break;
+	case 4:
 #line 489 "tokenizer_utils.rl"
 	{te = p+1;{ *transform = '\''; transform++; 
                            *transform = '\''; transform++; }}
-	goto st10;
-tr9:
-#line 498 "tokenizer_utils.rl"
-	{te = p+1;{ *transform = '\''; transform++; 
-                                 *transform = '\''; transform++; }}
-	goto st10;
-tr10:
+	break;
+	case 5:
 #line 492 "tokenizer_utils.rl"
 	{te = p+1;{ *transform = '`'; transform++; }}
-	goto st10;
-tr11:
+	break;
+	case 6:
 #line 493 "tokenizer_utils.rl"
 	{te = p+1;{ *transform = '\''; transform++; }}
-	goto st10;
-tr12:
+	break;
+	case 7:
 #line 495 "tokenizer_utils.rl"
 	{te = p+1;{ *transform = '`'; transform++; 
                            *transform = '`'; transform++; }}
-	goto st10;
-tr13:
+	break;
+	case 8:
+#line 498 "tokenizer_utils.rl"
+	{te = p+1;{ *transform = '\''; transform++; 
+                                 *transform = '\''; transform++; }}
+	break;
+	case 9:
 #line 500 "tokenizer_utils.rl"
 	{te = p+1;{*transform = *p; transform++;}}
-	goto st10;
-tr17:
+	break;
+	case 10:
 #line 500 "tokenizer_utils.rl"
 	{te = p;p--;{*transform = *p; transform++;}}
-	goto st10;
-st10:
+	break;
+	case 11:
+#line 500 "tokenizer_utils.rl"
+	{{p = ((te))-1;}{*transform = *p; transform++;}}
+	break;
+#line 2048 "tokenizer_utils.c"
+		}
+	}
+
+_again:
+	_acts = _ProbablyRightLatexQuoteCounter_actions + _ProbablyRightLatexQuoteCounter_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 0:
 #line 1 "NONE"
 	{ts = 0;}
-	if ( ++p == pe )
-		goto _test_eof10;
-case 10:
-#line 1 "NONE"
-	{ts = p;}
-#line 1716 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 34u: goto tr8;
-		case 38u: goto tr14;
-		case 39u: goto tr4;
-		case 194u: goto tr15;
-		case 226u: goto tr16;
+	break;
+#line 2061 "tokenizer_utils.c"
+		}
 	}
-	goto tr13;
-tr14:
-#line 1 "NONE"
-	{te = p+1;}
-	goto st11;
-st11:
-	if ( ++p == pe )
-		goto _test_eof11;
-case 11:
-#line 1733 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 97u: goto st0;
-		case 113u: goto st4;
-	}
-	goto tr17;
-st0:
-	if ( ++p == pe )
-		goto _test_eof0;
-case 0:
-	if ( (*p) == 112u )
-		goto st1;
-	goto tr0;
-st1:
-	if ( ++p == pe )
-		goto _test_eof1;
-case 1:
-	if ( (*p) == 111u )
-		goto st2;
-	goto tr0;
-st2:
-	if ( ++p == pe )
-		goto _test_eof2;
-case 2:
-	if ( (*p) == 115u )
-		goto st3;
-	goto tr0;
-st3:
-	if ( ++p == pe )
-		goto _test_eof3;
-case 3:
-	if ( (*p) == 59u )
-		goto tr4;
-	goto tr0;
-st4:
-	if ( ++p == pe )
-		goto _test_eof4;
-case 4:
-	if ( (*p) == 117u )
-		goto st5;
-	goto tr0;
-st5:
-	if ( ++p == pe )
-		goto _test_eof5;
-case 5:
-	if ( (*p) == 111u )
-		goto st6;
-	goto tr0;
-st6:
-	if ( ++p == pe )
-		goto _test_eof6;
-case 6:
-	if ( (*p) == 116u )
-		goto st7;
-	goto tr0;
-st7:
-	if ( ++p == pe )
-		goto _test_eof7;
-case 7:
-	if ( (*p) == 59u )
-		goto tr8;
-	goto tr0;
-tr15:
-#line 1 "NONE"
-	{te = p+1;}
-	goto st12;
-st12:
-	if ( ++p == pe )
-		goto _test_eof12;
-case 12:
-#line 1803 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 128u: goto st8;
-		case 145u: goto tr10;
-		case 146u: goto tr11;
-		case 147u: goto tr12;
-		case 148u: goto tr9;
-		case 171u: goto tr12;
-		case 187u: goto tr9;
-	}
-	goto tr17;
-st8:
-	if ( ++p == pe )
-		goto _test_eof8;
-case 8:
-	if ( (*p) == 157u )
-		goto tr9;
-	goto tr0;
-tr16:
-#line 1 "NONE"
-	{te = p+1;}
-	goto st13;
-st13:
-	if ( ++p == pe )
-		goto _test_eof13;
-case 13:
-#line 1829 "tokenizer_utils.c"
-	if ( (*p) == 128u )
-		goto st9;
-	goto tr17;
-st9:
-	if ( ++p == pe )
-		goto _test_eof9;
-case 9:
-	switch( (*p) ) {
-		case 152u: goto tr10;
-		case 155u: goto tr10;
-		case 156u: goto tr12;
-		case 185u: goto tr10;
-		case 186u: goto tr11;
-	}
-	if ( 153u <= (*p) && (*p) <= 154u )
-		goto tr11;
-	goto tr0;
-	}
-	_test_eof10: cs = 10; goto _test_eof; 
-	_test_eof11: cs = 11; goto _test_eof; 
-	_test_eof0: cs = 0; goto _test_eof; 
-	_test_eof1: cs = 1; goto _test_eof; 
-	_test_eof2: cs = 2; goto _test_eof; 
-	_test_eof3: cs = 3; goto _test_eof; 
-	_test_eof4: cs = 4; goto _test_eof; 
-	_test_eof5: cs = 5; goto _test_eof; 
-	_test_eof6: cs = 6; goto _test_eof; 
-	_test_eof7: cs = 7; goto _test_eof; 
-	_test_eof12: cs = 12; goto _test_eof; 
-	_test_eof8: cs = 8; goto _test_eof; 
-	_test_eof13: cs = 13; goto _test_eof; 
-	_test_eof9: cs = 9; goto _test_eof; 
 
+	if ( ++p != pe )
+		goto _resume;
 	_test_eof: {}
 	if ( p == eof )
 	{
-	switch ( cs ) {
-	case 11: goto tr17;
-	case 0: goto tr0;
-	case 1: goto tr0;
-	case 2: goto tr0;
-	case 3: goto tr0;
-	case 4: goto tr0;
-	case 5: goto tr0;
-	case 6: goto tr0;
-	case 7: goto tr0;
-	case 12: goto tr17;
-	case 8: goto tr0;
-	case 13: goto tr17;
-	case 9: goto tr0;
+	if ( _ProbablyRightLatexQuoteCounter_eof_trans[cs] > 0 ) {
+		_trans = _ProbablyRightLatexQuoteCounter_eof_trans[cs] - 1;
+		goto _eof_trans;
 	}
 	}
 
@@ -1890,7 +2083,39 @@ case 9:
 
 
 
-#line 1894 "tokenizer_utils.c"
+#line 2087 "tokenizer_utils.c"
+static const char _CopyNoSoftHypen_actions[] = {
+	0, 1, 0, 1, 1
+};
+
+static const char _CopyNoSoftHypen_key_offsets[] = {
+	0, 1, 2
+};
+
+static const unsigned char _CopyNoSoftHypen_trans_keys[] = {
+	194u, 173u, 194u, 0
+};
+
+static const char _CopyNoSoftHypen_single_lengths[] = {
+	1, 1, 1
+};
+
+static const char _CopyNoSoftHypen_range_lengths[] = {
+	0, 0, 0
+};
+
+static const char _CopyNoSoftHypen_index_offsets[] = {
+	0, 2, 4
+};
+
+static const char _CopyNoSoftHypen_trans_targs[] = {
+	1, 2, 2, 2, 1, 2, 0
+};
+
+static const char _CopyNoSoftHypen_trans_actions[] = {
+	0, 1, 0, 3, 0, 1, 0
+};
+
 static const int CopyNoSoftHypen_start = 0;
 static const int CopyNoSoftHypen_error = -1;
 
@@ -1905,30 +2130,91 @@ void NL_copy_no_softhyphen(unsigned char *p, size_t buf_length,
     unsigned char *pe = p + buf_length; 
 
     
-#line 1909 "tokenizer_utils.c"
+#line 2134 "tokenizer_utils.c"
 	{
 	cs = CopyNoSoftHypen_start;
 	}
 
 #line 549 "tokenizer_utils.rl"
     
-#line 1916 "tokenizer_utils.c"
+#line 2141 "tokenizer_utils.c"
 	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
 	if ( p == pe )
 		goto _test_eof;
-	switch ( cs )
+_resume:
+	_keys = _CopyNoSoftHypen_trans_keys + _CopyNoSoftHypen_key_offsets[cs];
+	_trans = _CopyNoSoftHypen_index_offsets[cs];
+
+	_klen = _CopyNoSoftHypen_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _CopyNoSoftHypen_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+	cs = _CopyNoSoftHypen_trans_targs[_trans];
+
+	if ( _CopyNoSoftHypen_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _CopyNoSoftHypen_actions + _CopyNoSoftHypen_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
 	{
-case 0:
-	if ( (*p) == 194u )
-		goto st1;
-	goto tr0;
-tr0:
+		switch ( *_acts++ )
+		{
+	case 0:
 #line 525 "tokenizer_utils.rl"
 	{
         *transform = *(p); transform++;
     }
-	goto st2;
-tr2:
+	break;
+	case 1:
 #line 529 "tokenizer_utils.rl"
 	{
         *transform = *(p - 1);
@@ -1936,26 +2222,14 @@ tr2:
         *transform = *p;
         transform++;       
     }
-	goto st2;
-st2:
-	if ( ++p == pe )
-		goto _test_eof2;
-case 2:
-#line 1945 "tokenizer_utils.c"
-	if ( (*p) == 194u )
-		goto st1;
-	goto tr0;
-st1:
-	if ( ++p == pe )
-		goto _test_eof1;
-case 1:
-	if ( (*p) == 173u )
-		goto st2;
-	goto tr2;
+	break;
+#line 2227 "tokenizer_utils.c"
+		}
 	}
-	_test_eof2: cs = 2; goto _test_eof; 
-	_test_eof1: cs = 1; goto _test_eof; 
 
+_again:
+	if ( ++p != pe )
+		goto _resume;
 	_test_eof: {}
 	}
 
@@ -1968,7 +2242,57 @@ case 1:
 
 
 
-#line 1972 "tokenizer_utils.c"
+#line 2246 "tokenizer_utils.c"
+static const char _NormalizeAmps_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1, 
+	3, 1, 4, 1, 5, 1, 6
+};
+
+static const char _NormalizeAmps_key_offsets[] = {
+	0, 2, 4, 5, 6
+};
+
+static const unsigned char _NormalizeAmps_trans_keys[] = {
+	77u, 109u, 80u, 112u, 59u, 38u, 65u, 97u, 
+	0
+};
+
+static const char _NormalizeAmps_single_lengths[] = {
+	2, 2, 1, 1, 2
+};
+
+static const char _NormalizeAmps_range_lengths[] = {
+	0, 0, 0, 0, 0
+};
+
+static const char _NormalizeAmps_index_offsets[] = {
+	0, 3, 6, 8, 10
+};
+
+static const char _NormalizeAmps_trans_targs[] = {
+	1, 1, 3, 2, 2, 3, 3, 3, 
+	4, 3, 0, 0, 3, 3, 3, 3, 
+	3, 0
+};
+
+static const char _NormalizeAmps_trans_actions[] = {
+	0, 0, 13, 0, 0, 13, 7, 13, 
+	5, 9, 0, 0, 11, 13, 13, 13, 
+	11, 0
+};
+
+static const char _NormalizeAmps_to_state_actions[] = {
+	0, 0, 0, 1, 0
+};
+
+static const char _NormalizeAmps_from_state_actions[] = {
+	0, 0, 0, 3, 0
+};
+
+static const char _NormalizeAmps_eof_trans[] = {
+	16, 16, 16, 0, 17
+};
+
 static const int NormalizeAmps_start = 3;
 static const int NormalizeAmps_error = -1;
 
@@ -1986,7 +2310,7 @@ void NL_normalize_ampersand(unsigned char *p, size_t buf_length,
     unsigned char *eof = pe;
 
     
-#line 1990 "tokenizer_utils.c"
+#line 2314 "tokenizer_utils.c"
 	{
 	cs = NormalizeAmps_start;
 	ts = 0;
@@ -1996,94 +2320,135 @@ void NL_normalize_ampersand(unsigned char *p, size_t buf_length,
 
 #line 577 "tokenizer_utils.rl"
     
-#line 2000 "tokenizer_utils.c"
+#line 2324 "tokenizer_utils.c"
 	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
 	if ( p == pe )
 		goto _test_eof;
-	switch ( cs )
-	{
-tr0:
-#line 561 "tokenizer_utils.rl"
-	{{p = ((te))-1;}{ *transform = *p; transform++; }}
-	goto st3;
-tr3:
-#line 560 "tokenizer_utils.rl"
-	{te = p+1;{ *transform = '&'; transform++; }}
-	goto st3;
-tr4:
-#line 561 "tokenizer_utils.rl"
-	{te = p+1;{ *transform = *p; transform++; }}
-	goto st3;
-tr6:
-#line 561 "tokenizer_utils.rl"
-	{te = p;p--;{ *transform = *p; transform++; }}
-	goto st3;
-st3:
-#line 1 "NONE"
-	{ts = 0;}
-	if ( ++p == pe )
-		goto _test_eof3;
-case 3:
+_resume:
+	_acts = _NormalizeAmps_actions + _NormalizeAmps_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
 #line 1 "NONE"
 	{ts = p;}
-#line 2030 "tokenizer_utils.c"
-	if ( (*p) == 38u )
-		goto tr5;
-	goto tr4;
-tr5:
+	break;
+#line 2343 "tokenizer_utils.c"
+		}
+	}
+
+	_keys = _NormalizeAmps_trans_keys + _NormalizeAmps_key_offsets[cs];
+	_trans = _NormalizeAmps_index_offsets[cs];
+
+	_klen = _NormalizeAmps_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _NormalizeAmps_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+_eof_trans:
+	cs = _NormalizeAmps_trans_targs[_trans];
+
+	if ( _NormalizeAmps_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _NormalizeAmps_actions + _NormalizeAmps_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
+	{
+		switch ( *_acts++ )
+		{
+	case 2:
 #line 1 "NONE"
 	{te = p+1;}
-	goto st4;
-st4:
-	if ( ++p == pe )
-		goto _test_eof4;
-case 4:
-#line 2042 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 65u: goto st0;
-		case 97u: goto st0;
+	break;
+	case 3:
+#line 560 "tokenizer_utils.rl"
+	{te = p+1;{ *transform = '&'; transform++; }}
+	break;
+	case 4:
+#line 561 "tokenizer_utils.rl"
+	{te = p+1;{ *transform = *p; transform++; }}
+	break;
+	case 5:
+#line 561 "tokenizer_utils.rl"
+	{te = p;p--;{ *transform = *p; transform++; }}
+	break;
+	case 6:
+#line 561 "tokenizer_utils.rl"
+	{{p = ((te))-1;}{ *transform = *p; transform++; }}
+	break;
+#line 2428 "tokenizer_utils.c"
+		}
 	}
-	goto tr6;
-st0:
-	if ( ++p == pe )
-		goto _test_eof0;
-case 0:
-	switch( (*p) ) {
-		case 77u: goto st1;
-		case 109u: goto st1;
-	}
-	goto tr0;
-st1:
-	if ( ++p == pe )
-		goto _test_eof1;
-case 1:
-	switch( (*p) ) {
-		case 80u: goto st2;
-		case 112u: goto st2;
-	}
-	goto tr0;
-st2:
-	if ( ++p == pe )
-		goto _test_eof2;
-case 2:
-	if ( (*p) == 59u )
-		goto tr3;
-	goto tr0;
-	}
-	_test_eof3: cs = 3; goto _test_eof; 
-	_test_eof4: cs = 4; goto _test_eof; 
-	_test_eof0: cs = 0; goto _test_eof; 
-	_test_eof1: cs = 1; goto _test_eof; 
-	_test_eof2: cs = 2; goto _test_eof; 
 
+_again:
+	_acts = _NormalizeAmps_actions + _NormalizeAmps_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 0:
+#line 1 "NONE"
+	{ts = 0;}
+	break;
+#line 2441 "tokenizer_utils.c"
+		}
+	}
+
+	if ( ++p != pe )
+		goto _resume;
 	_test_eof: {}
 	if ( p == eof )
 	{
-	switch ( cs ) {
-	case 4: goto tr6;
-	case 0: goto tr0;
-	case 1: goto tr0;
-	case 2: goto tr0;
+	if ( _NormalizeAmps_eof_trans[cs] > 0 ) {
+		_trans = _NormalizeAmps_eof_trans[cs] - 1;
+		goto _eof_trans;
 	}
 	}
 
@@ -2098,7 +2463,54 @@ case 2:
 
 
 
-#line 2102 "tokenizer_utils.c"
+#line 2467 "tokenizer_utils.c"
+static const char _CountUnescapedForwardSlashesAsterisks_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1, 
+	3, 1, 4, 1, 5
+};
+
+static const char _CountUnescapedForwardSlashesAsterisks_key_offsets[] = {
+	0, 3
+};
+
+static const unsigned char _CountUnescapedForwardSlashesAsterisks_trans_keys[] = {
+	42u, 47u, 92u, 42u, 47u, 0
+};
+
+static const char _CountUnescapedForwardSlashesAsterisks_single_lengths[] = {
+	3, 2
+};
+
+static const char _CountUnescapedForwardSlashesAsterisks_range_lengths[] = {
+	0, 0
+};
+
+static const char _CountUnescapedForwardSlashesAsterisks_index_offsets[] = {
+	0, 4
+};
+
+static const char _CountUnescapedForwardSlashesAsterisks_trans_targs[] = {
+	0, 0, 1, 0, 0, 0, 0, 0, 
+	0
+};
+
+static const char _CountUnescapedForwardSlashesAsterisks_trans_actions[] = {
+	7, 7, 0, 9, 5, 5, 11, 11, 
+	0
+};
+
+static const char _CountUnescapedForwardSlashesAsterisks_to_state_actions[] = {
+	1, 0
+};
+
+static const char _CountUnescapedForwardSlashesAsterisks_from_state_actions[] = {
+	3, 0
+};
+
+static const char _CountUnescapedForwardSlashesAsterisks_eof_trans[] = {
+	0, 8
+};
+
 static const int CountUnescapedForwardSlashesAsterisks_start = 0;
 static const int CountUnescapedForwardSlashesAsterisks_error = -1;
 
@@ -2117,7 +2529,7 @@ size_t NL_get_size_escaped_forward_slash_asterisk(unsigned char *p,
     size_t count = 0;
 
     
-#line 2121 "tokenizer_utils.c"
+#line 2533 "tokenizer_utils.c"
 	{
 	cs = CountUnescapedForwardSlashesAsterisks_start;
 	ts = 0;
@@ -2127,61 +2539,131 @@ size_t NL_get_size_escaped_forward_slash_asterisk(unsigned char *p,
 
 #line 607 "tokenizer_utils.rl"
     
-#line 2131 "tokenizer_utils.c"
+#line 2543 "tokenizer_utils.c"
 	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
 	if ( p == pe )
 		goto _test_eof;
-	switch ( cs )
-	{
-tr0:
-#line 590 "tokenizer_utils.rl"
-	{te = p+1;{ count++; }}
-	goto st0;
-tr1:
-#line 589 "tokenizer_utils.rl"
-	{te = p+1;{ count += 2; }}
-	goto st0;
-tr3:
-#line 590 "tokenizer_utils.rl"
-	{te = p;p--;{ count++; }}
-	goto st0;
-tr4:
-#line 588 "tokenizer_utils.rl"
-	{te = p+1;{ count += 2; }}
-	goto st0;
-st0:
-#line 1 "NONE"
-	{ts = 0;}
-	if ( ++p == pe )
-		goto _test_eof0;
-case 0:
+_resume:
+	_acts = _CountUnescapedForwardSlashesAsterisks_actions + _CountUnescapedForwardSlashesAsterisks_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
 #line 1 "NONE"
 	{ts = p;}
-#line 2161 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 42u: goto tr1;
-		case 47u: goto tr1;
-		case 92u: goto st1;
+	break;
+#line 2562 "tokenizer_utils.c"
+		}
 	}
-	goto tr0;
-st1:
-	if ( ++p == pe )
-		goto _test_eof1;
-case 1:
-	switch( (*p) ) {
-		case 42u: goto tr4;
-		case 47u: goto tr4;
-	}
-	goto tr3;
-	}
-	_test_eof0: cs = 0; goto _test_eof; 
-	_test_eof1: cs = 1; goto _test_eof; 
 
+	_keys = _CountUnescapedForwardSlashesAsterisks_trans_keys + _CountUnescapedForwardSlashesAsterisks_key_offsets[cs];
+	_trans = _CountUnescapedForwardSlashesAsterisks_index_offsets[cs];
+
+	_klen = _CountUnescapedForwardSlashesAsterisks_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _CountUnescapedForwardSlashesAsterisks_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+_eof_trans:
+	cs = _CountUnescapedForwardSlashesAsterisks_trans_targs[_trans];
+
+	if ( _CountUnescapedForwardSlashesAsterisks_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _CountUnescapedForwardSlashesAsterisks_actions + _CountUnescapedForwardSlashesAsterisks_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
+	{
+		switch ( *_acts++ )
+		{
+	case 2:
+#line 588 "tokenizer_utils.rl"
+	{te = p+1;{ count += 2; }}
+	break;
+	case 3:
+#line 589 "tokenizer_utils.rl"
+	{te = p+1;{ count += 2; }}
+	break;
+	case 4:
+#line 590 "tokenizer_utils.rl"
+	{te = p+1;{ count++; }}
+	break;
+	case 5:
+#line 590 "tokenizer_utils.rl"
+	{te = p;p--;{ count++; }}
+	break;
+#line 2643 "tokenizer_utils.c"
+		}
+	}
+
+_again:
+	_acts = _CountUnescapedForwardSlashesAsterisks_actions + _CountUnescapedForwardSlashesAsterisks_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 0:
+#line 1 "NONE"
+	{ts = 0;}
+	break;
+#line 2656 "tokenizer_utils.c"
+		}
+	}
+
+	if ( ++p != pe )
+		goto _resume;
 	_test_eof: {}
 	if ( p == eof )
 	{
-	switch ( cs ) {
-	case 1: goto tr3;
+	if ( _CountUnescapedForwardSlashesAsterisks_eof_trans[cs] > 0 ) {
+		_trans = _CountUnescapedForwardSlashesAsterisks_eof_trans[cs] - 1;
+		goto _eof_trans;
 	}
 	}
 
@@ -2197,7 +2679,55 @@ case 1:
 
 
 
-#line 2201 "tokenizer_utils.c"
+#line 2683 "tokenizer_utils.c"
+static const char _EscapedForwardSlashesAsterisks_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1, 
+	3, 1, 4, 1, 5, 1, 6, 1, 
+	7
+};
+
+static const char _EscapedForwardSlashesAsterisks_key_offsets[] = {
+	0, 3
+};
+
+static const unsigned char _EscapedForwardSlashesAsterisks_trans_keys[] = {
+	42u, 47u, 92u, 42u, 47u, 0
+};
+
+static const char _EscapedForwardSlashesAsterisks_single_lengths[] = {
+	3, 2
+};
+
+static const char _EscapedForwardSlashesAsterisks_range_lengths[] = {
+	0, 0
+};
+
+static const char _EscapedForwardSlashesAsterisks_index_offsets[] = {
+	0, 4
+};
+
+static const char _EscapedForwardSlashesAsterisks_trans_targs[] = {
+	0, 0, 1, 0, 0, 0, 0, 0, 
+	0
+};
+
+static const char _EscapedForwardSlashesAsterisks_trans_actions[] = {
+	11, 9, 0, 13, 7, 5, 15, 15, 
+	0
+};
+
+static const char _EscapedForwardSlashesAsterisks_to_state_actions[] = {
+	1, 0
+};
+
+static const char _EscapedForwardSlashesAsterisks_from_state_actions[] = {
+	3, 0
+};
+
+static const char _EscapedForwardSlashesAsterisks_eof_trans[] = {
+	0, 8
+};
+
 static const int EscapedForwardSlashesAsterisks_start = 0;
 static const int EscapedForwardSlashesAsterisks_error = -1;
 
@@ -2215,7 +2745,7 @@ void NL_escape_forward_slash_asterisk(unsigned char *p,
     unsigned char *eof = pe;
 
     
-#line 2219 "tokenizer_utils.c"
+#line 2749 "tokenizer_utils.c"
 	{
 	cs = EscapedForwardSlashesAsterisks_start;
 	ts = 0;
@@ -2225,81 +2755,151 @@ void NL_escape_forward_slash_asterisk(unsigned char *p,
 
 #line 650 "tokenizer_utils.rl"
     
-#line 2229 "tokenizer_utils.c"
+#line 2759 "tokenizer_utils.c"
 	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
 	if ( p == pe )
 		goto _test_eof;
-	switch ( cs )
+_resume:
+	_acts = _EscapedForwardSlashesAsterisks_actions + _EscapedForwardSlashesAsterisks_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
+#line 1 "NONE"
+	{ts = p;}
+	break;
+#line 2778 "tokenizer_utils.c"
+		}
+	}
+
+	_keys = _EscapedForwardSlashesAsterisks_trans_keys + _EscapedForwardSlashesAsterisks_key_offsets[cs];
+	_trans = _EscapedForwardSlashesAsterisks_index_offsets[cs];
+
+	_klen = _EscapedForwardSlashesAsterisks_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _EscapedForwardSlashesAsterisks_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+_eof_trans:
+	cs = _EscapedForwardSlashesAsterisks_trans_targs[_trans];
+
+	if ( _EscapedForwardSlashesAsterisks_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _EscapedForwardSlashesAsterisks_actions + _EscapedForwardSlashesAsterisks_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
 	{
-tr0:
-#line 634 "tokenizer_utils.rl"
-	{te = p+1;{ *transform = *ts; transform++; }}
-	goto st0;
-tr1:
-#line 630 "tokenizer_utils.rl"
-	{te = p+1;{ 
-            *transform = '\\'; transform++; 
-            *transform = '*'; transform++;
-        }}
-	goto st0;
-tr2:
-#line 626 "tokenizer_utils.rl"
-	{te = p+1;{
-            *transform = '\\'; transform++; 
-            *transform = '/'; transform++;
-        }}
-	goto st0;
-tr4:
-#line 634 "tokenizer_utils.rl"
-	{te = p;p--;{ *transform = *ts; transform++; }}
-	goto st0;
-tr5:
-#line 622 "tokenizer_utils.rl"
-	{te = p+1;{ 
-            *transform = '\\'; transform++; 
-            *transform = '*'; transform++;
-        }}
-	goto st0;
-tr6:
+		switch ( *_acts++ )
+		{
+	case 2:
 #line 618 "tokenizer_utils.rl"
 	{te = p+1;{
             *transform = '\\'; transform++; 
             *transform = '/'; transform++;
         }}
-	goto st0;
-st0:
+	break;
+	case 3:
+#line 622 "tokenizer_utils.rl"
+	{te = p+1;{ 
+            *transform = '\\'; transform++; 
+            *transform = '*'; transform++;
+        }}
+	break;
+	case 4:
+#line 626 "tokenizer_utils.rl"
+	{te = p+1;{
+            *transform = '\\'; transform++; 
+            *transform = '/'; transform++;
+        }}
+	break;
+	case 5:
+#line 630 "tokenizer_utils.rl"
+	{te = p+1;{ 
+            *transform = '\\'; transform++; 
+            *transform = '*'; transform++;
+        }}
+	break;
+	case 6:
+#line 634 "tokenizer_utils.rl"
+	{te = p+1;{ *transform = *ts; transform++; }}
+	break;
+	case 7:
+#line 634 "tokenizer_utils.rl"
+	{te = p;p--;{ *transform = *ts; transform++; }}
+	break;
+#line 2879 "tokenizer_utils.c"
+		}
+	}
+
+_again:
+	_acts = _EscapedForwardSlashesAsterisks_actions + _EscapedForwardSlashesAsterisks_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 0:
 #line 1 "NONE"
 	{ts = 0;}
-	if ( ++p == pe )
-		goto _test_eof0;
-case 0:
-#line 1 "NONE"
-	{ts = p;}
-#line 2279 "tokenizer_utils.c"
-	switch( (*p) ) {
-		case 42u: goto tr1;
-		case 47u: goto tr2;
-		case 92u: goto st1;
+	break;
+#line 2892 "tokenizer_utils.c"
+		}
 	}
-	goto tr0;
-st1:
-	if ( ++p == pe )
-		goto _test_eof1;
-case 1:
-	switch( (*p) ) {
-		case 42u: goto tr5;
-		case 47u: goto tr6;
-	}
-	goto tr4;
-	}
-	_test_eof0: cs = 0; goto _test_eof; 
-	_test_eof1: cs = 1; goto _test_eof; 
 
+	if ( ++p != pe )
+		goto _resume;
 	_test_eof: {}
 	if ( p == eof )
 	{
-	switch ( cs ) {
-	case 1: goto tr4;
+	if ( _EscapedForwardSlashesAsterisks_eof_trans[cs] > 0 ) {
+		_trans = _EscapedForwardSlashesAsterisks_eof_trans[cs] - 1;
+		goto _eof_trans;
 	}
 	}
 
@@ -2314,7 +2914,48 @@ case 1:
 
 
 
-#line 2318 "tokenizer_utils.c"
+#line 2918 "tokenizer_utils.c"
+static const char _CountSpaces_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1, 
+	3
+};
+
+static const char _CountSpaces_key_offsets[] = {
+	0
+};
+
+static const unsigned char _CountSpaces_trans_keys[] = {
+	32u, 0
+};
+
+static const char _CountSpaces_single_lengths[] = {
+	1
+};
+
+static const char _CountSpaces_range_lengths[] = {
+	0
+};
+
+static const char _CountSpaces_index_offsets[] = {
+	0
+};
+
+static const char _CountSpaces_trans_targs[] = {
+	0, 0, 0
+};
+
+static const char _CountSpaces_trans_actions[] = {
+	5, 7, 0
+};
+
+static const char _CountSpaces_to_state_actions[] = {
+	1
+};
+
+static const char _CountSpaces_from_state_actions[] = {
+	3
+};
+
 static const int CountSpaces_start = 0;
 static const int CountSpaces_error = -1;
 
@@ -2333,7 +2974,7 @@ size_t NL_get_size_normalized_spaces(unsigned char *p,
     size_t count = 0;
 
     
-#line 2337 "tokenizer_utils.c"
+#line 2978 "tokenizer_utils.c"
 	{
 	cs = CountSpaces_start;
 	ts = 0;
@@ -2343,35 +2984,116 @@ size_t NL_get_size_normalized_spaces(unsigned char *p,
 
 #line 678 "tokenizer_utils.rl"
     
-#line 2347 "tokenizer_utils.c"
+#line 2988 "tokenizer_utils.c"
 	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
 	if ( p == pe )
 		goto _test_eof;
-	switch ( cs )
-	{
-tr0:
-#line 661 "tokenizer_utils.rl"
-	{te = p+1;{ count++; }}
-	goto st0;
-tr1:
-#line 660 "tokenizer_utils.rl"
-	{te = p+1;{ count += 2; }}
-	goto st0;
-st0:
-#line 1 "NONE"
-	{ts = 0;}
-	if ( ++p == pe )
-		goto _test_eof0;
-case 0:
+_resume:
+	_acts = _CountSpaces_actions + _CountSpaces_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
 #line 1 "NONE"
 	{ts = p;}
-#line 2369 "tokenizer_utils.c"
-	if ( (*p) == 32u )
-		goto tr1;
-	goto tr0;
+	break;
+#line 3007 "tokenizer_utils.c"
+		}
 	}
-	_test_eof0: cs = 0; goto _test_eof; 
 
+	_keys = _CountSpaces_trans_keys + _CountSpaces_key_offsets[cs];
+	_trans = _CountSpaces_index_offsets[cs];
+
+	_klen = _CountSpaces_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _CountSpaces_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+	cs = _CountSpaces_trans_targs[_trans];
+
+	if ( _CountSpaces_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _CountSpaces_actions + _CountSpaces_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
+	{
+		switch ( *_acts++ )
+		{
+	case 2:
+#line 660 "tokenizer_utils.rl"
+	{te = p+1;{ count += 2; }}
+	break;
+	case 3:
+#line 661 "tokenizer_utils.rl"
+	{te = p+1;{ count++; }}
+	break;
+#line 3079 "tokenizer_utils.c"
+		}
+	}
+
+_again:
+	_acts = _CountSpaces_actions + _CountSpaces_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 0:
+#line 1 "NONE"
+	{ts = 0;}
+	break;
+#line 3092 "tokenizer_utils.c"
+		}
+	}
+
+	if ( ++p != pe )
+		goto _resume;
 	_test_eof: {}
 	}
 
@@ -2385,7 +3107,48 @@ case 0:
 
 
 
-#line 2389 "tokenizer_utils.c"
+#line 3111 "tokenizer_utils.c"
+static const char _NormalizeSpaces_actions[] = {
+	0, 1, 0, 1, 1, 1, 2, 1, 
+	3
+};
+
+static const char _NormalizeSpaces_key_offsets[] = {
+	0
+};
+
+static const unsigned char _NormalizeSpaces_trans_keys[] = {
+	32u, 0
+};
+
+static const char _NormalizeSpaces_single_lengths[] = {
+	1
+};
+
+static const char _NormalizeSpaces_range_lengths[] = {
+	0
+};
+
+static const char _NormalizeSpaces_index_offsets[] = {
+	0
+};
+
+static const char _NormalizeSpaces_trans_targs[] = {
+	0, 0, 0
+};
+
+static const char _NormalizeSpaces_trans_actions[] = {
+	5, 7, 0
+};
+
+static const char _NormalizeSpaces_to_state_actions[] = {
+	1
+};
+
+static const char _NormalizeSpaces_from_state_actions[] = {
+	3
+};
+
 static const int NormalizeSpaces_start = 0;
 static const int NormalizeSpaces_error = -1;
 
@@ -2403,7 +3166,7 @@ void NL_normalize_spaces(unsigned char *p,
     unsigned char *eof = pe;
 
     
-#line 2407 "tokenizer_utils.c"
+#line 3170 "tokenizer_utils.c"
 	{
 	cs = NormalizeSpaces_start;
 	ts = 0;
@@ -2413,38 +3176,119 @@ void NL_normalize_spaces(unsigned char *p,
 
 #line 709 "tokenizer_utils.rl"
     
-#line 2417 "tokenizer_utils.c"
+#line 3180 "tokenizer_utils.c"
 	{
+	int _klen;
+	unsigned int _trans;
+	const char *_acts;
+	unsigned int _nacts;
+	const unsigned char *_keys;
+
 	if ( p == pe )
 		goto _test_eof;
-	switch ( cs )
+_resume:
+	_acts = _NormalizeSpaces_actions + _NormalizeSpaces_from_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 1:
+#line 1 "NONE"
+	{ts = p;}
+	break;
+#line 3199 "tokenizer_utils.c"
+		}
+	}
+
+	_keys = _NormalizeSpaces_trans_keys + _NormalizeSpaces_key_offsets[cs];
+	_trans = _NormalizeSpaces_index_offsets[cs];
+
+	_klen = _NormalizeSpaces_single_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + _klen - 1;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + ((_upper-_lower) >> 1);
+			if ( (*p) < *_mid )
+				_upper = _mid - 1;
+			else if ( (*p) > *_mid )
+				_lower = _mid + 1;
+			else {
+				_trans += (unsigned int)(_mid - _keys);
+				goto _match;
+			}
+		}
+		_keys += _klen;
+		_trans += _klen;
+	}
+
+	_klen = _NormalizeSpaces_range_lengths[cs];
+	if ( _klen > 0 ) {
+		const unsigned char *_lower = _keys;
+		const unsigned char *_mid;
+		const unsigned char *_upper = _keys + (_klen<<1) - 2;
+		while (1) {
+			if ( _upper < _lower )
+				break;
+
+			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
+			if ( (*p) < _mid[0] )
+				_upper = _mid - 2;
+			else if ( (*p) > _mid[1] )
+				_lower = _mid + 2;
+			else {
+				_trans += (unsigned int)((_mid - _keys)>>1);
+				goto _match;
+			}
+		}
+		_trans += _klen;
+	}
+
+_match:
+	cs = _NormalizeSpaces_trans_targs[_trans];
+
+	if ( _NormalizeSpaces_trans_actions[_trans] == 0 )
+		goto _again;
+
+	_acts = _NormalizeSpaces_actions + _NormalizeSpaces_trans_actions[_trans];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 )
 	{
-tr0:
-#line 693 "tokenizer_utils.rl"
-	{te = p+1;{ *transform = *ts; transform++; }}
-	goto st0;
-tr1:
+		switch ( *_acts++ )
+		{
+	case 2:
 #line 689 "tokenizer_utils.rl"
 	{te = p+1;{
             *transform = 0xC2; transform++;
             *transform = 0xA0; transform++;
         }}
-	goto st0;
-st0:
+	break;
+	case 3:
+#line 693 "tokenizer_utils.rl"
+	{te = p+1;{ *transform = *ts; transform++; }}
+	break;
+#line 3274 "tokenizer_utils.c"
+		}
+	}
+
+_again:
+	_acts = _NormalizeSpaces_actions + _NormalizeSpaces_to_state_actions[cs];
+	_nacts = (unsigned int) *_acts++;
+	while ( _nacts-- > 0 ) {
+		switch ( *_acts++ ) {
+	case 0:
 #line 1 "NONE"
 	{ts = 0;}
-	if ( ++p == pe )
-		goto _test_eof0;
-case 0:
-#line 1 "NONE"
-	{ts = p;}
-#line 2442 "tokenizer_utils.c"
-	if ( (*p) == 32u )
-		goto tr1;
-	goto tr0;
+	break;
+#line 3287 "tokenizer_utils.c"
+		}
 	}
-	_test_eof0: cs = 0; goto _test_eof; 
 
+	if ( ++p != pe )
+		goto _resume;
 	_test_eof: {}
 	}
 
