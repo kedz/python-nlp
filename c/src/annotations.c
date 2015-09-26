@@ -48,7 +48,6 @@ inline NL_bspan *NL_get_bspan(NL_annotations *ann, size_t index) {
     }
 }
 
-
 void NL_deallocate_bspan_annotations(NL_v_memmgr *mgr, NL_annotations **ann) {
     NL_bspan *span = NULL;
     for (size_t i = 0; i < (*ann)->size; i++) {
@@ -57,6 +56,17 @@ void NL_deallocate_bspan_annotations(NL_v_memmgr *mgr, NL_annotations **ann) {
             NL_deallocate_v_mem(mgr, (void **) &(span->data)); 
         }
     }
+    NL_deallocate_v_mem(mgr, (void **) &(*ann)->list);
     NL_deallocate_v_mem(mgr, (void **) ann);
+}
+
+NL_string *NL_new_string(NL_v_memmgr *mgr, size_t size) {
+    void *data = NL_allocate_mem_size(mgr, size + sizeof(NL_string));
+    if (data == NULL)
+        return NULL;
+    NL_string *string = data;
+    string->bytes = data + sizeof(NL_string);
+    string->size = size;
+    return string;
 }
 

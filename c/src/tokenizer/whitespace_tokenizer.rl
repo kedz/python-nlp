@@ -32,15 +32,22 @@
 
     SPACENL = SPACE | NEWLINE ;
 
-    WS = SPACENL+ ;
-
-    WORD = ((any+?) -- WS) >{ ts = fpc; };
-
     action NextToken {
         NL_add_bspan(mgr, ann, ts, fpc - ts, NULL, 0);
     }
-    
-    main := WS? WORD (WS @NextToken  WORD)* %NextToken WS? ;
+ 
+
+    WS = SPACENL+ >NextToken;
+
+    WORD = ((any+) -- (SPACENL+)) >{ ts = fpc; } ;
+    TWS = (SPACENL+)  >NextToken;
+
+    SWS = (SPACENL+) %{ ts = fpc; };
+
+    main :=   (SWS ((WORD TWS)+)) 
+            | (SWS ((WORD TWS)+) WORD) %NextToken
+            | ((WORD TWS)+) 
+            | (((WORD TWS)+) WORD) %NextToken; 
 
 }%%
 

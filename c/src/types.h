@@ -3,7 +3,7 @@
 
 typedef unsigned char NL_flags;
 
-static NL_flags NL_OWN_DATA = 1;
+#define NL_OWN_DATA 0x01
 
 // All annotations are built on top of an underlying byte buffer. Usually this
 // is the text of a document under analysis. size stores the length of the 
@@ -26,7 +26,7 @@ typedef struct NL_annotations {
 typedef struct NL_string {
     unsigned char *bytes;
     size_t size;
-    unsigned char flags; 
+    NL_flags flags; 
 } NL_string;
 
 // Span of bytes annotation.

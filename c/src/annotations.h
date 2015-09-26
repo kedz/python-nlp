@@ -19,4 +19,6 @@ NL_bspan *NL_get_bspan(NL_annotations *ann, size_t index);
 
 void NL_deallocate_bspan_annotations(NL_v_memmgr *mgr, NL_annotations **ann);
 
+NL_string *NL_new_string(NL_v_memmgr *mgr, size_t size);
+
 #endif

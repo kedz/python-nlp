@@ -3,82 +3,101 @@
 #include "whitespace_tokenizer.h"
 
 
-#line 45 "whitespace_tokenizer.rl"
+#line 52 "whitespace_tokenizer.rl"
 
 
 
 #line 11 "whitespace_tokenizer.c"
 static const char _ws_tok_actions[] = {
-	0, 1, 0, 1, 1, 2, 0, 1, 
-	2, 1, 0
+	0, 1, 0, 1, 1, 2, 2, 1
+	
 };
 
-static const char _ws_tok_key_offsets[] = {
-	0, 6, 12, 18, 26, 33, 43, 50, 
-	57, 65, 72, 82, 89
+static const unsigned char _ws_tok_key_offsets[] = {
+	0, 6, 12, 20, 27, 37, 44, 51, 
+	57, 65, 72, 82, 89, 96, 102, 108, 
+	116, 123, 133, 140
 };
 
 static const unsigned char _ws_tok_trans_keys[] = {
 	32u, 194u, 226u, 227u, 9u, 13u, 32u, 194u, 
-	226u, 227u, 9u, 13u, 32u, 194u, 226u, 227u, 
-	9u, 13u, 32u, 133u, 160u, 194u, 226u, 227u, 
-	9u, 13u, 32u, 128u, 194u, 226u, 227u, 9u, 
-	13u, 32u, 194u, 226u, 227u, 9u, 13u, 128u, 
-	138u, 168u, 169u, 32u, 128u, 194u, 226u, 227u, 
-	9u, 13u, 32u, 128u, 194u, 226u, 227u, 9u, 
+	226u, 227u, 9u, 13u, 32u, 133u, 160u, 194u, 
+	226u, 227u, 9u, 13u, 32u, 128u, 194u, 226u, 
+	227u, 9u, 13u, 32u, 194u, 226u, 227u, 9u, 
+	13u, 128u, 138u, 168u, 169u, 32u, 128u, 194u, 
+	226u, 227u, 9u, 13u, 32u, 128u, 194u, 226u, 
+	227u, 9u, 13u, 32u, 194u, 226u, 227u, 9u, 
 	13u, 32u, 133u, 160u, 194u, 226u, 227u, 9u, 
 	13u, 32u, 128u, 194u, 226u, 227u, 9u, 13u, 
 	32u, 194u, 226u, 227u, 9u, 13u, 128u, 138u, 
 	168u, 169u, 32u, 128u, 194u, 226u, 227u, 9u, 
 	13u, 32u, 128u, 194u, 226u, 227u, 9u, 13u, 
-	0
+	32u, 194u, 226u, 227u, 9u, 13u, 32u, 194u, 
+	226u, 227u, 9u, 13u, 32u, 133u, 160u, 194u, 
+	226u, 227u, 9u, 13u, 32u, 128u, 194u, 226u, 
+	227u, 9u, 13u, 32u, 194u, 226u, 227u, 9u, 
+	13u, 128u, 138u, 168u, 169u, 32u, 128u, 194u, 
+	226u, 227u, 9u, 13u, 32u, 128u, 194u, 226u, 
+	227u, 9u, 13u, 0
 };
 
 static const char _ws_tok_single_lengths[] = {
-	4, 4, 4, 6, 5, 4, 5, 5, 
-	6, 5, 4, 5, 5
+	4, 4, 6, 5, 4, 5, 5, 4, 
+	6, 5, 4, 5, 5, 4, 4, 6, 
+	5, 4, 5, 5
 };
 
 static const char _ws_tok_range_lengths[] = {
-	1, 1, 1, 1, 1, 3, 1, 1, 
-	1, 1, 3, 1, 1
+	1, 1, 1, 1, 3, 1, 1, 1, 
+	1, 1, 3, 1, 1, 1, 1, 1, 
+	1, 3, 1, 1
 };
 
-static const char _ws_tok_index_offsets[] = {
-	0, 6, 12, 18, 26, 33, 41, 48, 
-	55, 63, 70, 78, 85
+static const unsigned char _ws_tok_index_offsets[] = {
+	0, 6, 12, 20, 27, 35, 42, 49, 
+	55, 63, 70, 78, 85, 92, 98, 104, 
+	112, 119, 127, 134
 };
 
 static const char _ws_tok_indicies[] = {
 	1, 2, 3, 4, 1, 0, 6, 7, 
-	8, 9, 6, 5, 10, 11, 12, 13, 
-	10, 0, 6, 6, 6, 7, 8, 9, 
-	6, 5, 6, 14, 7, 8, 9, 6, 
-	5, 6, 7, 8, 9, 6, 6, 6, 
-	5, 6, 15, 7, 8, 9, 6, 5, 
-	6, 6, 7, 8, 9, 6, 5, 6, 
-	16, 16, 7, 8, 9, 6, 5, 6, 
+	8, 9, 6, 5, 6, 10, 10, 7, 
+	8, 9, 6, 5, 6, 11, 7, 8, 
+	9, 6, 5, 6, 7, 8, 9, 6, 
+	10, 10, 5, 6, 12, 7, 8, 9, 
+	6, 5, 6, 10, 7, 8, 9, 6, 
+	5, 1, 14, 15, 16, 1, 13, 6, 
+	1, 1, 7, 8, 9, 6, 5, 6, 
 	17, 7, 8, 9, 6, 5, 6, 7, 
-	8, 9, 6, 16, 16, 5, 6, 18, 
-	7, 8, 9, 6, 5, 6, 16, 7, 
-	8, 9, 6, 5, 0
+	8, 9, 6, 1, 1, 5, 6, 18, 
+	7, 8, 9, 6, 5, 6, 1, 7, 
+	8, 9, 6, 5, 10, 20, 21, 22, 
+	10, 19, 6, 24, 25, 26, 6, 23, 
+	6, 10, 10, 24, 25, 26, 6, 23, 
+	6, 27, 24, 25, 26, 6, 23, 6, 
+	24, 25, 26, 6, 10, 10, 23, 6, 
+	28, 24, 25, 26, 6, 23, 6, 10, 
+	24, 25, 26, 6, 23, 0
 };
 
 static const char _ws_tok_trans_targs[] = {
-	1, 0, 8, 9, 11, 1, 2, 3, 
-	4, 6, 2, 3, 4, 6, 5, 7, 
-	0, 10, 12
+	1, 7, 8, 9, 11, 1, 13, 2, 
+	3, 5, 13, 4, 6, 1, 8, 9, 
+	11, 10, 12, 14, 15, 16, 18, 14, 
+	15, 16, 18, 17, 19
 };
 
 static const char _ws_tok_trans_actions[] = {
-	1, 5, 1, 1, 1, 0, 3, 0, 
-	0, 0, 8, 1, 1, 1, 0, 0, 
-	3, 0, 0
+	3, 0, 3, 3, 3, 0, 1, 1, 
+	1, 1, 0, 0, 0, 5, 5, 5, 
+	5, 0, 0, 3, 3, 3, 3, 0, 
+	1, 1, 1, 0, 0
 };
 
 static const char _ws_tok_eof_actions[] = {
-	5, 3, 5, 3, 3, 3, 3, 3, 
-	3, 3, 3, 3, 3
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 0, 0, 0, 0, 1, 1, 
+	1, 1, 1, 1
 };
 
 static const int ws_tok_start = 0;
@@ -87,7 +106,7 @@ static const int ws_tok_error = -1;
 static const int ws_tok_en_main = 0;
 
 
-#line 48 "whitespace_tokenizer.rl"
+#line 55 "whitespace_tokenizer.rl"
 
 NL_annotations *NL_ws_tokenize(NL_buffer *buffer, NL_v_memmgr *mgr) {
     int cs;
@@ -99,15 +118,15 @@ NL_annotations *NL_ws_tokenize(NL_buffer *buffer, NL_v_memmgr *mgr) {
     NL_annotations *ann = NL_new_bspan_annotations(mgr);
 
     
-#line 103 "whitespace_tokenizer.c"
+#line 122 "whitespace_tokenizer.c"
 	{
 	cs = ws_tok_start;
 	}
 
-#line 59 "whitespace_tokenizer.rl"
+#line 66 "whitespace_tokenizer.rl"
 
     
-#line 111 "whitespace_tokenizer.c"
+#line 130 "whitespace_tokenizer.c"
 	{
 	int _klen;
 	unsigned int _trans;
@@ -180,16 +199,20 @@ _match:
 		switch ( *_acts++ )
 		{
 	case 0:
-#line 37 "whitespace_tokenizer.rl"
-	{ ts = p; }
-	break;
-	case 1:
-#line 39 "whitespace_tokenizer.rl"
+#line 35 "whitespace_tokenizer.rl"
 	{
         NL_add_bspan(mgr, ann, ts, p - ts, NULL, 0);
     }
 	break;
-#line 193 "whitespace_tokenizer.c"
+	case 1:
+#line 42 "whitespace_tokenizer.rl"
+	{ ts = p; }
+	break;
+	case 2:
+#line 45 "whitespace_tokenizer.rl"
+	{ ts = p; }
+	break;
+#line 216 "whitespace_tokenizer.c"
 		}
 	}
 
@@ -204,23 +227,19 @@ _again:
 	while ( __nacts-- > 0 ) {
 		switch ( *__acts++ ) {
 	case 0:
-#line 37 "whitespace_tokenizer.rl"
-	{ ts = p; }
-	break;
-	case 1:
-#line 39 "whitespace_tokenizer.rl"
+#line 35 "whitespace_tokenizer.rl"
 	{
         NL_add_bspan(mgr, ann, ts, p - ts, NULL, 0);
     }
 	break;
-#line 217 "whitespace_tokenizer.c"
+#line 236 "whitespace_tokenizer.c"
 		}
 	}
 	}
 
 	}
 
-#line 61 "whitespace_tokenizer.rl"
+#line 68 "whitespace_tokenizer.rl"
 
     return ann;
 
