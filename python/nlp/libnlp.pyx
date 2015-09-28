@@ -307,45 +307,77 @@ def get_global_PTB_config():
     return global_ptb_tok_cfg
 
 cdef class BufferDocument(object):
-    def __cinit__(self, bytes pystr):
-       
-        self.num_tokens = 0;
-        self.tokens = NULL;
-        if not PyObject_CheckBuffer(pystr):
-            raise TypeError("argument must follow the buffer protocol")
-
-        PyObject_GetBuffer(pystr, &self.view, PyBUF_SIMPLE);
+    def __cinit__(self):
+        self._doc = NULL;
 
     def __str__(self):
         if PY_MAJOR_VERSION < 3:
-            return (<unsigned char *>self.view.buf)[:self.view.len]
+            return (<unsigned char *>self._view.buf)[:self._view.len]
         else:
-            return (<unsigned char *>self.view.buf)[:self.view.len].decode(
+            return (<unsigned char *>self._view.buf)[:self._view.len].decode(
                 "utf-8")
 
     def __bytes__(self):
-        return (<unsigned char *>self.view.buf)[:self.view.len]
+        return (<unsigned char *>self._view.buf)[:self._view.len]
 
     def __unicode__(self):
-        return (<unsigned char *>self.view.buf)[:self.view.len].decode("utf-8")
+        return (<unsigned char *>self._view.buf)[:self._view.len].decode("utf-8")
 
     def __len__(self):
-        return self.num_tokens
+        if self._doc != NULL and self._doc.tokens != NULL:
+            return self._doc.tokens.size
+        else:
+            return 0
 
     def __iter__(self):
-        cdef size_t i 
-        for i in range(self.num_tokens):
+        cdef size_t i, 
+        cdef size_t num_tokens = 0
+        if self._doc != NULL and self._doc.tokens != NULL:
+            num_tokens = self._doc.tokens.size
+       
+        for i in range(num_tokens):
             yield BufferToken(self, i)
 
-    def __getitem__(self, i):
+    def __getitem__(self, size_t i):
         return BufferToken(self, i)
 
-    def __dealloc__(self):
+    def sents(self):
+        cdef size_t i
+        if self._doc.sentences != NULL:
+            for i in range(self._doc.sentences.size):
+                yield SentenceView(self, i)
+
+    def __dealloc__(self):        
+       # for i in range(self.num_tokens):
+       #     NL_free_span(&self.tokens[i], memmgr._mgr)
+       
+        if self._doc:
+            if self._doc.tokens != NULL:
+                NL_deallocate_bspan_annotations(
+                    memmgr._mgr, &self._doc.tokens);
         
-        for i in range(self.num_tokens):
-            NL_free_span(&self.tokens[i], memmgr._mgr)
-        NL_deallocate_v_mem(memmgr._mgr, <void **> &self.tokens)
-        PyBuffer_Release(&self.view)
+            NL_deallocate_v_mem(memmgr._mgr, <void **> &self._doc)
+       
+        PyBuffer_Release(&self._view)
+
+cdef class SentenceView(object):
+    def __cinit__(self, BufferDocument doc, size_t index):
+        self.doc = doc
+        self.index = index
+        
+
+    def __str__(self):
+        cdef NL_sspan *sent = NL_get_sspan(self.doc._doc.sentences, self.index)
+        cdef NL_bspan *tok_start = NL_get_bspan(self.doc._doc.tokens, sent.span_id);
+        cdef NL_bspan *tok_end = NL_get_bspan(self.doc._doc.tokens, 
+                sent.span_id + sent.size - 1);
+        cdef size_t size = tok_end.bytes + tok_end.size - tok_start.bytes;
+            
+        if PY_MAJOR_VERSION < 3:
+            return (<unsigned char *>tok_start.bytes)[:size]
+        else:
+            return (<unsigned char *>tok_start.bytes)[:size].decode("utf-8")
+       
 
 cdef class BufferToken(object):
     def __cinit__(self, BufferDocument doc, size_t index):
@@ -353,33 +385,39 @@ cdef class BufferToken(object):
         self.index = index
 
     def __str__(self):
-        cdef NL_span *tok = self.doc.tokens[self.index]
+        cdef NL_bspan *tok = NL_get_bspan(self.doc._doc.tokens, self.index)
+        cdef NL_string *norm 
         if PY_MAJOR_VERSION < 3:
-            if tok.label_length == 0:
-                return (<unsigned char *>tok.start)[:tok.length]
+            if tok.data == NULL:
+                return (<unsigned char *>tok.bytes)[:tok.size]
             else: 
-                return (<unsigned char *>tok.label)[:tok.label_length]
+                norm = <NL_string *> tok.data
+                return (<unsigned char *>norm.bytes)[:norm.size]
         else:
-            if tok.label_length == 0:
-                return (<unsigned char *>tok.start)[:tok.length].decode(
+            if tok.data == NULL:
+                return (<unsigned char *>tok.bytes)[:tok.size].decode(
                     "utf-8")
             else: 
-                return (<unsigned char *>tok.label)[:tok.label_length].decode(
+                norm = <NL_string *> tok.data
+                return (<unsigned char *>norm.bytes)[:norm.size].decode(
                     "utf-8")
 
     def __bytes__(self):
-        cdef NL_span *tok = self.doc.tokens[self.index]
-        if tok.label_length == 0:
-            return (<unsigned char *>tok.start)[:tok.length]
+        cdef NL_bspan *tok = NL_get_bspan(self.doc._doc.tokens, self.index)
+        cdef NL_string *norm
+        if tok.data == NULL:
+            return (<unsigned char *>tok.bytes)[:tok.size]
         else: 
-            return (<unsigned char *>tok.label)[:tok.label_length]
+            norm = <NL_string *> tok.data
+            return (<unsigned char *>norm.bytes)[:norm.size]
 
     def __unicode__(self):
-        cdef NL_span *tok = self.doc.tokens[self.index]
-        if tok.label_length == 0:
-            return (<unsigned char *>tok.start)[:tok.length].decode("utf-8")
+        cdef NL_bspan *tok = NL_get_bspan(self.doc._doc.tokens, self.index)
+        cdef NL_string *norm
+        if tok.data == NULL:
+            return (<unsigned char *>tok.bytes)[:tok.size].decode("utf-8")
         else: 
-            return (<unsigned char *>tok.label)[:tok.label_length].decode(
-                "utf-8")
+            norm = <NL_string *> tok.data
+            return (<unsigned char *>norm.bytes)[:norm.size].decode("utf-8")
 
 
