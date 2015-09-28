@@ -4,6 +4,8 @@
 typedef unsigned char NL_flags;
 
 #define NL_OWN_DATA 0x01
+#define NL_SENT_END_FLAG 0x02
+#define NL_SENT_INC 0x04
 
 // All annotations are built on top of an underlying byte buffer. Usually this
 // is the text of a document under analysis. size stores the length of the 
@@ -20,6 +22,7 @@ typedef struct NL_annotations {
     size_t size;
     size_t _object_size;
     size_t _list_size;
+    NL_flags flags;
 } NL_annotations;
 
 // A string type. One additional byte for storing meta data.
@@ -40,7 +43,7 @@ typedef struct NL_bspan {
 
 // Span of spans.
 typedef struct NL_sspan {
-    NL_bspan *spans;
+    size_t span_id;
     size_t size;
     void *data;
     NL_flags flags;
@@ -51,6 +54,7 @@ typedef struct NL_doc {
     NL_annotations *tokens;
     NL_annotations *pos_tags;
     NL_annotations *ner_tags;
+    NL_annotations *sentences;
     unsigned char *flags;
 } NL_doc;
 
