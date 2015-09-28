@@ -1,36 +1,45 @@
 CC = gcc
 CFLAGS = -g -Wall -shared -fPIC -std=c11 -O9
+INCLUDE = -I../include/
 
-.PHONY: default all clean
+.PHONY: clean ragel
 
-all: obj/document.o obj/mem_manager.o obj/tokenizer.o obj/tokenizer_utils.o
-	
-#obj/MurmurHash3.o 
-#	#obj/tokenizer.o 
+all: obj obj/mem_manager.o obj/annotations.o obj/tokenizer_utils.o \
+	obj/tokenizer.o  obj/tokenizer/whitespace_tokenizer.o \
+	obj/tokenizer/sentence_tokenizer.o
 
-obj/document.o: src/document.c 
-	$(CC) $(CFLAGS) -c src/document.c -o obj/document.o
+obj:
+	mkdir -p obj; mkdir -p obj/tokenizer
 
-obj/tokenizer.o: src/tokenizer.c 
-	$(CC) $(CFLAGS) -c src/tokenizer.c -o obj/tokenizer.o
+obj/mem_manager.o: src/mem_manager.c
+	$(CC) $(CFLAGS) -c src/mem_manager.c -o obj/mem_manager.o $(INCLUDE)
 
-obj/tokenizer_utils.o: src/tokenizer_utils.c
-	$(CC) $(CFLAGS) -c src/tokenizer_utils.c -o obj/tokenizer_utils.o
+obj/annotations.o: src/annotations.c
+	$(CC) $(CFLAGS) -c src/annotations.c -o obj/annotations.o $(INCLUDE)
 
-src/tokenizer.c:
-	cd src; ragel tokenizer.rl
+ragel: src/tokenizer_utils.c src/tokenizer.c \
+	src/tokenizer/whitespace_tokenizer.c
 
-src/tokenizer_utils.c:
+src/tokenizer_utils.c: src/tokenizer_utils.rl
 	cd src; ragel tokenizer_utils.rl
 
-#obj/MurmurHash3.o:
-#	$(CC) $(CFLAGS) -c src/MurmurHash3.c -o obj/MurmurHash3.o
+src/tokenizer.c: src/tokenizer.rl
+	cd src; ragel tokenizer.rl
 
-obj/mem_manager.o:
-	$(CC) $(CFLAGS) -c src/mem_manager.c -o obj/mem_manager.o
+src/tokenizer/whitespace_tokenizer.c: src/tokenizer/whitespace_tokenizer.rl
+	cd src/tokenizer; ragel whitespace_tokenizer.rl
 
+obj/tokenizer_utils.o: src/tokenizer_utils.c
+	$(CC) $(CFLAGS) -c src/tokenizer_utils.c -o obj/tokenizer_utils.o $(INCLUDE)
+
+obj/tokenizer.o: src/tokenizer.c
+	$(CC) $(CFLAGS) -c src/tokenizer.c -o obj/tokenizer.o $(INCLUDE)
+
+obj/tokenizer/whitespace_tokenizer.o: src/tokenizer/whitespace_tokenizer.c
+	$(CC) $(CFLAGS) -c src/tokenizer/whitespace_tokenizer.c -o obj/tokenizer/whitespace_tokenizer.o $(INCLUDE)
+
+obj/tokenizer/sentence_tokenizer.o: src/tokenizer/sentence_tokenizer.c
+	$(CC) $(CFLAGS) -c src/tokenizer/sentence_tokenizer.c -o obj/tokenizer/sentence_tokenizer.o $(INCLUDE)
 
 clean:
 	rm -rf obj/
-	rm -f src/tokenizer.c
-	rm -f src/tokenizer_utils.c
