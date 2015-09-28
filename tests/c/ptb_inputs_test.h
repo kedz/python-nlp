@@ -77,4 +77,3 @@ error_info **sgml_test1(char **name, size_t *num_errors);
     sgml_test1,                                                              \
 };                                                                           \
 
-

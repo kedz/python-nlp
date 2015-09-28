@@ -1,8 +1,9 @@
 #include "ptb_inputs_test.h"
-#include "memmgr_test.h"
-#include "tokenizer_utils_tests.h"
+/*#include "memmgr_test.h"
+#include "tokenizer_utils_tests.h"*/
 #include "tokenizer_tests.h"
-#include "sent_tok_tests.h"
+#include "ws_tokenizer_tests.h"
+//#include "sent_tok_tests.h"
 
 #define KNRM  "\x1B[0m"
 #define KRED  "\x1B[31m"
@@ -61,16 +62,18 @@ int main(int argc, char *argv[]) {
 
     }
 
-    MEMMGR_TESTS(memmgr_tests);
-    run_tests((test_func *) &memmgr_tests, NUM_MEMMGR_TESTS, verbose);
-    TOK_UTILS_TESTS(tok_utils_tests);
-    run_tests((test_func *) &tok_utils_tests, NUM_TOK_UTILS_TESTS, verbose);
+//    MEMMGR_TESTS(memmgr_tests);
+//    run_tests((test_func *) &memmgr_tests, NUM_MEMMGR_TESTS, verbose);
+//    TOK_UTILS_TESTS(tok_utils_tests);
+//    run_tests((test_func *) &tok_utils_tests, NUM_TOK_UTILS_TESTS, verbose);
     PTB_INPUTS_TESTS(ptb_inputs_tests);
     run_tests((test_func *) &ptb_inputs_tests, NUM_PTB_INPUTS_TESTS, verbose);
+//    SENT_TOKENIZER_TESTS(sent_tokenizer_tests);
+//    run_tests((test_func *) &sent_tokenizer_tests, NUM_SENT_TOKENIZER_TESTS, 
+//            verbose);
+    WS_TOKENIZER_TESTS(ws_tokenizer_tests);
+    run_tests((test_func *) &ws_tokenizer_tests, NUM_WS_TOKENIZER_TESTS,
+            verbose);
     TOKENIZER_TESTS(tokenizer_tests);
     run_tests((test_func *) &tokenizer_tests, NUM_TOKENIZER_TESTS, verbose);
-    SENT_TOKENIZER_TESTS(sent_tokenizer_tests);
-    run_tests((test_func *) &sent_tokenizer_tests, NUM_SENT_TOKENIZER_TESTS, 
-            verbose);
-
 }

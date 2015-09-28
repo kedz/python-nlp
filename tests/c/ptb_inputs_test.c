@@ -1,56 +1,57 @@
 #include "ptb_inputs_test.h"
 
-
 #define TOKEN_TEST                                                            \
-  size_t num_tokens = 0;                                                      \
-  NL_span **tokens = NL_tokenize_buf(buf, buf_len, &num_tokens, cfg, mgr);    \
-  for (int i=0; i < num_tokens; i++) {                                        \
-      if (i < gold_num_tokens) {                                              \
-          unsigned char *token = NULL;                                        \
-          size_t token_length = 0;                                            \
-          if (tokens[i]->label_length > 0) {                                  \
-              token = tokens[i]->label;                                       \
-              token_length = tokens[i]->label_length;                         \
-          } else {                                                            \
-              token = tokens[i]->start;                                       \
-              token_length = tokens[i]->length;                               \
-          }                                                                   \
-          unsigned char *gold_token = gold[i];                                \
-          size_t gold_length = strlen((char *) gold_token);                   \
-          if (token_length != gold_length                                     \
-                      || memcmp(token, gold_token, token_length) != 0) {      \
+  NL_annotations *ann = NL_tokenize_buf(&buffer, cfg, mgr);                   \
+  if (ann == NULL) {                                                          \
+      NEW_ERROR(80);                                                          \
+      sprintf((char *) this_error->msg, "Tokenizer returned NULL!");          \
+  } else {                                                                    \
+      for (int i=0; i < ann->size; i++) {                                     \
+          if (i < gold_num_tokens) {                                          \
+              unsigned char *token = NULL;                                    \
+              size_t token_length = 0;                                        \
+              NL_bspan *span = NL_get_bspan(ann, i);                          \
+              if (span->data == NULL) {                                       \
+                  token = span->bytes;                                        \
+                  token_length = span->size;                                  \
+              } else {                                                        \
+                  token = ((NL_string *) span->data)->bytes;                  \
+                  token_length = ((NL_string *) span->data)->size;            \
+              }                                                               \
+              unsigned char *gold_token = gold[i];                            \
+              size_t gold_length = strlen((char *) gold_token);               \
+              if (token_length != gold_length                                 \
+                          || memcmp(token, gold_token, token_length) != 0) {  \
                                                                               \
-              *num_errors += 1;                                               \
-              errors = realloc(errors, *num_errors * sizeof(error_info *));   \
-              errors[*num_errors -1] = malloc(sizeof(error_info));            \
-              error_info *this_error = errors[*num_errors -1];                \
-              this_error->msg = NULL;                                         \
+                *num_errors += 1;                                             \
+                errors = realloc(errors, *num_errors * sizeof(error_info *)); \
+                errors[*num_errors -1] = malloc(sizeof(error_info));          \
+                error_info *this_error = errors[*num_errors -1];              \
+                this_error->msg = NULL;                                       \
                                                                               \
-              size_t cpy_s1 = strlen("Tokenizer returned \"");                \
-              size_t cpy_s2 = strlen("\" but expected \"");                   \
-              size_t cpy_s3 = strlen("\".");                                  \
-              size_t msg_size = cpy_s1 + cpy_s2 + cpy_s3                      \
-                  + token_length + gold_length + 1;                           \
-              this_error->msg = malloc(sizeof(char) * msg_size);              \
-              this_error->msg[msg_size-1] = '\0';                             \
-              memcpy(this_error->msg, "Tokenizer returned \"", cpy_s1);       \
-              memcpy(&this_error->msg[cpy_s1], token, token_length);          \
-              memcpy(&this_error->msg[cpy_s1 + token_length],                 \
-                     "\" but expected \"", cpy_s2);                           \
-              memcpy(&this_error->msg[cpy_s1 + token_length + cpy_s2],        \
-                     gold_token, gold_length);                                \
-              memcpy(                                                         \
-                  &this_error->msg[cpy_s1+token_length+cpy_s2+gold_length],   \
-                  "\".", cpy_s3);                                             \
+                size_t cpy_s1 = strlen("Tokenizer returned \"");              \
+                size_t cpy_s2 = strlen("\" but expected \"");                 \
+                size_t cpy_s3 = strlen("\".");                                \
+                size_t msg_size = cpy_s1 + cpy_s2 + cpy_s3                    \
+                    + token_length + gold_length + 1;                         \
+                this_error->msg = malloc(sizeof(char) * msg_size);            \
+                this_error->msg[msg_size-1] = '\0';                           \
+                memcpy(this_error->msg, "Tokenizer returned \"", cpy_s1);     \
+                memcpy(&this_error->msg[cpy_s1], token, token_length);        \
+                memcpy(&this_error->msg[cpy_s1 + token_length],               \
+                       "\" but expected \"", cpy_s2);                         \
+                memcpy(&this_error->msg[cpy_s1 + token_length + cpy_s2],      \
+                       gold_token, gold_length);                              \
+                memcpy(                                                       \
+                    &this_error->msg[cpy_s1+token_length+cpy_s2+gold_length], \
+                    "\".", cpy_s3);                                           \
+              }                                                               \
           }                                                                   \
       }                                                                       \
-      NL_free_span(&tokens[i], mgr);                                          \
   }                                                                           \
                                                                               \
-  NL_deallocate_v_mem(mgr, (void **) &tokens);                                \
-  NL_deallocate_v_mem(mgr, (void **) &cfg);                                   \
                                                                               \
-  if (num_tokens != gold_num_tokens) {                                        \
+  if (ann->size != gold_num_tokens) {                                         \
       *num_errors += 1;                                                       \
       errors = realloc(errors, *num_errors * sizeof(error_info *));           \
       errors[*num_errors -1] = malloc(sizeof(error_info));                    \
@@ -60,10 +61,12 @@
       sprintf(                                                                \
           (char *) this_error->msg,                                           \
           "Tokenizer returned %lu tokens, should be %lu.",                    \
-          num_tokens, gold_num_tokens);                                       \
+          ann->size, gold_num_tokens);                                       \
                                                                               \
   }                                                                           \
                                                                               \
+  NL_deallocate_bspan_annotations(mgr, &ann);                                 \
+  NL_deallocate_v_mem(mgr, (void **) &cfg);                                   \
                                                                               \
   int pool_size = 2;                                                          \
   for (int i=0; i < mgr->max_pools; i++) {                                    \
@@ -82,7 +85,7 @@
       pool_size = pool_size * 2;                                              \
                                                                               \
   }                                                                           \
-  NL_free_v_memmgr(&mgr);                                                     \
+  NL_free_v_memmgr(&mgr);
 
 
 
@@ -95,7 +98,10 @@ error_info **ptb_test1(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 5;
-    unsigned char *buf = (unsigned char *)"This is a sentence.";
+    NL_buffer buffer = {
+        (unsigned char *) "This is a sentence.",
+        strlen("This is a sentence.")
+    };
     unsigned char *gold[] = {
         (unsigned char *)"This", 
         (unsigned char *)"is", 
@@ -103,8 +109,6 @@ error_info **ptb_test1(char **name, size_t *num_errors) {
         (unsigned char *)"sentence", 
         (unsigned char *)".",
     }; 
-
-    size_t buf_len = strlen((char *)buf); 
 
     TOKEN_TEST
 
@@ -120,9 +124,10 @@ error_info **ptb_test2(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 12;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "U.S. insurance: Conseco acquires Kemper Corp. \n"
         "</HEADLINE>\n<P>\nU.S insurance";
+    NL_buffer buffer = {bytes, strlen((char *)bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"U.S.",
         (unsigned char*)"insurance",
@@ -138,8 +143,6 @@ error_info **ptb_test2(char **name, size_t *num_errors) {
         (unsigned char*)"insurance"
     }; 
 
-    size_t buf_len = strlen((char *)buf); 
-
     TOKEN_TEST
 
     return errors;
@@ -154,10 +157,11 @@ error_info **ptb_test3(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 22;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "Based in Eugene,Ore., PakTech needs a new distributor after "
         "Sydney-based Creative Pack Pty. Ltd. went into voluntary "
         "administration.";
+    NL_buffer buffer = {bytes, strlen((char *)bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"Based",
         (unsigned char*)"in",
@@ -183,8 +187,6 @@ error_info **ptb_test3(char **name, size_t *num_errors) {
         (unsigned char*)"." 
     }; 
 
-    size_t buf_len = strlen((char *)buf); 
-
     TOKEN_TEST
 
     return errors;
@@ -199,8 +201,10 @@ error_info **ptb_test4(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 12;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "The Iron Age (ca. 1300 – ca. 300 BC).";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
+
     unsigned char *gold[] = {
         (unsigned char*)"The",
         (unsigned char*)"Iron",
@@ -216,8 +220,6 @@ error_info **ptb_test4(char **name, size_t *num_errors) {
         (unsigned char*)"."
     }; 
 
-    size_t buf_len = strlen((char *)buf); 
-
     TOKEN_TEST
 
     return errors;
@@ -232,15 +234,14 @@ error_info **ptb_test5(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 3;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "Indo\xC2\xADnesian ship\xC2\xADping \xC2\xAD";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"Indonesian",
         (unsigned char*)"shipping",
         (unsigned char*)"-"
     }; 
-
-    size_t buf_len = strlen((char *)buf); 
 
     TOKEN_TEST
 
@@ -256,8 +257,9 @@ error_info **ptb_test6(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 11;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "Gimme a phone, I'm gonna call.";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"Gim",
         (unsigned char*)"me",
@@ -271,8 +273,6 @@ error_info **ptb_test6(char **name, size_t *num_errors) {
         (unsigned char*)"call",
         (unsigned char*)"."
     }; 
-
-    size_t buf_len = strlen((char *)buf); 
 
     TOKEN_TEST
 
@@ -288,9 +288,10 @@ error_info **ptb_test7(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 31;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "\"John & Mary's dog,\" Jane thought (to herself).\n\""
         "What a #$%!\na- ``I like AT&T''.\"";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"``",
         (unsigned char*)"John",
@@ -325,8 +326,6 @@ error_info **ptb_test7(char **name, size_t *num_errors) {
         (unsigned char*)"''"
     }; 
 
-    size_t buf_len = strlen((char *)buf); 
-
     TOKEN_TEST
 
     return errors;
@@ -341,8 +340,9 @@ error_info **ptb_test8(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 6;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "I said at 4:45pm.";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"I",
         (unsigned char*)"said",
@@ -351,8 +351,6 @@ error_info **ptb_test8(char **name, size_t *num_errors) {
         (unsigned char*)"pm",
         (unsigned char*)".",
     }; 
-
-    size_t buf_len = strlen((char *)buf); 
 
     TOKEN_TEST
 
@@ -368,9 +366,10 @@ error_info **ptb_test9(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 29;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "I can't believe they wanna keep 40% of that.\"\n"
         "``Whatcha think?''\n\"I don't --- think so...,\"";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"I",
         (unsigned char*)"ca",
@@ -403,8 +402,6 @@ error_info **ptb_test9(char **name, size_t *num_errors) {
         (unsigned char*)"''"
     }; 
 
-    size_t buf_len = strlen((char *)buf); 
-
     TOKEN_TEST
 
     return errors;
@@ -419,8 +416,9 @@ error_info **ptb_test10(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 15;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "You `paid' US$170,000?!\nYou should've paid only$16.75.";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"You",
         (unsigned char*)"`",
@@ -439,8 +437,6 @@ error_info **ptb_test10(char **name, size_t *num_errors) {
         (unsigned char*)"."
     }; 
 
-    size_t buf_len = strlen((char *)buf); 
-
     TOKEN_TEST
 
     return errors;
@@ -455,8 +451,9 @@ error_info **ptb_test11(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 19;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "1. Buy a new Chevrolet (37%-owned in the U.S..) . 15%";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"1",
         (unsigned char*)".",
@@ -479,8 +476,6 @@ error_info **ptb_test11(char **name, size_t *num_errors) {
         (unsigned char*)"%"
     }; 
 
-    size_t buf_len = strlen((char *)buf); 
-
     TOKEN_TEST
 
     return errors;
@@ -495,8 +490,9 @@ error_info **ptb_test12(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 18;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "I like you ;-) but do you care :(. I'm happy ^_^ but shy (x.x)!";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"I",
         (unsigned char*)"like",
@@ -518,8 +514,6 @@ error_info **ptb_test12(char **name, size_t *num_errors) {
         (unsigned char*)"!" 
     }; 
 
-    size_t buf_len = strlen((char *)buf); 
-
     TOKEN_TEST
 
     return errors;
@@ -534,9 +528,10 @@ error_info **ptb_test13(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 25;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "Diamond (``Not even the chair'') lives near Udaipur (84km). "
         "{1. A potential Palmer trade:}";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"Diamond",
         (unsigned char*)"-LRB-",
@@ -565,8 +560,6 @@ error_info **ptb_test13(char **name, size_t *num_errors) {
         (unsigned char*)"-RCB-"
     }; 
 
-    size_t buf_len = strlen((char *)buf); 
-
     TOKEN_TEST
 
     return errors;
@@ -581,8 +574,9 @@ error_info **ptb_test14(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 10;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "No. I like No. 24 and no.47.";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"No",
         (unsigned char*)".",
@@ -595,8 +589,6 @@ error_info **ptb_test14(char **name, size_t *num_errors) {
         (unsigned char*)"47",
         (unsigned char*)"."
     }; 
-
-    size_t buf_len = strlen((char *)buf); 
 
     TOKEN_TEST
 
@@ -612,9 +604,10 @@ error_info **ptb_test15(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 21;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "You can get a B.S. or a B. A. or a Ph.D (sometimes a Ph. D) "
         "from Stanford.";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"You",
         (unsigned char*)"can",
@@ -639,8 +632,6 @@ error_info **ptb_test15(char **name, size_t *num_errors) {
         (unsigned char*)"."
     }; 
 
-    size_t buf_len = strlen((char *)buf); 
-
     TOKEN_TEST
 
     return errors;
@@ -655,8 +646,9 @@ error_info **ptb_test16(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 6;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "@Harry_Styles didn`t like Mu`ammar al-Qaddafi";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"@Harry_Styles",
         (unsigned char*)"did",
@@ -665,8 +657,6 @@ error_info **ptb_test16(char **name, size_t *num_errors) {
         (unsigned char*)"Mu`ammar",
         (unsigned char*)"al-Qaddafi"
     }; 
-
-    size_t buf_len = strlen((char *)buf); 
 
     TOKEN_TEST
 
@@ -682,9 +672,10 @@ error_info **ptb_test17(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 16;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "Kenneth liked Windows 3.1, Windows 3.x,"
         " and Mesa A.B as I remember things.";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"Kenneth",
         (unsigned char*)"liked",
@@ -704,8 +695,6 @@ error_info **ptb_test17(char **name, size_t *num_errors) {
         (unsigned char*)"."
     }; 
 
-    size_t buf_len = strlen((char *)buf); 
-
     TOKEN_TEST
 
     return errors;
@@ -720,8 +709,9 @@ error_info **ptb_test18(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 9;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "I like programming in F# more than C#.";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"I",
         (unsigned char*)"like",
@@ -733,8 +723,6 @@ error_info **ptb_test18(char **name, size_t *num_errors) {
         (unsigned char*)"C#",
         (unsigned char*)"."
     }; 
-
-    size_t buf_len = strlen((char *)buf); 
 
     TOKEN_TEST
 
@@ -750,9 +738,10 @@ error_info **ptb_test19(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 24;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "NBC Live will be available free through the Yahoo! Chat Web site. "
         "E! Entertainment said ``Jeopardy!'' is a game show.";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"NBC",
         (unsigned char*)"Live",
@@ -780,8 +769,6 @@ error_info **ptb_test19(char **name, size_t *num_errors) {
         (unsigned char*)"."
     }; 
 
-    size_t buf_len = strlen((char *)buf); 
-
     TOKEN_TEST
 
     return errors;
@@ -796,8 +783,9 @@ error_info **ptb_test20(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 9;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "I lived in O\xE2\x80\x99Malley and read OK! Magazine.";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"I",
         (unsigned char*)"lived",
@@ -809,8 +797,6 @@ error_info **ptb_test20(char **name, size_t *num_errors) {
         (unsigned char*)"Magazine",
         (unsigned char*)"."
     }; 
-
-    size_t buf_len = strlen((char *)buf); 
 
     TOKEN_TEST
 
@@ -826,8 +812,9 @@ error_info **ptb_test21(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 9;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "I lived in O\xC2\x92Malley and read OK! Magazine."; /* invalid unicode codepoint, but inherit from cp1252 */
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"I",
         (unsigned char*)"lived",
@@ -839,8 +826,6 @@ error_info **ptb_test21(char **name, size_t *num_errors) {
         (unsigned char*)"Magazine",
         (unsigned char*)"."
     }; 
-
-    size_t buf_len = strlen((char *)buf); 
 
     TOKEN_TEST
 
@@ -856,9 +841,10 @@ error_info **ptb_test22(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 16;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "I like: \xE2\x80\xA2wine, \xC2\x95" "cheese, \xE2\x80\xA3salami, "
         "& \xE2\x81\x83speck.";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
 
         (unsigned char*)"I",
@@ -879,8 +865,6 @@ error_info **ptb_test22(char **name, size_t *num_errors) {
         (unsigned char*)"."
     }; 
 
-    size_t buf_len = strlen((char *)buf); 
-
     TOKEN_TEST
 
     return errors;
@@ -895,8 +879,9 @@ error_info **ptb_test23(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 15;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "I don't give a f**k about your sh*tty life.";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"I",
         (unsigned char*)"do",
@@ -915,8 +900,6 @@ error_info **ptb_test23(char **name, size_t *num_errors) {
         (unsigned char*)"."
     }; 
 
-    size_t buf_len = strlen((char *)buf); 
-
     TOKEN_TEST
 
     return errors;
@@ -931,8 +914,9 @@ error_info **ptb_test24(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 6;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "First sentence.... Second sentence.";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"First",
         (unsigned char*)"sentence",
@@ -941,8 +925,6 @@ error_info **ptb_test24(char **name, size_t *num_errors) {
         (unsigned char*)"sentence",
         (unsigned char*)"."
     }; 
-
-    size_t buf_len = strlen((char *)buf); 
 
     TOKEN_TEST
 
@@ -958,8 +940,9 @@ error_info **ptb_test25(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 6;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "First sentence . . . . Second sentence.";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"First",
         (unsigned char*)"sentence",
@@ -968,8 +951,6 @@ error_info **ptb_test25(char **name, size_t *num_errors) {
         (unsigned char*)"sentence",
         (unsigned char*)"."
     }; 
-
-    size_t buf_len = strlen((char *)buf); 
 
     TOKEN_TEST
 
@@ -985,9 +966,10 @@ error_info **ptb_test26(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 28;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
          "I wasn’t really ... well, what I mean...see . . . "
          "what I'm saying, the thing is . . . I didn’t mean it.";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"I",
         (unsigned char*)"was",
@@ -1019,8 +1001,6 @@ error_info **ptb_test26(char **name, size_t *num_errors) {
         (unsigned char*)"."
     }; 
 
-    size_t buf_len = strlen((char *)buf); 
-
     TOKEN_TEST
 
     return errors;
@@ -1036,9 +1016,10 @@ error_info **corp_test1(char **name, size_t *num_errors) {
     cfg->strict_ptb3 = 1;
 
     size_t gold_num_tokens = 18;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "So, too, many analysts predict, will Exxon Corp., "
         "Chevron Corp. and Amoco Corp.";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"So",
         (unsigned char*)",",
@@ -1060,8 +1041,6 @@ error_info **corp_test1(char **name, size_t *num_errors) {
         (unsigned char*)"."
     }; 
 
-    size_t buf_len = strlen((char *)buf); 
-
     TOKEN_TEST
 
     return errors;
@@ -1077,9 +1056,10 @@ error_info **corp_test2(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 18;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "So, too, many analysts predict, will Exxon Corp., "
         "Chevron Corp. and Amoco Corp.";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"So",
         (unsigned char*)",",
@@ -1101,8 +1081,6 @@ error_info **corp_test2(char **name, size_t *num_errors) {
         (unsigned char*)"."
     }; 
 
-    size_t buf_len = strlen((char *)buf); 
-
     TOKEN_TEST
 
     return errors;
@@ -1117,14 +1095,13 @@ error_info **jacob_eisenstein_apos_test(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 2;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "it's";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"it",
         (unsigned char*)"'s",
     }; 
-
-    size_t buf_len = strlen((char *)buf); 
 
     TOKEN_TEST
 
@@ -1140,10 +1117,11 @@ error_info **sgml_test1(char **name, size_t *num_errors) {
     NL_PTBTokConfig *cfg = NL_new_PTB_tokenizer_config(mgr);
 
     size_t gold_num_tokens = 40;
-    unsigned char *buf = (unsigned char *)
+    unsigned char *bytes = (unsigned char *)
         "Significant improvements in peak FEV1 were demonstrated with "
         "tiotropium/olodaterol 5/2 μg (p = 0.008), 5/5 μg (p = 0.012), "
         "and 5/10 μg (p < 0.0001) versus tiotropium monotherapy [51].";
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
     unsigned char *gold[] = {
         (unsigned char*)"Significant",
         (unsigned char*)"improvements",
@@ -1187,53 +1165,9 @@ error_info **sgml_test1(char **name, size_t *num_errors) {
         (unsigned char*)"."
     }; 
 
-    size_t buf_len = strlen((char *)buf); 
-
     TOKEN_TEST
 
     return errors;
 }
 
 
-
-//int main(int argc, char *argv[]) {
-//
-//    char *usage = "ptb_inputs_test [-v] [-h]\n"
-//        "\t-v\tverbose, print error messages\n"
-//        "\t-h\tdisplay this message\n";
-//
-//    int verbose = 0;
-//
-//    for (int i=0; i < argc; i++) {
-//        if (strcmp(argv[i], "-v") == 0) {
-//            verbose = 1;
-//        } else if (strcmp(argv[i], "-h") == 0) {
-//            printf("%s", usage);
-//            exit(0);
-//        }
-//
-//    }
-//
-//    for (int i=0; i < num_tests; i++) {
-//        char **name = malloc(sizeof(char *));
-//        error_info **errors = NULL;
-//        size_t num_errors = 0;
-//        errors = (*tests[i]) (name, &num_errors);
-//        char *status;
-//        if (num_errors == 0) {
-//            status = "OK";
-//        } else {
-//            status = "FAIL";
-//        }
-//        printf("%s ... %s\n", *name, status);
-//        for (int e=0; e<num_errors; e++) {
-//            if (verbose == 1) {
-//                printf("Error %d: %s\n", e, errors[e]->msg);
-//            }
-//            free(errors[e]->msg);
-//            free(errors[e]);
-//        }
-//        free(errors);
-//        free(name);
-//    }
-//}
