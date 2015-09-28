@@ -51,7 +51,6 @@ inline void NL_add_bspan(NL_v_memmgr *mgr, NL_annotations *ann,
     NL_bspan *span = ann->list + ann->size * ann->_object_size;
     span->bytes = bytes;
     span->size = size;
-    printf("TOKEN: "); fwrite(bytes, 1, size, stdout); printf("\n");
     span->data = data;
     span->flags = flags;
     ann->size++;
