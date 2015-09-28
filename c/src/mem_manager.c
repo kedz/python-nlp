@@ -66,8 +66,8 @@ inline void *NL_allocate_mem_size(NL_v_memmgr *mgr, size_t object_size) {
     printf("NL_v_memmgr allocating chunk of size %lu bytes for an object of "
             "size %lu\n", mgr->pools[bucket]->object_size, object_size);
 #endif 
-    return NL_allocate_mem(mgr->pools[bucket]);
-
+    void * mem = NL_allocate_mem(mgr->pools[bucket]);
+    return mem;
 }
 
 inline void *NL_allocate_16_mem(NL_v_memmgr *mgr) {

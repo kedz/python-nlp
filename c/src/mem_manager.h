@@ -2,7 +2,8 @@
 #define H_NL_MEMMGR
 
 #include <stddef.h>
-
+#include <inttypes.h>
+#include <stdint.h>
 
 typedef struct NL_mem_list NL_mem_list;
 struct NL_mem_list {
