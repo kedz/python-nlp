@@ -27,8 +27,6 @@ NL_annotations *NL_sentence_tokenize(NL_annotations *tokens,
         NL_add_sspan(mgr, sents, start, tokens->size - start, NULL, 0);
     } 
     
-
-
     return sents;
 }
 
