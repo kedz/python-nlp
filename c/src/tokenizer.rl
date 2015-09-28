@@ -541,20 +541,7 @@ action NextToken {
 }
 
 action NextTokenSentEnd {
-    if (span_pos == BUFSIZE) {                                              
-        __token_list *next_slab = NL_allocate_mem_size(                     
-            mgr, sizeof(__token_list));                                     
-        next_slab->next = NULL;                                             
-        next_slab->tokens = NL_allocate_mem_size(                           
-            mgr, sizeof(NL_span *) * BUFSIZE);                              
-        tail->next = next_slab;                                             
-        tail = tail->next;                                                  
-        num_lists++;                                                        
-        span_pos = 0;                                                       
-        tokens = next_slab->tokens;                                         
-    }                                                                       
-    tokens[span_pos++] = NL_new_span(ts, te - ts, NL_SENT_END_FLAG, mgr);
-
+    NL_add_bspan(mgr, ann, ts, te - ts, NULL, NL_SENT_END_FLAG);
 }
 
 
@@ -574,83 +561,32 @@ action SplitAssimilation2 {
     }
 }
 action NormalizePTB3MDash {
-    NEXT_TOKEN
     if (normalize_ptb3_dashes == 1) {
-        NL_set_span_label(tokens[span_pos-1], ptb3dash, PTB3DASH_LEN);     
+        NL_add_bspan(mgr, ann, ts, te - ts, &ptb3dash, 0);
+    } else {
+        NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
     }
-
 }
-action NormalizeAmp {
-    NEXT_TOKEN
-    if (normalize_amp == 1) {
-        NL_set_span_label(tokens[span_pos-1], amp, AMP_LEN);     
-    }
 
+action NormalizeAmp {
+    if (normalize_amp == 1) {
+        NL_add_bspan(mgr, ann, ts, te - ts, &amp, 0);
+    } else {
+        NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
+    }
 }
 
 action ConvertAmp {
-    NEXT_TOKEN
     if (normalize_amp == 1 && num_amps > 0) {
-        size_t norm_size = te - ts - 4 * num_amps;
-        unsigned char *norm_str = NL_allocate_mem_size(mgr, norm_size+1);
-        NL_normalize_ampersand(ts, te - ts, norm_str);
-        NL_set_span_label(tokens[span_pos-1], norm_str, norm_size);     
+        size_t size = te - ts - 4 * num_amps;
+        NL_string *norm = NL_new_string(mgr, size);
+        NL_normalize_ampersand(ts, te - ts, norm->bytes);
+        NL_add_bspan(mgr, ann, ts, te - ts, (void *) norm, NL_OWN_DATA);
+        num_amps = 0;
+    } else {
+        NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
     }
-    num_amps = 0;
 }
-
-#action NormalizedAmpNext {
-#    if (span_pos == max_span_pos) {
-#        max_span_pos = max_span_pos * 2;
-#        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-#        if (tokens == NULL) {
-#            return;
-#        }
-#        //printf("%d spans allocated\n", max_span_pos);
-#    }
-#    tokens[span_pos] = NLPC_new_span(ts, te);
-#    if (config->normalizeAmpersandEntity) {
-#        NL_add_label(
-#            tokens[span_pos], (unsigned char*)"NORM", (unsigned char *) "&");
-#    } 
-#    span_pos++;
-#}
-#
-#action NormalizedLRBNext {
-#    if (span_pos == max_span_pos) {
-#        max_span_pos = max_span_pos * 2;
-#        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-#        if (tokens == NULL) {
-#            return;
-#        }
-#        //printf("%d spans allocated\n", max_span_pos);
-#    }
-#    tokens[span_pos] = NLPC_new_span(ts, te);
-#    if (config->normalizeParentheses) {
-#        NL_add_label(
-#            tokens[span_pos], (unsigned char*)"NORM", (unsigned char *) "-LRB-");
-#    } 
-#    span_pos++;
-#}
-#
-#action NormalizedRRBNext {
-#    if (span_pos == max_span_pos) {
-#        max_span_pos = max_span_pos * 2;
-#        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-#        if (tokens == NULL) {
-#            return;
-#        }
-#        //printf("%d spans allocated\n", max_span_pos);
-#    }
-#    tokens[span_pos] = NLPC_new_span(ts, te);
-#    if (config->normalizeParentheses) {
-#        NL_add_label(
-#            tokens[span_pos], (unsigned char*)"NORM", (unsigned char *) "-RRB-");
-#    } 
-#    span_pos++;
-#}
-#
-#
 
 action MarkIntermediate1 {
     ti1 = fpc;    
@@ -661,34 +597,20 @@ action MarkIntermediate2 {
 }
 
 action NextIntermediate1 {
-    if (span_pos == BUFSIZE) {                           
-        __token_list *next_slab = NL_allocate_mem_size(  
-            mgr, sizeof(__token_list));                  
-        next_slab->next = NULL;                          
-        next_slab->tokens = NL_allocate_mem_size(        
-            mgr, sizeof(NL_span *) * BUFSIZE);           
-        tail->next = next_slab;                          
-        tail = tail->next;                               
-        num_lists++;                                     
-        span_pos = 0;                                    
-        tokens = next_slab->tokens;                      
-    }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, 0, mgr); 
-
+    
     if (alert_soft_hyphen > 0) {                                            
-        size_t size_label = ti1 - ts - alert_soft_hyphen * 2 + 1;             
-        unsigned char *label_str = NULL;                                    
-                                                                            
-        if (size_label > 1) {                                               
-            label_str = NL_allocate_mem_size(mgr, size_label);              
-            NL_copy_no_softhyphen(ts, ti1 - ts, label_str);                  
+        size_t size = ti1 - ts - alert_soft_hyphen * 2;             
+        if (size > 1) {                                               
+            NL_string *norm = NL_new_string(mgr, size);
+            NL_copy_no_softhyphen(ts, ti1 - ts, norm->bytes);                  
+            NL_add_bspan(mgr, ann, ts, ti1 - ts, (void *) norm, NL_OWN_DATA); 
         } else {                                                            
-            size_label = 2;                                                 
-            label_str = NL_allocate_mem_size(mgr, size_label);              
-            label_str[0] = '-';                                             
+            NL_string *norm = NL_new_string(mgr, 1);
+            norm->bytes[0] = '-';
+            NL_add_bspan(mgr, ann, ts, ti1 - ts, (void *) norm, NL_OWN_DATA); 
         }                                                                   
-        label_str[size_label - 1] = 0x01;                                   
-        NL_set_span_label(tokens[span_pos-1], label_str, size_label - 1);     
+    } else {
+        NL_add_bspan(mgr, ann, ts, ti1 - ts, NULL, 0); 
     }
 
     alert_soft_hyphen = 0;
@@ -698,34 +620,20 @@ action NextIntermediate1 {
 }
 
 action NextIntermediate2 {
-    if (span_pos == BUFSIZE) {                           
-        __token_list *next_slab = NL_allocate_mem_size(  
-            mgr, sizeof(__token_list));                  
-        next_slab->next = NULL;                          
-        next_slab->tokens = NL_allocate_mem_size(        
-            mgr, sizeof(NL_span *) * BUFSIZE);           
-        tail->next = next_slab;                          
-        tail = tail->next;                               
-        num_lists++;                                     
-        span_pos = 0;                                    
-        tokens = next_slab->tokens;                      
-    }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (alert_soft_hyphen > 0) {                                            
-        size_t size_label = ti2 - ts - alert_soft_hyphen * 2 + 1;           
-        unsigned char *label_str = NULL;                                    
-                                                                            
-        if (size_label > 1) {                                               
-            label_str = NL_allocate_mem_size(mgr, size_label);              
-            NL_copy_no_softhyphen(ts, ti2 - ts, label_str);                 
+        size_t size = ti2 - ts - alert_soft_hyphen * 2;             
+        if (size > 1) {                                               
+            NL_string *norm = NL_new_string(mgr, size);
+            NL_copy_no_softhyphen(ts, ti2 - ts, norm->bytes);                  
+            NL_add_bspan(mgr, ann, ts, ti2 - ts, (void *) norm, NL_OWN_DATA); 
         } else {                                                            
-            size_label = 2;                                                 
-            label_str = NL_allocate_mem_size(mgr, size_label);              
-            label_str[0] = '-';                                             
+            NL_string *norm = NL_new_string(mgr, 1);
+            norm->bytes[0] = '-';
+            NL_add_bspan(mgr, ann, ts, ti2 - ts, (void *) norm, NL_OWN_DATA); 
         }                                                                   
-        label_str[size_label - 1] = 0x01;                                   
-        NL_set_span_label(tokens[span_pos-1], label_str, size_label - 1);     
+    } else {
+        NL_add_bspan(mgr, ann, ts, ti2 - ts, NULL, 0); 
     }
 
     alert_soft_hyphen = 0;
@@ -735,38 +643,24 @@ action NextIntermediate2 {
 }
 
 action NextIntermediateHandleProbablyLeftQuotes1 {
-    if (span_pos == BUFSIZE) {                           
-        __token_list *next_slab = NL_allocate_mem_size(  
-            mgr, sizeof(__token_list));                  
-        next_slab->next = NULL;                          
-        next_slab->tokens = NL_allocate_mem_size(        
-            mgr, sizeof(NL_span *) * BUFSIZE);           
-        tail->next = next_slab;                          
-        tail = tail->next;                               
-        num_lists++;                                     
-        span_pos = 0;                                    
-        tokens = next_slab->tokens;                      
-    }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, 0, mgr); 
 
     if (normalize_quotes == QUOTES_LATEX) {
-        size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti1 - ts);
-        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
-        NL_latex_quotes_probably_left(ts, ti1 - ts, label_str);
-        label_str[label_length - 1] = 0x01;
-        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+        size_t size NL_get_size_latex_quotes(ts, ti1 - ts);
+        NL_string *norm = NL_new_string(mgr, size);
+        NL_latex_quotes_probably_left(ts, ti1 - ts, norm->bytes);
+        NL_add_bspan(mgr, ann, ts, ti1 - ts, norm, NL_OWN_DATA); 
     } else if (normalize_quotes == QUOTES_UNICODE) {
-        size_t label_length = 1 + NL_get_size_unicode_quotes(ts, ti1 - ts);
-        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
-        NL_unicode_quotes_probably_left(ts, ti1 - ts, label_str);
-        label_str[label_length - 1] = 0x01;
-        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+        size_t size = NL_get_size_unicode_quotes(ts, ti1 - ts);
+        NL_string *norm = NL_new_string(mgr, size);
+        NL_unicode_quotes_probably_left(ts, ti1 - ts, norm->bytes);
+        NL_add_bspan(mgr, ann, ts, ti1 - ts, norm, NL_OWN_DATA); 
     } else if (normalize_quotes == QUOTES_ASCII) {
-        size_t label_length = 1 + NL_get_size_ascii_quotes(ts, ti1 - ts);
-        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
-        NL_ascii_quotes(ts, ti1 - ts, label_str);
-        label_str[label_length - 1] = 0x01;
-        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+        size_t size = NL_get_size_ascii_quotes(ts, ti1 - ts);
+        NL_string *norm = NL_new_string(mgr, size);
+        NL_ascii_quotes(ts, ti1 - ts, norm->bytes);
+        NL_add_bspan(mgr, ann, ts, ti1 - ts, norm, NL_OWN_DATA); 
+    } else {
+        NL_add_bspan(mgr, ann, ts, ti1 - ts, NULL, 0); 
     }
     alert_soft_hyphen = 0;
     ts = ti1;                                            
@@ -775,38 +669,25 @@ action NextIntermediateHandleProbablyLeftQuotes1 {
 }
 
 action NextIntermediateHandleProbablyRightQuotes1 {
-    if (span_pos == BUFSIZE) {                           
-        __token_list *next_slab = NL_allocate_mem_size(  
-            mgr, sizeof(__token_list));                  
-        next_slab->next = NULL;                          
-        next_slab->tokens = NL_allocate_mem_size(        
-            mgr, sizeof(NL_span *) * BUFSIZE);           
-        tail->next = next_slab;                          
-        tail = tail->next;                               
-        num_lists++;                                     
-        span_pos = 0;                                    
-        tokens = next_slab->tokens;                      
-    }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti1 - ts, 0, mgr); 
+
 
     if (normalize_quotes == QUOTES_LATEX) {
-        size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti1 - ts);
-        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
-        NL_latex_quotes_probably_right(ts, ti1 - ts, label_str);
-        label_str[label_length - 1] = 0x01;
-        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+        size_t size = NL_get_size_latex_quotes(ts, ti1 - ts);
+        NL_string *norm = NL_new_string(mgr, size);
+        NL_latex_quotes_probably_right(ts, ti1 - ts, norm->bytes);
+        NL_add_bspan(mgr, ann, ts, ti1 - ts, norm, NL_OWN_DATA | NL_SENT_INC); 
     } else if (normalize_quotes == QUOTES_UNICODE) {
-        size_t label_length = 1 + NL_get_size_unicode_quotes(ts, ti1 - ts);
-        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
-        NL_unicode_quotes_probably_right(ts, ti1 - ts, label_str);
-        label_str[label_length - 1] = 0x01;
-        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+        size_t size = NL_get_size_unicode_quotes(ts, ti1 - ts);
+        NL_string *norm = NL_new_string(mgr, size);
+        NL_unicode_quotes_probably_right(ts, ti1 - ts, norm->bytes);
+        NL_add_bspan(mgr, ann, ts, ti1 - ts, norm, NL_OWN_DATA | NL_SENT_INC); 
     } else if (normalize_quotes == QUOTES_ASCII) {
-        size_t label_length = 1 + NL_get_size_ascii_quotes(ts, ti1 - ts);
-        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
-        NL_ascii_quotes(ts, ti1 - ts, label_str);
-        label_str[label_length - 1] = 0x01;
-        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+        size_t size = NL_get_size_ascii_quotes(ts, ti1 - ts);
+        NL_string *norm = NL_new_string(mgr, size);
+        NL_ascii_quotes(ts, ti1 - ts, norm->bytes);
+        NL_add_bspan(mgr, ann, ts, ti1 - ts, norm, NL_OWN_DATA | NL_SENT_INC); 
+    } else {
+        NL_add_bspan(mgr, ann, ts, ti1 - ts, NULL, NL_SENT_INC); 
     }
     alert_soft_hyphen = 0;
     ts = ti1;                                            
@@ -816,38 +697,25 @@ action NextIntermediateHandleProbablyRightQuotes1 {
 
 
 action NextIntermediateHandleProbablyLeftQuotes2 {
-    if (span_pos == BUFSIZE) {                           
-        __token_list *next_slab = NL_allocate_mem_size(  
-            mgr, sizeof(__token_list));                  
-        next_slab->next = NULL;                          
-        next_slab->tokens = NL_allocate_mem_size(        
-            mgr, sizeof(NL_span *) * BUFSIZE);           
-        tail->next = next_slab;                          
-        tail = tail->next;                               
-        num_lists++;                                     
-        span_pos = 0;                                    
-        tokens = next_slab->tokens;                      
-    }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
+
 
     if (normalize_quotes == QUOTES_LATEX) {
-        size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti2 - ts);
-        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
-        NL_latex_quotes_probably_left(ts, ti2 - ts, label_str);
-        label_str[label_length - 1] = 0x01;
-        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+        size_t size = NL_get_size_latex_quotes(ts, ti2 - ts);
+        NL_string *norm = NL_new_string(mgr, size);
+        NL_latex_quotes_probably_left(ts, ti2 - ts, norm->bytes);
+        NL_add_bspan(mgr, ann, ts, ti2 - ts, norm, NL_OWN_DATA); 
     } else if (normalize_quotes == QUOTES_UNICODE) {
-        size_t label_length = 1 + NL_get_size_unicode_quotes(ts, ti2 - ts);
-        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
-        NL_unicode_quotes_probably_left(ts, ti2 - ts, label_str);
-        label_str[label_length - 1] = 0x01;
-        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+        size_t size = NL_get_size_unicode_quotes(ts, ti2 - ts);
+        NL_string *norm = NL_new_string(mgr, size);
+        NL_unicode_quotes_probably_left(ts, ti2 - ts, norm->bytes);
+        NL_add_bspan(mgr, ann, ts, ti2 - ts, norm, NL_OWN_DATA); 
     } else if (normalize_quotes == QUOTES_ASCII) {
-        size_t label_length = 1 + NL_get_size_ascii_quotes(ts, ti2 - ts);
-        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
-        NL_ascii_quotes(ts, ti2 - ts, label_str);
-        label_str[label_length - 1] = 0x01;
-        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+        size_t size = NL_get_size_ascii_quotes(ts, ti2 - ts);
+        NL_string *norm = NL_new_string(mgr, size);
+        NL_ascii_quotes(ts, ti2 - ts, norm->bytes);
+        NL_add_bspan(mgr, ann, ts, ti2 - ts, norm, NL_OWN_DATA); 
+    } else {
+        NL_add_bspan(mgr, ann, ts, ti2 - ts, NULL, 0); 
     }
     alert_soft_hyphen = 0;
     ts = ti2;                                            
@@ -856,40 +724,26 @@ action NextIntermediateHandleProbablyLeftQuotes2 {
 }
 
 action NextIntermediateHandleProbablyRightQuotes2 {
-    if (span_pos == BUFSIZE) {                           
-        __token_list *next_slab = NL_allocate_mem_size(  
-            mgr, sizeof(__token_list));                  
-        next_slab->next = NULL;                          
-        next_slab->tokens = NL_allocate_mem_size(        
-            mgr, sizeof(NL_span *) * BUFSIZE);           
-        tail->next = next_slab;                          
-        tail = tail->next;                               
-        num_lists++;                                     
-        span_pos = 0;                                    
-        tokens = next_slab->tokens;                      
-    }                                                    
-    tokens[span_pos++] = NL_new_span(ts, ti2 - ts, 0, mgr); 
 
     if (normalize_quotes == QUOTES_LATEX) {
-        size_t label_length = 1 + NL_get_size_latex_quotes(ts, ti2 - ts);
-        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
-        NL_latex_quotes_probably_right(ts, ti2 - ts, label_str);
-        label_str[label_length - 1] = 0x01;
-        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+        size_t size = NL_get_size_latex_quotes(ts, ti2 - ts);
+        NL_string *norm = NL_new_string(mgr, size);
+        NL_latex_quotes_probably_right(ts, ti2 - ts, norm->bytes);
+        NL_add_bspan(mgr, ann, ts, ti2 - ts, norm, NL_OWN_DATA | NL_SENT_INC); 
     } else if (normalize_quotes == QUOTES_UNICODE) {
-        size_t label_length = 1 + NL_get_size_unicode_quotes(ts, ti2 - ts);
-        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
-        NL_unicode_quotes_probably_right(ts, ti2 - ts, label_str);
-        label_str[label_length - 1] = 0x01;
-        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+        size_t size = NL_get_size_unicode_quotes(ts, ti2 - ts);
+        NL_string *norm = NL_new_string(mgr, size);
+        NL_unicode_quotes_probably_right(ts, ti2 - ts, norm->bytes);
+        NL_add_bspan(mgr, ann, ts, ti2 - ts, norm, NL_OWN_DATA | NL_SENT_INC); 
     } else if (normalize_quotes == QUOTES_ASCII) {
-        size_t label_length = 1 + NL_get_size_ascii_quotes(ts, ti2 - ts);
-        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
-        NL_ascii_quotes(ts, ti2 - ts, label_str);
-        label_str[label_length - 1] = 0x01;
-        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+        size_t size = NL_get_size_ascii_quotes(ts, ti2 - ts);
+        NL_string *norm = NL_new_string(mgr, size);
+        NL_ascii_quotes(ts, ti2 - ts, norm->bytes);
+        NL_add_bspan(mgr, ann, ts, ti2 - ts, norm, NL_OWN_DATA | NL_SENT_INC); 
+    } else {
+        NL_add_bspan(mgr, ann, ts, ti2 - ts, NULL, NL_SENT_INC); 
     }
-    alert_soft_hyphen = 0;
+    alert_soft_hyphen = 0; 
     ts = ti2;                                            
     fpc = ti2 - 1;                                       
     te = '\0';                                           
@@ -897,125 +751,101 @@ action NextIntermediateHandleProbablyRightQuotes2 {
 
 
 action HandleQuotesProbablyRight {
-    NEXT_TOKEN
 
     if (normalize_quotes == QUOTES_LATEX) {
-        size_t label_length = 1 + NL_get_size_latex_quotes(ts, te - ts);
-        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
-        NL_latex_quotes_probably_right(ts, te - ts, label_str);
-        label_str[label_length - 1] = 0x01;
-        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+        size_t size = NL_get_size_latex_quotes(ts, te - ts);
+        NL_string *norm = NL_new_string(mgr, size);
+        NL_latex_quotes_probably_right(ts, te - ts, norm->bytes);
+        NL_add_bspan(mgr, ann, ts, te - ts, norm, NL_OWN_DATA | NL_SENT_INC); 
     } else if (normalize_quotes == QUOTES_UNICODE) {
-        size_t label_length = 1 + NL_get_size_unicode_quotes(ts, te - ts);
-        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
-        NL_unicode_quotes_probably_right(ts, te - ts, label_str);
-        label_str[label_length - 1] = 0x01;
-        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+        size_t size = NL_get_size_unicode_quotes(ts, te - ts);
+        NL_string *norm = NL_new_string(mgr, size);
+        NL_unicode_quotes_probably_right(ts, te - ts, norm->bytes);
+        NL_add_bspan(mgr, ann, ts, te - ts, norm, NL_OWN_DATA | NL_SENT_INC); 
     } else if (normalize_quotes == QUOTES_ASCII) {
-        size_t label_length = 1 + NL_get_size_ascii_quotes(ts, te - ts);
-        unsigned char *label_str = NL_allocate_mem_size(mgr, label_length);
-        NL_ascii_quotes(ts, te - ts, label_str);
-        label_str[label_length - 1] = 0x01;
-        NL_set_span_label(tokens[span_pos-1], label_str, label_length - 1);
+        size_t size = NL_get_size_ascii_quotes(ts, te - ts);
+        NL_string *norm = NL_new_string(mgr, size);
+        NL_ascii_quotes(ts, te - ts, norm->bytes);
+        NL_add_bspan(mgr, ann, ts, te - ts, norm, NL_OWN_DATA | NL_SENT_INC); 
+    } else {
+        NL_add_bspan(mgr, ann, ts, te - ts, NULL, NL_SENT_INC); 
+
     }
 }
 
-#action NextTwoTokens {
-#    if (span_pos == max_span_pos) {
-#        max_span_pos = max_span_pos * 2;
-#        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-#        //printf("%d spans allocated\n", max_span_pos);
-#    }
-#    tokens[span_pos++] = NLPC_new_span(ts, ti);
-#
-#    if (span_pos == max_span_pos) {
-#        max_span_pos = max_span_pos * 2;
-#        tokens = realloc(tokens, sizeof(NLPC_span *) * max_span_pos);
-#        //printf("%d spans allocated\n", max_span_pos);
-#    }
-#    tokens[span_pos++] = NLPC_new_span(ti, te);
-#
-#}
-#
-#
-
     action TokenizeNewline {
         if (tokenize_newlines == 1) {
-            NEXT_TOKEN
-            NL_set_span_label(tokens[span_pos-1], newline_token, NL_LEN);     
+            NL_add_bspan(mgr, ann, ts, te - ts, &newline_token, 0);
         }
     }
 
     action EscapeForwardSlashAsterisk {
-        NEXT_TOKEN 
         if (escape_forward_slash_asterisk == 1) {
-            size_t label_size = 1 + NL_get_size_escaped_forward_slash_asterisk(
+            size_t size = NL_get_size_escaped_forward_slash_asterisk(
                 ts, te - ts);
-            unsigned char *label_str = NL_allocate_mem_size(mgr, label_size);
-            NL_escape_forward_slash_asterisk(ts, te - ts, label_str);
-            label_str[label_size - 1] = 0x01;
-            NL_set_span_label(tokens[span_pos-1], label_str, label_size - 1);
+            NL_string *norm = NL_new_string(mgr, size);
+            NL_escape_forward_slash_asterisk(ts, te - ts, norm->bytes);
+            NL_add_bspan(mgr, ann, ts, te - ts, (void *) norm, NL_OWN_DATA);
+        } else {
+            NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
         }
-
     }
 
     action HandleEllipsis {
-        NEXT_TOKEN
         if (normalize_ellipsis == ELLIPSIS_PTB3) {
-            NL_set_span_label(
-                tokens[span_pos-1], ptb3_ellipsis_label, PTB3_ELLIPSIS_LEN);
+            NL_add_bspan(mgr, ann, ts, te - ts, &ptb3_ellipsis_label, 0);
         } else if (normalize_ellipsis == ELLIPSIS_UNICODE) {
-            NL_set_span_label(
-                tokens[span_pos-1], uni_ellipsis_label, UNI_ELLIPSIS_LEN);
+            NL_add_bspan(mgr, ann, ts, te - ts, &uni_ellipsis_label, 0);
+        } else {
+            NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
         }
     }
 
     action NormalizeLCBNext { 
-        NEXT_TOKEN
         if (normalize_brackets == 1) {
-            NL_set_span_label(
-                tokens[span_pos-1], lcb_label, LCB_LEN);
+            NL_add_bspan(mgr, ann, ts, te - ts, &lcb_label, 0);
+        } else {
+            NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
         }
     }
 
     action NormalizeRCBNext { 
-        NEXT_TOKEN
         if (normalize_brackets == 1) {
-            NL_set_span_label(
-                tokens[span_pos-1], rcb_label, RCB_LEN);
+            NL_add_bspan(mgr, ann, ts, te - ts, &rcb_label, NL_SENT_INC);
+        } else {
+            NL_add_bspan(mgr, ann, ts, te - ts, NULL, NL_SENT_INC);
         }
     }
 
     action NormalizeLSBNext { 
-        NEXT_TOKEN
         if (normalize_brackets == 1) {
-            NL_set_span_label(
-                tokens[span_pos-1], lsb_label, LSB_LEN);
+            NL_add_bspan(mgr, ann, ts, te - ts, &lsb_label, 0);
+        } else {
+            NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
         }
     }
 
     action NormalizeRSBNext { 
-        NEXT_TOKEN
         if (normalize_brackets == 1) {
-            NL_set_span_label(
-                tokens[span_pos-1], rsb_label, RSB_LEN);
+            NL_add_bspan(mgr, ann, ts, te - ts, &rsb_label, NL_SENT_INC);
+        } else {
+            NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
         }
     }
 
     action NormalizeLRBNext { 
-        NEXT_TOKEN
-        if (normalize_parentheses == 1) {
-            NL_set_span_label(
-                tokens[span_pos-1], lrb_label, LRB_LEN);
+        if (normalize_brackets == 1) {
+            NL_add_bspan(mgr, ann, ts, te - ts, &lrb_label, 0);
+        } else {
+            NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
         }
-
     }
 
     action NormalizeRRBNext { 
-        NEXT_TOKEN
-        if (normalize_parentheses == 1) {
-            NL_set_span_label(
-                tokens[span_pos-1], rrb_label, RRB_LEN);
+        if (normalize_brackets == 1) {
+            NL_add_bspan(mgr, ann, ts, te - ts, &rrb_label, NL_SENT_INC);
+        } else {
+            NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
         }
     }
 
@@ -1030,16 +860,15 @@ action HandleQuotesProbablyRight {
             | /'tis/i) => SplitAssimilation2;                   
 
         SGML => {
-            NEXT_TOKEN
             if (normalize_spaces == 1) {
-                size_t label_size = 1 + NL_get_size_normalized_spaces(
+                size_t size = NL_get_size_normalized_spaces(
                     ts, te - ts);
-                unsigned char *label_str = NL_allocate_mem_size(
-                    mgr, label_size);
-                NL_normalize_spaces(ts, te - ts, label_str);
-                label_str[label_size - 1] = 0x01;
-                NL_set_span_label(tokens[span_pos-1], 
-                    label_str, label_size - 1);
+                NL_string *norm = NL_new_string(mgr, size);
+                NL_normalize_spaces(ts, te - ts, norm->bytes);
+                NL_add_bspan(mgr, ann, ts, te - ts, 
+                    (void *) norm, NL_OWN_DATA);
+            } else {
+                NEXT_TOKEN
             }
         };
 
@@ -1056,9 +885,9 @@ action HandleQuotesProbablyRight {
         APOWORD => HandleQuotesProbablyRight;
         APOWORD2 %MarkIntermediate2 ualpha => NextIntermediate2;
 
-        FULLURL => NextToken; # TODO add escaping for these
-        LIKELYURL => NextToken;
-        EMAIL => NextToken; # TODO: can't get this to work
+ #       FULLURL => NextToken; # TODO add escaping for these
+ #       LIKELYURL => NextToken;
+  #      EMAIL => NextToken; # TODO: can't get this to work
 
         TWITTER => NextToken;
         REDAUX %MarkIntermediate2 [^A-Za-z] => 
@@ -1069,252 +898,246 @@ action HandleQuotesProbablyRight {
         DATE => NextToken; #TODO escape slashes
         NUMBER => NextToken;
         SUBSUPNUM => NextToken;
-#
-#        FRAC => NextToken;
-#        FRAC2 => NextToken;
 
         FRAC => {
-            NEXT_TOKEN
             if (normalize_spaces == 1 && escape_forward_slash_asterisk == 1) {
-                size_t label_size = 1 + NL_get_size_normalized_spaces_slashes(
+                size_t size = NL_get_size_normalized_spaces_slashes(
                     ts, te - ts);
-                unsigned char *label_str = NL_allocate_mem_size(
-                    mgr, label_size);
-                NL_normalize_parens_slashes(ts, te - ts, label_str);
-                label_str[label_size - 1] = 0x01;
-                NL_set_span_label(tokens[span_pos-1], 
-                    label_str, label_size - 1);
+                NL_string *norm = NL_new_string(mgr, size);
+                NL_normalize_parens_slashes(ts, te - ts, norm->bytes);
+                NL_add_bspan(mgr, ann, ts, te - ts, norm, NL_OWN_DATA);
             } else if (normalize_spaces == 1) {
-                size_t label_size = 1 + NL_get_size_normalized_spaces(
+                size_t size = NL_get_size_normalized_spaces(
                     ts, te - ts);
-                unsigned char *label_str = NL_allocate_mem_size(
-                    mgr, label_size);
-                NL_normalize_spaces(ts, te - ts, label_str);
-                label_str[label_size - 1] = 0x01;
-                NL_set_span_label(tokens[span_pos-1], 
-                    label_str, label_size - 1);
+                NL_string *norm = NL_new_string(mgr, size);
+                NL_normalize_spaces(ts, te - ts, norm->bytes);
+                NL_add_bspan(mgr, ann, ts, te - ts, norm, NL_OWN_DATA);
             } else if (escape_forward_slash_asterisk == 1) {
-                size_t label_size = 1 + 
+                size_t size = 
                     NL_get_size_escaped_forward_slash_asterisk(ts, te - ts);
-                unsigned char *label_str = NL_allocate_mem_size(
-                    mgr, label_size);
-                NL_escape_forward_slash_asterisk(ts, te - ts, label_str);
-                label_str[label_size - 1] = 0x01;
-                NL_set_span_label(tokens[span_pos-1], 
-                    label_str, label_size - 1);
+                NL_string *norm = NL_new_string(mgr, size);
+                NL_escape_forward_slash_asterisk(ts, te - ts, norm->bytes);
+                NL_add_bspan(mgr, ann, ts, te - ts, norm, NL_OWN_DATA);
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
             }
 
         };
 
         ### FRAC2 patterns ###
         0xC2 0xBC => {
-            NEXT_TOKEN
             if (normalize_fractions == 1) {
                 if (escape_forward_slash_asterisk == 0) {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "1/4\x00", 3);
+                    NL_add_bspan(mgr, ann, ts, te - ts, &one_fourth_label, 0);
                 } else {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "1\\/4\x00", 4);
+                    NL_add_bspan(mgr, ann, ts, te - ts, 
+                        &one_fourth_esc_label, 0);
                 }
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
             }
         };
+
         0xC2 0xBD => {
-            NEXT_TOKEN
             if (normalize_fractions == 1) {
                 if (escape_forward_slash_asterisk == 0) {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "1/2\x00", 3);
+                    NL_add_bspan(mgr, ann, ts, te - ts, &one_half_label, 0);
                 } else {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "1\\/2\x00", 4);
+                    NL_add_bspan(mgr, ann, ts, te - ts, 
+                        &one_half_esc_label, 0);
                 }
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
             }
         };
+
         0xC2 0xBE => {
-            NEXT_TOKEN
             if (normalize_fractions == 1) {
                 if (escape_forward_slash_asterisk == 0) {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "3/4\x00", 3);
+                    NL_add_bspan(mgr, ann, ts, te - ts, &three_fourths_label, 0);
                 } else {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "3\\/4\x00", 4);
+                    NL_add_bspan(mgr, ann, ts, te - ts, 
+                        &three_fourths_esc_label, 0);
                 }
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
             }
         };
+
         0xE2 0x85 0x93 => {
-            NEXT_TOKEN
             if (normalize_fractions == 1) {
                 if (escape_forward_slash_asterisk == 0) {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "1/3\x00", 3);
+                    NL_add_bspan(mgr, ann, ts, te - ts, &one_third_label, 0);
                 } else {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "1\\/3\x00", 4);
+                    NL_add_bspan(mgr, ann, ts, te - ts, 
+                        &one_third_esc_label, 0);
                 }
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
             }
         };
+
         0xE2 0x85 0x94 => {
-            NEXT_TOKEN
             if (normalize_fractions == 1) {
                 if (escape_forward_slash_asterisk == 0) {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "2/3\x00", 3);
+                    NL_add_bspan(mgr, ann, ts, te - ts, &two_thirds_label, 0);
                 } else {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "2\\/3\x00", 4);
+                    NL_add_bspan(mgr, ann, ts, te - ts,
+                        &two_thirds_esc_label, 0);
                 }
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
             }
         };
+
         0xE2 0x85 0x95 => {
-            NEXT_TOKEN
             if (normalize_fractions == 1) {
                 if (escape_forward_slash_asterisk == 0) {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "1/5\x00", 3);
+                    NL_add_bspan(mgr, ann, ts, te - ts, &one_fifth_label, 0);
                 } else {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "1\\/5\x00", 4);
+                    NL_add_bspan(mgr, ann, ts, te - ts,
+                        &one_fifth_esc_label, 0);
                 }
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
             }
         };
+
         0xE2 0x85 0x96 => {
-            NEXT_TOKEN
             if (normalize_fractions == 1) {
                 if (escape_forward_slash_asterisk == 0) {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "2/5\x00", 3);
+                    NL_add_bspan(mgr, ann, ts, te - ts, &two_fifths_label, 0);
                 } else {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "2\\/5\x00", 4);
+                    NL_add_bspan(mgr, ann, ts, te - ts,
+                        &two_fifths_esc_label, 0);
                 }
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
             }
         };
+
         0xE2 0x85 0x97 => {
-            NEXT_TOKEN
             if (normalize_fractions == 1) {
                 if (escape_forward_slash_asterisk == 0) {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "3/5\x00", 3);
+                    NL_add_bspan(mgr, ann, ts, te - ts, &three_fifths_label, 0);
                 } else {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "3\\/5\x00", 4);
+                    NL_add_bspan(mgr, ann, ts, te - ts,
+                    &three_fifths_esc_label, 0);
                 }
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
             }
         };
+
         0xE2 0x85 0x98 => {
-            NEXT_TOKEN
             if (normalize_fractions == 1) {
                 if (escape_forward_slash_asterisk == 0) {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "4/5\x00", 3);
+                    NL_add_bspan(mgr, ann, ts, te - ts, &four_fifths_label, 0);
                 } else {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "4\\/5\x00", 4);
+                    NL_add_bspan(mgr, ann, ts, te - ts, &four_fifths_esc_label, 0);
                 }
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
             }
         };
+
         0xE2 0x85 0x99 => {
-            NEXT_TOKEN
             if (normalize_fractions == 1) {
                 if (escape_forward_slash_asterisk == 0) {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "1/6\x00", 3);
+                    NL_add_bspan(mgr, ann, ts, te - ts, &one_sixth_label, 0);
                 } else {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "1\\/6\x00", 4);
+                    NL_add_bspan(mgr, ann, ts, te - ts,
+                        &one_sixth_esc_label, 0);
                 }
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
             }
         };
+
         0xE2 0x85 0x9A => {
-            NEXT_TOKEN
             if (normalize_fractions == 1) {
                 if (escape_forward_slash_asterisk == 0) {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "5/6\x00", 3);
+                    NL_add_bspan(mgr, ann, ts, te - ts, &five_sixths_label, 0);
                 } else {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "5\\/6\x00", 4);
+                    NL_add_bspan(mgr, ann, ts, te - ts,
+                        &five_sixths_esc_label, 0);
                 }
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
             }
         };
+
         0xE2 0x85 0x9B => {
-            NEXT_TOKEN
             if (normalize_fractions == 1) {
                 if (escape_forward_slash_asterisk == 0) {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "1/8\x00", 3);
+                    NL_add_bspan(mgr, ann, ts, te - ts, &one_eighth_label, 0);
                 } else {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "1\\/8\x00", 4);
+                    NL_add_bspan(mgr, ann, ts, te - ts, &one_eighth_esc_label, 0);
                 }
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
             }
         };
+
         0xE2 0x85 0x9C => {
-            NEXT_TOKEN
             if (normalize_fractions == 1) {
                 if (escape_forward_slash_asterisk == 0) {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "3/8\x00", 3);
+                    NL_add_bspan(mgr, ann, ts, te - ts, &three_eighths_label, 0);
                 } else {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "3\\/8\x00", 4);
+                    NL_add_bspan(mgr, ann, ts, te - ts,
+                        &three_eighths_esc_label, 0);
                 }
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
             }
         };
+
         0xE2 0x85 0x9D => {
-            NEXT_TOKEN
             if (normalize_fractions == 1) {
                 if (escape_forward_slash_asterisk == 0) {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "5/8\x00", 3);
+                    NL_add_bspan(mgr, ann, ts, te - ts, &five_eighths_label, 0);
                 } else {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "5\\/8\x00", 4);
+                    NL_add_bspan(mgr, ann, ts, te - ts,
+                        &five_eighths_esc_label, 0);
                 }
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
             }
         };
+
         0xE2 0x85 0x9E => {
-            NEXT_TOKEN
             if (normalize_fractions == 1) {
                 if (escape_forward_slash_asterisk == 0) {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "7/8\x00", 3);
+                    NL_add_bspan(mgr, ann, ts, te - ts, &seven_eighths_label, 0);
                 } else {
-                    NL_set_span_label(
-                        tokens[span_pos-1], (unsigned char *) "7\\/8\x00", 4);
+                    NL_add_bspan(mgr, ann, ts, te - ts, 
+                        &seven_eighths_esc_label, 0);
                 }
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
             }
         };
-#
+
         TBSPEC => NextToken;
         TBSPEC_SampP => {
-            NEXT_TOKEN            
-            unsigned char *label_str = NL_allocate_mem_size(mgr, 8);
-            label_str[0] = *ts;
-            label_str[1] = '&';
-            label_str[2] = *(ts +6);                                       
-            label_str[3] = '-';
-            label_str[4] = '5';
-            label_str[5] = '0';
-            label_str[6] = '0';
-            label_str[7] = 0x01;
-            NL_set_span_label(tokens[span_pos-1], label_str, 7);
-
+            NL_string *norm = NL_new_string(mgr, 7);
+            norm->bytes[0] = *ts;
+            norm->bytes[1] = '&';
+            norm->bytes[2] = *(ts +6);                                       
+            norm->bytes[3] = '-';
+            norm->bytes[4] = '5';
+            norm->bytes[5] = '0';
+            norm->bytes[6] = '0';
+            NL_add_bspan(mgr, ann, ts, te - ts, (void *) norm, NL_OWN_DATA);
         };
 
         TBSPEC_SampLs => {
-            NEXT_TOKEN
-            
-            unsigned char *label_str = NL_allocate_mem_size(mgr, 5);
-            label_str[0] = *ts;
-            label_str[1] = '&';
-            label_str[2] = *(ts +6);                                       
-            label_str[3] = *(ts +7);            
-            label_str[4] = 0x01;
-            NL_set_span_label(tokens[span_pos-1], label_str, 4);
-
+            NL_string *norm = NL_new_string(mgr, 4);
+            norm->bytes[0] = *ts;
+            norm->bytes[1] = '&';
+            norm->bytes[2] = *(ts +6);                                       
+            norm->bytes[3] = *(ts +7);            
+            NL_add_bspan(mgr, ann, ts, te - ts, (void *) norm, NL_OWN_DATA);
         };
 
         BANGWORDS => NextToken;
@@ -1324,57 +1147,54 @@ action HandleQuotesProbablyRight {
         DOLSIGN => NextToken;
         DOLSIGN2 => NextToken;
         DOLSIGN2_CENTS => {
-            NEXT_TOKEN
             if (normalize_currency == 1) {
-                NL_set_span_label(tokens[span_pos-1], cents_label, CENTS_LEN);
+                NL_add_bspan(mgr, ann, ts, te -ts, &cents_label, 0);
+            } else {
+                NL_add_bspan(mgr, ann, ts, te -ts, NULL, 0);
             }
         };
 
         DOLSIGN2_POUNDS => {
-            NEXT_TOKEN
             if (normalize_currency == 1) {
-                NL_set_span_label(
-                    tokens[span_pos-1], pounds_label, POUNDS_LEN);
+                NL_add_bspan(mgr, ann, ts, te -ts, &pounds_label, 0);
+            } else {
+                NL_add_bspan(mgr, ann, ts, te -ts, NULL, 0);
             }
         };
 
         DOLSIGN2_NORM => {
-            NEXT_TOKEN
             if (normalize_currency == 1) {
-                NL_set_span_label(
-                    tokens[span_pos-1], dollar_label, DOLLAR_LEN);
+                NL_add_bspan(mgr, ann, ts, te -ts, &dollar_label, 0);
+            } else {
+                NL_add_bspan(mgr, ann, ts, te -ts, NULL, 0);
             }
         };
 
         PHONE => {
-            NEXT_TOKEN
+            
             if (normalize_spaces == 1 && normalize_parentheses == 1) {
-                size_t label_size = 1 + NL_get_size_normalized_spaces_parens(
+                size_t size = NL_get_size_normalized_spaces_parens(
                     ts, te - ts);
-                unsigned char *label_str = NL_allocate_mem_size(
-                    mgr, label_size);
-                NL_normalize_parens_spaces(ts, te - ts, label_str);
-                label_str[label_size - 1] = 0x01;
-                NL_set_span_label(tokens[span_pos-1], 
-                    label_str, label_size - 1);
+                NL_string *norm = NL_new_string(mgr, size);
+                NL_normalize_parens_spaces(ts, te - ts, norm->bytes);
+                NL_add_bspan(
+                    mgr, ann, ts, te - ts, (void *) norm, NL_OWN_DATA);
             } else if (normalize_spaces == 1) {
-                size_t label_size = 1 + NL_get_size_normalized_spaces(
+                size_t size = NL_get_size_normalized_spaces(
                     ts, te - ts);
-                unsigned char *label_str = NL_allocate_mem_size(
-                    mgr, label_size);
-                NL_normalize_spaces(ts, te - ts, label_str);
-                label_str[label_size - 1] = 0x01;
-                NL_set_span_label(tokens[span_pos-1], 
-                    label_str, label_size - 1);
+                NL_string *norm = NL_new_string(mgr, size);
+                NL_normalize_spaces(ts, te - ts, norm->bytes);
+                NL_add_bspan(
+                    mgr, ann, ts, te - ts, (void *) norm, NL_OWN_DATA);
             } else if (normalize_parentheses == 1) {
-                size_t label_size = 1 + NL_get_size_normalized_parentheses(
+                size_t size = NL_get_size_normalized_parentheses(
                     ts, te - ts);
-                unsigned char *label_str = NL_allocate_mem_size(
-                    mgr, label_size);
-                NL_normalize_parentheses(ts, te - ts, label_str);
-                label_str[label_size - 1] = 0x01;
-                NL_set_span_label(tokens[span_pos-1], 
-                    label_str, label_size - 1);
+                NL_string *norm = NL_new_string(mgr, size);
+                NL_normalize_parentheses(ts, te - ts, norm->bytes);
+                NL_add_bspan(
+                    mgr, ann, ts, te - ts, (void *) norm, NL_OWN_DATA);
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
             }
         };
 
@@ -1487,48 +1307,40 @@ action HandleQuotesProbablyRight {
         DBLQUOT => HandleQuotesProbablyRight;
        
         LESSTHAN => {
-            NEXT_TOKEN
-            if (*ts != '<') {
-                NL_set_span_label(tokens[span_pos-1], lessthan_label, LT_LEN);
-            }
+            NL_add_bspan(mgr, ann, ts, te - ts, &lessthan_label, 0);
         };
         GREATERTHAN => {
-            NEXT_TOKEN
-            if (*ts != '>') {
-                NL_set_span_label(
-                    tokens[span_pos-1], greaterthan_label, GT_LEN);
-            }
+            NL_add_bspan(mgr, ann, ts, te - ts, &greaterthan_label, 0);
         };
 
         SMILEY %MarkIntermediate2 [^A-Za-z0-9] => {
             te = ti2;
-            NEXT_TOKEN
             if (normalize_parentheses == 1) {
-                size_t label_size = 1 + NL_get_size_normalized_parentheses(
+                size_t size = NL_get_size_normalized_parentheses(
                     ts, te - ts);
-                unsigned char *label_str = NL_allocate_mem_size(
-                    mgr, label_size);
-                NL_normalize_parentheses(ts, te - ts, label_str);
-                label_str[label_size - 1] = 0x01;
-                NL_set_span_label(tokens[span_pos-1], 
-                    label_str, label_size - 1);
-            }    
+                NL_string *norm = NL_new_string(mgr, size);
+                NL_normalize_parentheses(ts, te - ts, norm->bytes);
+                NL_add_bspan(
+                    mgr, ann, ts, te - ts, (void *) norm, NL_OWN_DATA);
+
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
+            }   
             ts = te;
             fpc = te - 1;
             te = '\0';
 
         };
         ASIANSMILEY => {
-            NEXT_TOKEN
             if (normalize_parentheses == 1) {
-                size_t label_size = 1 + NL_get_size_normalized_parentheses(
+                size_t size = NL_get_size_normalized_parentheses(
                     ts, te - ts);
-                unsigned char *label_str = NL_allocate_mem_size(
-                    mgr, label_size);
-                NL_normalize_parentheses(ts, te - ts, label_str);
-                label_str[label_size - 1] = 0x01;
-                NL_set_span_label(tokens[span_pos-1], 
-                    label_str, label_size - 1);
+                NL_string *norm = NL_new_string(mgr, size);
+                NL_normalize_parentheses(ts, te - ts, norm->bytes);
+                NL_add_bspan(
+                    mgr, ann, ts, te - ts, (void *) norm, NL_OWN_DATA);
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
             }
         };
 
@@ -1540,13 +1352,13 @@ action HandleQuotesProbablyRight {
         ")" => NormalizeRRBNext;
 
         HYPHENS => {
-            NEXT_TOKEN
             size_t num_hyphens = te - ts;
             if (normalize_ptb3_dashes 
                     && 3 <= num_hyphens && num_hyphens <= 4) {
-                NL_set_span_label(
-                    tokens[span_pos-1], ptb3dash, PTB3DASH_LEN);
-            }; 
+                NL_add_bspan(mgr, ann, ts, te - ts, &ptb3dash, 0);
+            } else {
+                NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);
+            }
         };
         LDOTS => HandleEllipsis;
 
@@ -1588,12 +1400,10 @@ action HandleQuotesProbablyRight {
         MISCSYMBOL => NextToken;
 
         0xC2 0x95 => {
-            NEXT_TOKEN
-            NL_set_span_label(tokens[span_pos-1], uni_bullet, BULLET_LEN);     
+            NL_add_bspan(mgr, ann, ts, te - ts, &uni_bullet, 0);     
         };
         0xC2 0x99 => {
-            NEXT_TOKEN
-            NL_set_span_label(tokens[span_pos-1], uni_tm, TM_LEN);     
+            NL_add_bspan(mgr, ann, ts, te - ts, &uni_tm, 0);     
         };
 
         ALL_SPACES;
@@ -1618,220 +1428,98 @@ action HandleQuotesProbablyRight {
 %% write data nofinal;
 
 
-#ifdef NLDBG
-#define NEXT_TOKEN                                                          \
-    if (span_pos == BUFSIZE) {                                              \
-        printf("Allocating __token_list *next_slab of size %lu\n",          \
-            sizeof(__token_list));                                          \
-        __token_list *next_slab = NL_allocate_mem_size(                     \
-            mgr, sizeof(__token_list));                                     \
-        next_slab->next = NULL;                                             \
-        printf("Allocating NL_span **next_slab->tokens of size %lu\n",      \
-            sizeof(NL_span *) * BUFSIZE);                                   \
-        next_slab->tokens = NL_allocate_mem_size(                           \
-            mgr, sizeof(NL_span *) * BUFSIZE);                              \
-        tail->next = next_slab;                                             \
-        tail = tail->next;                                                  \
-        num_lists++;                                                        \
-        span_pos = 0;                                                       \
-        tokens = next_slab->tokens;                                         \
-    }                                                                       \
-    tokens[span_pos++] = NL_new_span(ts, te - ts, 0, mgr);                     \
-                                                                            \
-    if (alert_soft_hyphen > 0) {                                            \
-        size_t size_label = te - ts - alert_soft_hyphen * 2 + 1;            \
-        unsigned char *label_str = NULL;                                    \
-                                                                            \
-        if (size_label > 1) {                                               \
-            label_str = NL_allocate_mem_size(mgr, size_label);              \
-            NL_copy_no_softhyphen(ts, te - ts, label_str);                  \
-        } else {                                                            \
-            size_label = 2;                                                 \
-            label_str = NL_allocate_mem_size(mgr, size_label);              \
-            label_str[0] = '-';                                             \
-        }                                                                   \
-        label_str[size_label - 1] = 0x01;                                   \
-        NL_set_span_label(tokens[span_pos-1], label_str, size_label - 1);   \
-    }                                                                       \
-    alert_soft_hyphen = 0;                                                  \
-
-#define SPLIT_ASSIM(PREFIX)                              \
-    if (span_pos == BUFSIZE) {                           \
-        __token_list *next_slab = NL_allocate_mem_size(  \
-            mgr, sizeof(__token_list));                  \
-        next_slab->next = NULL;                          \
-        next_slab->tokens = NL_allocate_mem_size(        \
-            mgr, sizeof(NL_span *) * BUFSIZE);           \
-        tail->next = next_slab;                          \
-        tail = tail->next;                               \
-        num_lists++;                                     \
-        span_pos = 0;                                    \
-        tokens = next_slab->tokens;                      \
-    }                                                    \
-    tokens[span_pos++] = NL_new_span(ts, PREFIX, 0, mgr);   \
-    if (span_pos == BUFSIZE) {                           \
-        __token_list *next_slab = NL_allocate_mem_size(  \
-            mgr, sizeof(__token_list));                  \
-        next_slab->next = NULL;                          \
-        next_slab->tokens = NL_allocate_mem_size(        \
-            mgr, sizeof(NL_span *) * BUFSIZE);           \
-        tail->next = next_slab;                          \
-        tail = tail->next;                               \
-        num_lists++;                                     \
-        span_pos = 0;                                    \
-        tokens = next_slab->tokens;                      \
-    }                                                    \
-    tokens[span_pos++] = NL_new_span(ts + PREFIX, te - (ts + PREFIX), 0, mgr);  \
+#define NEXT_TOKEN                                                            \
+    if (alert_soft_hyphen > 0) {                                              \
+        size_t size = te - ts - alert_soft_hyphen * 2;                        \
+        if (size > 1) {                                                       \
+            NL_string *norm = NL_new_string(mgr, size);                       \
+            NL_copy_no_softhyphen(ts, te - ts, norm->bytes);                  \
+            NL_add_bspan(                                                     \
+                mgr, ann, ts, te - ts, (void *) norm, NL_OWN_DATA);           \
+        } else {                                                              \
+            NL_string *norm = NL_new_string(mgr, 1);                          \
+            norm->bytes[0] = '-';                                             \
+            NL_add_bspan(                                                     \
+                mgr, ann, ts, te - ts, (void *) norm, NL_OWN_DATA);           \
+        }                                                                     \
+        alert_soft_hyphen = 0;                                                \
+    } else {                                                                  \
+        NL_add_bspan(mgr, ann, ts, te - ts, NULL, 0);                         \
+    }                                                                         \
 
 
-#else
-#define NEXT_TOKEN                                                          \
-    if (span_pos == BUFSIZE) {                                              \
-        __token_list *next_slab = NL_allocate_mem_size(                     \
-            mgr, sizeof(__token_list));                                     \
-        next_slab->next = NULL;                                             \
-        next_slab->tokens = NL_allocate_mem_size(                           \
-            mgr, sizeof(NL_span *) * BUFSIZE);                              \
-        tail->next = next_slab;                                             \
-        tail = tail->next;                                                  \
-        num_lists++;                                                        \
-        span_pos = 0;                                                       \
-        tokens = next_slab->tokens;                                         \
-    }                                                                       \
-    tokens[span_pos++] = NL_new_span(ts, te - ts, 0, mgr);                     \
-                                                                            \
-    if (alert_soft_hyphen > 0) {                                            \
-        size_t size_label = te - ts - alert_soft_hyphen * 2 + 1;            \
-        unsigned char *label_str = NULL;                                    \
-                                                                            \
-        if (size_label > 1) {                                               \
-            label_str = NL_allocate_mem_size(mgr, size_label);              \
-            NL_copy_no_softhyphen(ts, te - ts, label_str);                  \
-        } else {                                                            \
-            size_label = 2;                                                 \
-            label_str = NL_allocate_mem_size(mgr, size_label);              \
-            label_str[0] = '-';                                             \
-        }                                                                   \
-        label_str[size_label - 1] = 0x01;                                   \
-        NL_set_span_label(tokens[span_pos-1], label_str, size_label - 1);   \
-    }                                                                       \
-    alert_soft_hyphen = 0;                                                  \
-
-#define SPLIT_ASSIM(PREFIX)                              \
-    if (span_pos == BUFSIZE) {                           \
-        __token_list *next_slab = NL_allocate_mem_size(  \
-            mgr, sizeof(__token_list));                  \
-        next_slab->next = NULL;                          \
-        next_slab->tokens = NL_allocate_mem_size(        \
-            mgr, sizeof(NL_span *) * BUFSIZE);           \
-        tail->next = next_slab;                          \
-        tail = tail->next;                               \
-        num_lists++;                                     \
-        span_pos = 0;                                    \
-        tokens = next_slab->tokens;                      \
-    }                                                    \
-    tokens[span_pos++] = NL_new_span(ts, PREFIX, 0, mgr);\
-    if (span_pos == BUFSIZE) {                           \
-        __token_list *next_slab = NL_allocate_mem_size(  \
-            mgr, sizeof(__token_list));                  \
-        next_slab->next = NULL;                          \
-        next_slab->tokens = NL_allocate_mem_size(        \
-            mgr, sizeof(NL_span *) * BUFSIZE);           \
-        tail->next = next_slab;                          \
-        tail = tail->next;                               \
-        num_lists++;                                     \
-        span_pos = 0;                                    \
-        tokens = next_slab->tokens;                      \
-    }                                                    \
-    tokens[span_pos++] = NL_new_span(ts + PREFIX, te - (ts + PREFIX), 0, mgr);  \
-
-#endif
+#define SPLIT_ASSIM(PREFIX)                                                   \
+    NL_add_bspan(mgr, ann, ts, PREFIX, NULL, 0);                              \
+    NL_add_bspan(mgr, ann, ts + PREFIX, te - PREFIX - ts, NULL, 0);           \
 
 
+static NL_string ptb3dash = {(unsigned char *) "--", 2, 0};
+static NL_string amp = {(unsigned char *) "&", 1, 0};
+static NL_string newline_token = {(unsigned char *) "*NL*", 4, 0};
+static NL_string uni_bullet = {(unsigned char *) "\xE2\x80\xA2", 3, 0};
+static NL_string uni_tm = {(unsigned char *) "\xE2\x84\xA2", 3, 0};
+static NL_string cents_label = {(unsigned char *) "cents", 5, 0};
+static NL_string pounds_label = {(unsigned char *) "#", 1, 0};
+static NL_string dollar_label = {(unsigned char *) "\\$", 2, 0};
+static NL_string ptb3_ellipsis_label = {(unsigned char *) "...", 3, 0};
+static NL_string uni_ellipsis_label = {
+    (unsigned char *) "\xE2\x80\xA6", 3, 0};
 
-const static NL_label ptb3dash = (NL_label) "--\x00";
-#define PTB3DASH_LEN 2
+static NL_string lrb_label = {(unsigned char *) "-LRB-", 5, 0};
+static NL_string rrb_label = {(unsigned char *) "-RRB-", 5, 0};
+static NL_string lsb_label = {(unsigned char *) "-LSB-", 5, 0};
+static NL_string rsb_label = {(unsigned char *) "-RSB-", 5, 0};
+static NL_string lcb_label = {(unsigned char *) "-LCB-", 5, 0};
+static NL_string rcb_label = {(unsigned char *) "-RCB-", 5, 0};
 
-const static NL_label amp = (NL_label) "&\x00";
-#define AMP_LEN 1
-
-const static NL_label newline_token = (NL_label) "*NL*\x00";
-#define NL_LEN 4
-
-const static NL_label uni_bullet = (NL_label) "\xE2\x80\xA2\x00";
-#define BULLET_LEN 3
-
-const static NL_label uni_tm = (NL_label) "\xE2\x84\xA2\x00";
-#define TM_LEN 3
-
-const static NL_label cents_label = (NL_label) "cents\x00";
-#define CENTS_LEN 5
-
-const static NL_label pounds_label = (NL_label) "#\x00";
-#define POUNDS_LEN 1
-
-const static NL_label dollar_label = (NL_label) "\\$\x00";
-#define DOLLAR_LEN 2
-
-const static NL_label ptb3_ellipsis_label = (NL_label) "...\x00";
-#define PTB3_ELLIPSIS_LEN 3
-
-const static NL_label uni_ellipsis_label = (NL_label) "\xE2\x80\xA6\x00";
-#define UNI_ELLIPSIS_LEN 3
-
-const static NL_label lrb_label = (NL_label) "-LRB-\x00";
-#define LRB_LEN 5
-
-const static NL_label rrb_label = (NL_label) "-RRB-\x00";
-#define RRB_LEN 5
-
-const static NL_label lsb_label = (NL_label) "-LSB-\x00";
-#define LSB_LEN 5
-
-const static NL_label rsb_label = (NL_label) "-RSB-\x00";
-#define RSB_LEN 5
-
-const static NL_label lcb_label = (NL_label) "-LCB-\x00";
-#define LCB_LEN 5
-
-const static NL_label rcb_label = (NL_label) "-RCB-\x00";
-#define RCB_LEN 5
-
-const static NL_label lessthan_label = (NL_label) "<\x00";
-#define LT_LEN 1
-
-const static NL_label greaterthan_label = (NL_label) ">\x00";
-#define GT_LEN 1
+static NL_string lessthan_label = {(unsigned char *) "<", 1, 0};
+static NL_string greaterthan_label = {(unsigned char *) ">", 1, 0};
+static NL_string one_fourth_label = {(unsigned char *) "1/4", 3};
+static NL_string one_fourth_esc_label = {(unsigned char *) "1\\/4", 4};
+static NL_string one_half_label = {(unsigned char *) "1/2", 3};
+static NL_string one_half_esc_label = {(unsigned char *) "1\\/2", 4};
+static NL_string three_fourths_label = {(unsigned char *) "3/4", 3};
+static NL_string three_fourths_esc_label = {(unsigned char *) "3\\/4", 4};
+static NL_string one_third_label = {(unsigned char *) "1/3", 3};
+static NL_string one_third_esc_label = {(unsigned char *) "1\\/3", 4};
+static NL_string two_thirds_label = {(unsigned char *) "2/3", 3};
+static NL_string two_thirds_esc_label = {(unsigned char *) "2\\/3", 4};
+static NL_string one_fifth_label = {(unsigned char *) "1/5", 3};
+static NL_string one_fifth_esc_label = {(unsigned char *) "1\\/5", 4};
+static NL_string two_fifths_label = {(unsigned char *) "2/5", 3};
+static NL_string two_fifths_esc_label = {(unsigned char *) "2\\/5", 4};
+static NL_string three_fifths_label = {(unsigned char *) "3/5", 3};
+static NL_string three_fifths_esc_label = {(unsigned char *) "3\\/5", 4};
+static NL_string four_fifths_label = {(unsigned char *) "4/5", 3};
+static NL_string four_fifths_esc_label = {(unsigned char *) "4\\/5", 4};
+static NL_string one_sixth_label = {(unsigned char *) "1/6", 3};
+static NL_string one_sixth_esc_label = {(unsigned char *) "1\\/6", 4};
+static NL_string five_sixths_label = {(unsigned char *) "5/6", 3};
+static NL_string five_sixths_esc_label = {(unsigned char *) "5\\/6", 4};
+static NL_string one_eighth_label = {(unsigned char *) "1/8", 3};
+static NL_string one_eighth_esc_label = {(unsigned char *) "1\\/8", 4};
+static NL_string three_eighths_label = {(unsigned char *) "3/8", 3};
+static NL_string three_eighths_esc_label = {(unsigned char *) "3\\/8", 4};
+static NL_string five_eighths_label = {(unsigned char *) "5/8", 3};
+static NL_string five_eighths_esc_label = {(unsigned char *) "5\\/8", 4};
+static NL_string seven_eighths_label = {(unsigned char *) "7/8", 3};
+static NL_string seven_eighths_esc_label = {(unsigned char *) "7\\/8", 4};
 
 
-NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len, 
-        size_t *num_tokens, NL_PTBTokConfig *cfg, NL_v_memmgr *mgr) {
+NL_annotations *NL_tokenize_buf(NL_buffer *buffer, NL_PTBTokConfig *cfg, 
+        NL_v_memmgr *mgr) {
 
-    #ifdef NLDBG
-    printf("ALLOCATING MEM SIZE %lu\n",  sizeof(__token_list));
-    #endif
-    __token_list *head = NL_allocate_mem_size(mgr, sizeof(__token_list));
-    head->next = NULL;
-    __token_list *tail = head;
-    size_t num_lists = 1;
-
-    #ifdef NLDBG
-    printf("ALLOCATING MEM SIZE %lu\n", sizeof(NL_span *) * BUFSIZE);
-    #endif
-    NL_span **tokens = NL_allocate_mem_size(mgr, sizeof(NL_span *) * BUFSIZE);
-    head->tokens = tokens;
-
-    int span_pos = 0;
+    size_t tmp = buffer->size; // I don't understand what is happening here.
+    NL_annotations *ann = NL_new_bspan_annotations(mgr);
+    buffer->size = tmp;
     int alert_soft_hyphen = 0;
     size_t num_amps = 0;
-
-
     int cs, act;
     unsigned char *ts, *te = 0;
     unsigned char *ti1 = 0;
     unsigned char *ti2 = 0;
-    unsigned char *p = buf;  
-    unsigned char *pe = p + buf_len; 
+    unsigned char *p = buffer->bytes;  
+    unsigned char *pe = p + buffer->size; 
     unsigned char *eof = pe;
 
     int split_assimilations = 1;
@@ -1899,88 +1587,12 @@ NL_span **NL_tokenize_buf(unsigned char *buf, size_t buf_len,
         normalize_fractions = cfg->normalize_fractions;
     }
 
-    #ifdef NLDBG
-    printf("STARTING TO TOKENIZE\n");
-    #endif
-
     %% write init;
 
     %% write exec;
 
-    *num_tokens = BUFSIZE * (num_lists - 1) + span_pos;
+    return ann; 
 
-
-    
-
-    #ifdef NLDBG
-    printf("Tokenized %lu tokens\n", *num_tokens);
-    for (int j=0; j < mgr->max_pools; j++) {
-        printf("Pool %lu, %d allocs\n", mgr->pools[j]->object_size, mgr->pools[j]->allocs);
-    }
-    printf("NL_span **\tout_tokens\t%lu\t%lu bytes\n", 
-        *num_tokens, sizeof(NL_span *) * (*num_tokens));
-    printf("__token_list *\tnext_slab\t%lu\t%lu\n",        
-            num_lists, sizeof(__token_list));
-    printf("NL_span **\tnext_slab->tokens\t%lu\t%lu\n",    
-            num_lists, sizeof(NL_span *) * BUFSIZE);     
-
-    int num_slab_deallocs = 0;
-    #endif
-    NL_span **out_tokens = NL_allocate_mem_size(
-        mgr, sizeof(NL_span *) * (*num_tokens));
-
-    NL_span **current_out = out_tokens;
-    __token_list *next;
-
-
-    
-    for (;head; head=next) {
-        if (head->next == NULL) {
-            memcpy(current_out, head->tokens, span_pos * sizeof(NL_span*));
-        } else {
-            memcpy(current_out, head->tokens, BUFSIZE * sizeof(NL_span*));
-            current_out = &current_out[BUFSIZE] ;
-        }
-         
-        #ifdef NLDBG
-            printf("head->tokens -- deallocating (expected) %lu\n",
-                sizeof(NL_span *) * BUFSIZE);
-        #endif
-        NL_deallocate_v_mem(mgr, (void **) &head->tokens);
-        next = head->next;
-        #ifdef NLDBG
-            printf("head -- deallocating (expected) %lu\n",
-                sizeof(__token_list));
-            printf("%d deallocations of slabs and token lists\n", 
-                ++num_slab_deallocs);
-        #endif
-        NL_deallocate_v_mem(mgr, (void **) &head);
-
-    }
-
-    #ifdef NLDBG
-    printf("FINISHED TOKENIZE\n");
-    #endif
-    return out_tokens;
-
-}
-
-NL_sentence **NL_sentence_tokenize(NL_span **tokens, size_t num_tokens) {
-
-    unsigned char *start = tokens[0]->start;
-    for (int i=0; i < num_tokens; i++) {
-        if (tokens[i]->flags & NL_SENT_END_FLAG) {
-            fwrite(start, 1, tokens[i]->start + tokens[i]->length - start, 
-                   stdout);
-            printf("\n");
-            if (i + 1 < num_tokens)
-    
-                start = tokens[i + 1]->start;
-        }
-    }
-
-
-    return NULL;
 }
 
 NL_PTBTokConfig *NL_new_PTB_tokenizer_config(NL_v_memmgr *mgr) {

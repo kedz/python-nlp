@@ -8,6 +8,9 @@
 #include <string.h>
 #include "tokenizer_utils.h"
 
+#include "nlp/types.h"
+#include "nlp/annotations.h"
+
 
 typedef enum NL_normalize_quotes {
     QUOTES_NONE, 
@@ -34,37 +37,11 @@ typedef struct NL_PTBTokConfig {
     int strict_ptb3;
     int normalize_spaces;
     int normalize_fractions;
-//       strictTreebank3,
-    //    //americanize, normalizeSpace,
-//       normalizeFractions,
-    //    short int tokenizeNLs, 
-    //
-//       normalizeAmpersandEntity, normalizeCurrency, 
-//       normalizeParentheses, normalizeOtherBrackets,
-//       quotes_latex, quotes_unicode, quotes_ascii,
-//       ellipsis_ptb3, ellipsis_unicode,
-//       ptb3Dashes, escapeForwardSlashAsterisk,
-//       splitAssimilations;
 } NL_PTBTokConfig;
-
-
-typedef struct __token_list {
-    struct __token_list *next;
-    NL_span **tokens;
-} __token_list;
 
 NL_PTBTokConfig *NL_new_PTB_tokenizer_config(NL_v_memmgr* mgr);
 
-NL_span **NL_tokenize_buf(
-    unsigned char *buf, size_t buf_len, size_t *num_tokens, 
-    NL_PTBTokConfig *cfg, NL_v_memmgr *mgr);
-void uni_right_quote(unsigned char *p, size_t buf_length, unsigned char *cpy);
-
-NL_sentence **NL_sentence_tokenize(NL_span **tokens, size_t num_tokens);
-
-#define NL_SENT_END_FLAG 0x01
-
-#define BUFSIZE 2048
-#define NL_PTB_TOK_BUFSIZE 2048
+NL_annotations *NL_tokenize_buf(NL_buffer *buffer, NL_PTBTokConfig *cfg, 
+        NL_v_memmgr *mgr);
 
 #endif
