@@ -3,7 +3,7 @@
 #include "tokenizer_utils_tests.h"*/
 #include "tokenizer_tests.h"
 #include "ws_tokenizer_tests.h"
-//#include "sent_tok_tests.h"
+#include "sent_tok_tests.h"
 
 #define KNRM  "\x1B[0m"
 #define KRED  "\x1B[31m"
@@ -68,9 +68,9 @@ int main(int argc, char *argv[]) {
 //    run_tests((test_func *) &tok_utils_tests, NUM_TOK_UTILS_TESTS, verbose);
     PTB_INPUTS_TESTS(ptb_inputs_tests);
     run_tests((test_func *) &ptb_inputs_tests, NUM_PTB_INPUTS_TESTS, verbose);
-//    SENT_TOKENIZER_TESTS(sent_tokenizer_tests);
-//    run_tests((test_func *) &sent_tokenizer_tests, NUM_SENT_TOKENIZER_TESTS, 
-//            verbose);
+    SENT_TOKENIZER_TESTS(sent_tokenizer_tests);
+    run_tests((test_func *) &sent_tokenizer_tests, NUM_SENT_TOKENIZER_TESTS, 
+            verbose);
     WS_TOKENIZER_TESTS(ws_tokenizer_tests);
     run_tests((test_func *) &ws_tokenizer_tests, NUM_WS_TOKENIZER_TESTS,
             verbose);
