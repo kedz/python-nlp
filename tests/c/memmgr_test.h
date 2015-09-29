@@ -7,6 +7,7 @@
 #include "testdefs.h"
 
 #include "nlp/mem_manager.h" 
+#include "nlp/types.h" 
 
 error_info **memmgr_test1(char **name, size_t *num_errors);
 error_info **memmgr_test2(char **name, size_t *num_errors);
