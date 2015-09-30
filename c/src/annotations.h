@@ -10,6 +10,10 @@
 
 #define NL_BASE_ANN_LIST_SIZE 16
 
+#define NL_NEW_BUFFER(varname, str_literal)                                   \
+    NL_buffer varname = {(unsigned char *) str_literal, strlen(str_literal)}; \
+
+
 NL_annotations *NL_new_bspan_annotations(NL_v_memmgr *mgr);
 NL_annotations *NL_new_sspan_annotations(NL_v_memmgr *mgr);
 
@@ -18,7 +22,6 @@ void NL_add_bspan(NL_v_memmgr *mgr, NL_annotations *ann,
 
 void NL_add_sspan(NL_v_memmgr *mgr, NL_annotations *ann, 
         size_t span_id, size_t size, void *data, NL_flags flags);
-
 
 NL_bspan *NL_get_bspan(NL_annotations *ann, size_t index);
 NL_sspan *NL_get_sspan(NL_annotations *ann, size_t index);
