@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "nlp/tokenizer.h"
 
-static unsigned char * buffer =  (unsigned char *)
+static unsigned char * bytes =  (unsigned char *)
 " \
 Project Gutenberg's The Mysterious Affair at Styles, by Agatha Christie \
  \
@@ -8817,19 +8817,15 @@ int main() {
 
 
     NL_v_memmgr *mgr = NL_new_v_memmgr(5000);
-    size_t buf_len = strlen((char *) buffer);
-    printf ("Buffer length = %lu\n", buf_len);
+    NL_buffer buffer = {bytes, strlen((char *) bytes)};
+    printf ("Buffer length = %lu\n", buffer.size);
+    NL_annotations *tokens = NL_tokenize_buf(&buffer, NULL, mgr);
+    printf("Num tokens %lu\n", tokens->size);
 
-    size_t num_tokens;
-    NL_span **spans = NL_tokenize_buf(
-        buffer, buf_len, 
-        &num_tokens, NULL, mgr);
-//    for (int i=0; i < num_tokens; i++) {
-                        
 
-//    }
 
-    printf("Num tokens %lu\n", num_tokens);
+    
+
     for (int i=0; i <mgr->max_pools; i++) {
         printf("Pool size %lu has %lu allocs\n", mgr->pools[i]->object_size,
                 mgr->pools[i]->allocs);

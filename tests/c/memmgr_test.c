@@ -60,7 +60,7 @@ error_info **memmgr_test1(char **name, size_t *num_errors) {
             NEW_ERROR(200);
             sprintf(
                 (char *) this_error->msg, 
-                "NL_memmgr->allocs is %d, should be 0", 
+                "NL_memmgr->allocs is %lu, should be 0", 
                 mgr->allocs);
         }
 
@@ -148,7 +148,7 @@ error_info **memmgr_test2(char **name, size_t *num_errors) {
                 NEW_ERROR(200);
                 sprintf(
                     (char *) this_error->msg, 
-                    "NL_memmgr->allocs is %d, should be %d", 
+                    "NL_memmgr->allocs is %lu, should be %d", 
                     mgr->allocs, i + 1);
             }
 
@@ -205,7 +205,7 @@ error_info **memmgr_test2(char **name, size_t *num_errors) {
                 NEW_ERROR(200);
                 sprintf(
                     (char *) this_error->msg, 
-                    "NL_memmgr->allocs is %d, should be %d", 
+                    "NL_memmgr->allocs is %lu, should be %d", 
                     mgr->allocs, ALLOCS - i - 1);
             }
 
@@ -475,7 +475,7 @@ error_info **vmemmgr_test2(char **name, size_t *num_errors) {
                 NEW_ERROR(200);
                 sprintf(
                     (char *) this_error->msg, 
-                    "Memmory pool %lu has %d allocs, should be 0",
+                    "Memmory pool %lu has %lu allocs, should be 0",
                     i, mgr->pools[i]->allocs);
             }
 
@@ -625,7 +625,7 @@ error_info **vmemmgr_test5(char **name, size_t *num_errors) {
             if (mgr->pools[i]->allocs != 0) {
                 NEW_ERROR(200);
                 sprintf((char *) this_error->msg, 
-                    "Allocations from pool %d is %d, should be 0.",
+                    "Allocations from pool %d is %lu, should be 0.",
                     i, mgr->pools[i]->allocs);
             }
         }

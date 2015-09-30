@@ -1,5 +1,6 @@
 #include "ptb_inputs_test.h"
 #include "memmgr_test.h"
+#include "annotations_tests.h"
 #include "tokenizer_utils_tests.h"
 #include "tokenizer_tests.h"
 #include "ws_tokenizer_tests.h"
@@ -76,4 +77,6 @@ int main(int argc, char *argv[]) {
             verbose);
     TOKENIZER_TESTS(tokenizer_tests);
     run_tests((test_func *) &tokenizer_tests, NUM_TOKENIZER_TESTS, verbose);
+    ANNOTATIONS_TESTS(ann_tests);
+    run_tests((test_func *) &ann_tests, NUM_ANNOTATIONS_TESTS, verbose);
 }
