@@ -423,7 +423,7 @@
                 | 0xC2 0xBB # u+00BB
             ){1,2} ;
 
-    DBLQUOT = "\""|"&quot;";
+    DBLQUOT = "\""|"&quot;"; #THIS IS HOW STANFORD DOES IT
     #/* Cap'n for captain, c'est for french */
     TBSPEC = "-" (/RRB/i|/LRB/i|/RCB/i|/LCB/i|/RSB/i|/LSB/i)"-"
         | /C.D.s/i 
@@ -771,6 +771,7 @@ action HandleQuotesProbablyRight {
         NL_add_bspan(mgr, ann, ts, te - ts, NULL, NL_SENT_INC); 
 
     }
+
 }
 
     action TokenizeNewline {
@@ -1301,9 +1302,10 @@ action HandleQuotesProbablyRight {
 
         WORD"." %MarkIntermediate2 INSENTP => NextIntermediate2;
 
-        DBLQUOT %MarkIntermediate2 [A-Za-z0-9$] => 
+        (DBLQUOT | [`]{1,2}) %MarkIntermediate2 [A-Za-z0-9$] => 
             NextIntermediateHandleProbablyLeftQuotes2;
         #    NextToken;
+        
         DBLQUOT => HandleQuotesProbablyRight;
        
         LESSTHAN => {
