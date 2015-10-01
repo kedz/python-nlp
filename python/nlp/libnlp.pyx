@@ -348,14 +348,15 @@ cdef class BufferDocument(object):
                 yield SentenceView(self, i)
 
     def __dealloc__(self):        
-       # for i in range(self.num_tokens):
-       #     NL_free_span(&self.tokens[i], memmgr._mgr)
-       
         if self._doc:
             if self._doc.tokens != NULL:
                 NL_deallocate_bspan_annotations(
                     memmgr._mgr, &self._doc.tokens);
-        
+            if self._doc.sentences != NULL:
+                NL_deallocate_bspan_annotations(
+                    memmgr._mgr, &self._doc.sentences);
+
+            NL_deallocate_v_mem(memmgr._mgr, <void **> &self._doc.buffer)
             NL_deallocate_v_mem(memmgr._mgr, <void **> &self._doc)
        
         PyBuffer_Release(&self._view)
@@ -377,7 +378,15 @@ cdef class SentenceView(object):
             return (<unsigned char *>tok_start.bytes)[:size]
         else:
             return (<unsigned char *>tok_start.bytes)[:size].decode("utf-8")
-       
+
+    def __iter__(self):
+        cdef NL_sspan *sent = NL_get_sspan(self.doc._doc.sentences, self.index)
+        cdef size_t i
+        for i in range(sent.span_id, sent.span_id + sent.size):
+            yield BufferToken(self.doc, i)
+
+   
+
 
 cdef class BufferToken(object):
     def __cinit__(self, BufferDocument doc, size_t index):

@@ -11,11 +11,7 @@
             "../include/nlp/types.h"
         ], 
         "extra_compile_args": [
-            "-O9", 
             "-std=c11"
-        ], 
-        "extra_link_args": [
-            "-O9"
         ], 
         "include_dirs": [
             ".", 
@@ -670,6 +666,14 @@ static void __pyx_insert_code_object(int code_line, PyCodeObject* code_object);
 static void __Pyx_AddTraceback(const char *funcname, int c_line,
                                int py_line, const char *filename);
 
+static int __Pyx_Print(PyObject*, PyObject *, int);
+#if CYTHON_COMPILING_IN_PYPY || PY_MAJOR_VERSION >= 3
+static PyObject* __pyx_print = 0;
+static PyObject* __pyx_print_kwargs = 0;
+#endif
+
+static int __Pyx_PrintOne(PyObject* stream, PyObject *o);
+
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value);
 
 static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *);
@@ -720,9 +724,12 @@ int __pyx_module_is_main_nlp__ez = 0;
 static PyObject *__pyx_builtin_TypeError;
 static char __pyx_k_buf[] = "buf";
 static char __pyx_k_doc[] = "doc";
-static char __pyx_k_mem[] = "mem";
+static char __pyx_k_end[] = "end";
+static char __pyx_k_file[] = "file";
 static char __pyx_k_main[] = "__main__";
 static char __pyx_k_test[] = "__test__";
+static char __pyx_k_view[] = "_view";
+static char __pyx_k_print[] = "print";
 static char __pyx_k_utf_8[] = "utf-8";
 static char __pyx_k_encode[] = "encode";
 static char __pyx_k_nlp_ez[] = "nlp.ez";
@@ -737,15 +744,18 @@ static PyObject *__pyx_kp_s_argument_must_follow_the_buffer;
 static PyObject *__pyx_n_s_buf;
 static PyObject *__pyx_n_s_doc;
 static PyObject *__pyx_n_s_encode;
+static PyObject *__pyx_n_s_end;
+static PyObject *__pyx_n_s_file;
 static PyObject *__pyx_kp_s_home_kedz_projects2015_python_n;
 static PyObject *__pyx_n_s_main;
-static PyObject *__pyx_n_s_mem;
 static PyObject *__pyx_n_s_nlp_ez;
+static PyObject *__pyx_n_s_print;
 static PyObject *__pyx_n_s_sent_tokenize;
 static PyObject *__pyx_n_s_str_or_unicode;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_tokenize;
 static PyObject *__pyx_kp_s_utf_8;
+static PyObject *__pyx_n_s_view;
 static PyObject *__pyx_pf_3nlp_2ez_tokenize(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_str_or_unicode); /* proto */
 static PyObject *__pyx_pf_3nlp_2ez_2sent_tokenize(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_str_or_unicode); /* proto */
 static PyObject *__pyx_tuple_;
@@ -782,7 +792,7 @@ static PyObject *__pyx_pw_3nlp_2ez_1tokenize(PyObject *__pyx_self, PyObject *__p
 static PyObject *__pyx_pf_3nlp_2ez_tokenize(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_str_or_unicode) {
   PyObject *__pyx_v_buf = 0;
   struct __pyx_obj_3nlp_6libnlp_BufferDocument *__pyx_v_doc = NULL;
-  void *__pyx_v_mem;
+  Py_buffer __pyx_v__view;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -856,7 +866,7 @@ static PyObject *__pyx_pf_3nlp_2ez_tokenize(CYTHON_UNUSED PyObject *__pyx_self, 
  *     if not PyObject_CheckBuffer(buf):
  *         raise TypeError("argument must follow the buffer protocol")             # <<<<<<<<<<<<<<
  *     doc = BufferDocument();
- *     PyObject_GetBuffer(buf, &(doc._view), PyBUF_SIMPLE);
+ *     cdef Py_buffer _view
  */
     __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
@@ -877,52 +887,52 @@ static PyObject *__pyx_pf_3nlp_2ez_tokenize(CYTHON_UNUSED PyObject *__pyx_self, 
  *     if not PyObject_CheckBuffer(buf):
  *         raise TypeError("argument must follow the buffer protocol")
  *     doc = BufferDocument();             # <<<<<<<<<<<<<<
- *     PyObject_GetBuffer(buf, &(doc._view), PyBUF_SIMPLE);
- * 
+ *     cdef Py_buffer _view
+ *     PyObject_GetBuffer(buf, &_view, PyBUF_SIMPLE);
  */
   __pyx_t_4 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_3nlp_6libnlp_BufferDocument), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 25; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_v_doc = ((struct __pyx_obj_3nlp_6libnlp_BufferDocument *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "nlp/ez.pyx":26
- *         raise TypeError("argument must follow the buffer protocol")
+  /* "nlp/ez.pyx":27
  *     doc = BufferDocument();
- *     PyObject_GetBuffer(buf, &(doc._view), PyBUF_SIMPLE);             # <<<<<<<<<<<<<<
+ *     cdef Py_buffer _view
+ *     PyObject_GetBuffer(buf, &_view, PyBUF_SIMPLE);             # <<<<<<<<<<<<<<
+ *     doc._view = _view
  * 
- *     cdef void *mem = NL_allocate_mem_size(
  */
-  __pyx_t_5 = PyObject_GetBuffer(__pyx_v_buf, (&__pyx_v_doc->_view), PyBUF_SIMPLE); if (unlikely(__pyx_t_5 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = PyObject_GetBuffer(__pyx_v_buf, (&__pyx_v__view), PyBUF_SIMPLE); if (unlikely(__pyx_t_5 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 27; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
   /* "nlp/ez.pyx":28
- *     PyObject_GetBuffer(buf, &(doc._view), PyBUF_SIMPLE);
+ *     cdef Py_buffer _view
+ *     PyObject_GetBuffer(buf, &_view, PyBUF_SIMPLE);
+ *     doc._view = _view             # <<<<<<<<<<<<<<
  * 
- *     cdef void *mem = NL_allocate_mem_size(             # <<<<<<<<<<<<<<
- *             memmgr._mgr, sizeof(NL_doc) + sizeof(NL_buffer))
- *     doc._doc = <NL_doc *> mem;
+ *     #cdef void *mem = NL_allocate_mem_size(
  */
-  __pyx_v_mem = NL_allocate_mem_size(__pyx_v_3nlp_6libnlp_memmgr->_mgr, ((sizeof(NL_doc)) + (sizeof(NL_buffer))));
+  __pyx_v_doc->_view = __pyx_v__view;
 
-  /* "nlp/ez.pyx":30
- *     cdef void *mem = NL_allocate_mem_size(
- *             memmgr._mgr, sizeof(NL_doc) + sizeof(NL_buffer))
- *     doc._doc = <NL_doc *> mem;             # <<<<<<<<<<<<<<
+  /* "nlp/ez.pyx":33
+ *     #        memmgr._mgr, sizeof(NL_doc) + sizeof(NL_buffer))
+ *     #doc._doc = <NL_doc *> mem;
+ *     doc._doc = <NL_doc *> NL_allocate_mem_size(memmgr._mgr, sizeof(NL_doc))             # <<<<<<<<<<<<<<
  *     doc._doc.tokens = NULL
  *     doc._doc.pos_tags = NULL
  */
-  __pyx_v_doc->_doc = ((NL_doc *)__pyx_v_mem);
+  __pyx_v_doc->_doc = ((NL_doc *)NL_allocate_mem_size(__pyx_v_3nlp_6libnlp_memmgr->_mgr, (sizeof(NL_doc))));
 
-  /* "nlp/ez.pyx":31
- *             memmgr._mgr, sizeof(NL_doc) + sizeof(NL_buffer))
- *     doc._doc = <NL_doc *> mem;
+  /* "nlp/ez.pyx":34
+ *     #doc._doc = <NL_doc *> mem;
+ *     doc._doc = <NL_doc *> NL_allocate_mem_size(memmgr._mgr, sizeof(NL_doc))
  *     doc._doc.tokens = NULL             # <<<<<<<<<<<<<<
  *     doc._doc.pos_tags = NULL
  *     doc._doc.ner_tags = NULL
  */
   __pyx_v_doc->_doc->tokens = NULL;
 
-  /* "nlp/ez.pyx":32
- *     doc._doc = <NL_doc *> mem;
+  /* "nlp/ez.pyx":35
+ *     doc._doc = <NL_doc *> NL_allocate_mem_size(memmgr._mgr, sizeof(NL_doc))
  *     doc._doc.tokens = NULL
  *     doc._doc.pos_tags = NULL             # <<<<<<<<<<<<<<
  *     doc._doc.ner_tags = NULL
@@ -930,7 +940,7 @@ static PyObject *__pyx_pf_3nlp_2ez_tokenize(CYTHON_UNUSED PyObject *__pyx_self, 
  */
   __pyx_v_doc->_doc->pos_tags = NULL;
 
-  /* "nlp/ez.pyx":33
+  /* "nlp/ez.pyx":36
  *     doc._doc.tokens = NULL
  *     doc._doc.pos_tags = NULL
  *     doc._doc.ner_tags = NULL             # <<<<<<<<<<<<<<
@@ -939,44 +949,44 @@ static PyObject *__pyx_pf_3nlp_2ez_tokenize(CYTHON_UNUSED PyObject *__pyx_self, 
  */
   __pyx_v_doc->_doc->ner_tags = NULL;
 
-  /* "nlp/ez.pyx":34
+  /* "nlp/ez.pyx":37
  *     doc._doc.pos_tags = NULL
  *     doc._doc.ner_tags = NULL
  *     doc._doc.sentences = NULL             # <<<<<<<<<<<<<<
  *     doc._doc.flags = NULL
- * 
+ *     #doc._doc.buffer = <NL_buffer *> mem + sizeof(NL_doc)
  */
   __pyx_v_doc->_doc->sentences = NULL;
 
-  /* "nlp/ez.pyx":35
+  /* "nlp/ez.pyx":38
  *     doc._doc.ner_tags = NULL
  *     doc._doc.sentences = NULL
  *     doc._doc.flags = NULL             # <<<<<<<<<<<<<<
- * 
- *     doc._doc.buffer = <NL_buffer *> mem + sizeof(NL_doc)
+ *     #doc._doc.buffer = <NL_buffer *> mem + sizeof(NL_doc)
+ *     doc._doc.buffer = <NL_buffer *> NL_allocate_mem_size(
  */
   __pyx_v_doc->_doc->flags = NULL;
 
-  /* "nlp/ez.pyx":37
+  /* "nlp/ez.pyx":40
  *     doc._doc.flags = NULL
- * 
- *     doc._doc.buffer = <NL_buffer *> mem + sizeof(NL_doc)             # <<<<<<<<<<<<<<
+ *     #doc._doc.buffer = <NL_buffer *> mem + sizeof(NL_doc)
+ *     doc._doc.buffer = <NL_buffer *> NL_allocate_mem_size(             # <<<<<<<<<<<<<<
+ *             memmgr._mgr, sizeof(NL_buffer))
  *     doc._doc.buffer.bytes = <unsigned char *> doc._view.buf
- *     doc._doc.buffer.size = doc._view.len
  */
-  __pyx_v_doc->_doc->buffer = (((NL_buffer *)__pyx_v_mem) + (sizeof(NL_doc)));
+  __pyx_v_doc->_doc->buffer = ((NL_buffer *)NL_allocate_mem_size(__pyx_v_3nlp_6libnlp_memmgr->_mgr, (sizeof(NL_buffer))));
 
-  /* "nlp/ez.pyx":38
- * 
- *     doc._doc.buffer = <NL_buffer *> mem + sizeof(NL_doc)
+  /* "nlp/ez.pyx":42
+ *     doc._doc.buffer = <NL_buffer *> NL_allocate_mem_size(
+ *             memmgr._mgr, sizeof(NL_buffer))
  *     doc._doc.buffer.bytes = <unsigned char *> doc._view.buf             # <<<<<<<<<<<<<<
  *     doc._doc.buffer.size = doc._view.len
  *     doc._doc.tokens = NL_tokenize_buf(doc._doc.buffer,
  */
   __pyx_v_doc->_doc->buffer->bytes = ((unsigned char *)__pyx_v_doc->_view.buf);
 
-  /* "nlp/ez.pyx":39
- *     doc._doc.buffer = <NL_buffer *> mem + sizeof(NL_doc)
+  /* "nlp/ez.pyx":43
+ *             memmgr._mgr, sizeof(NL_buffer))
  *     doc._doc.buffer.bytes = <unsigned char *> doc._view.buf
  *     doc._doc.buffer.size = doc._view.len             # <<<<<<<<<<<<<<
  *     doc._doc.tokens = NL_tokenize_buf(doc._doc.buffer,
@@ -985,7 +995,7 @@ static PyObject *__pyx_pf_3nlp_2ez_tokenize(CYTHON_UNUSED PyObject *__pyx_self, 
   __pyx_t_6 = __pyx_v_doc->_view.len;
   __pyx_v_doc->_doc->buffer->size = __pyx_t_6;
 
-  /* "nlp/ez.pyx":40
+  /* "nlp/ez.pyx":44
  *     doc._doc.buffer.bytes = <unsigned char *> doc._view.buf
  *     doc._doc.buffer.size = doc._view.len
  *     doc._doc.tokens = NL_tokenize_buf(doc._doc.buffer,             # <<<<<<<<<<<<<<
@@ -994,7 +1004,7 @@ static PyObject *__pyx_pf_3nlp_2ez_tokenize(CYTHON_UNUSED PyObject *__pyx_self, 
  */
   __pyx_v_doc->_doc->tokens = NL_tokenize_buf(__pyx_v_doc->_doc->buffer, __pyx_v_3nlp_6libnlp_global_ptb_tok_cfg->_cfg, __pyx_v_3nlp_6libnlp_memmgr->_mgr);
 
-  /* "nlp/ez.pyx":43
+  /* "nlp/ez.pyx":47
  *         global_ptb_tok_cfg._cfg, memmgr._mgr)
  * 
  *     return doc             # <<<<<<<<<<<<<<
@@ -1028,7 +1038,7 @@ static PyObject *__pyx_pf_3nlp_2ez_tokenize(CYTHON_UNUSED PyObject *__pyx_self, 
   return __pyx_r;
 }
 
-/* "nlp/ez.pyx":45
+/* "nlp/ez.pyx":49
  *     return doc
  * 
  * def sent_tokenize(object str_or_unicode):             # <<<<<<<<<<<<<<
@@ -1053,7 +1063,7 @@ static PyObject *__pyx_pw_3nlp_2ez_3sent_tokenize(PyObject *__pyx_self, PyObject
 static PyObject *__pyx_pf_3nlp_2ez_2sent_tokenize(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_str_or_unicode) {
   PyObject *__pyx_v_buf = 0;
   struct __pyx_obj_3nlp_6libnlp_BufferDocument *__pyx_v_doc = 0;
-  void *__pyx_v_mem;
+  Py_buffer __pyx_v__view;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -1066,7 +1076,7 @@ static PyObject *__pyx_pf_3nlp_2ez_2sent_tokenize(CYTHON_UNUSED PyObject *__pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("sent_tokenize", 0);
 
-  /* "nlp/ez.pyx":46
+  /* "nlp/ez.pyx":50
  * 
  * def sent_tokenize(object str_or_unicode):
  *     cdef object buf = str_or_unicode             # <<<<<<<<<<<<<<
@@ -1076,7 +1086,7 @@ static PyObject *__pyx_pf_3nlp_2ez_2sent_tokenize(CYTHON_UNUSED PyObject *__pyx_
   __Pyx_INCREF(__pyx_v_str_or_unicode);
   __pyx_v_buf = __pyx_v_str_or_unicode;
 
-  /* "nlp/ez.pyx":50
+  /* "nlp/ez.pyx":54
  *     global global_ptb_tok_cfg
  * 
  *     if isinstance(str_or_unicode, unicode):             # <<<<<<<<<<<<<<
@@ -1087,22 +1097,22 @@ static PyObject *__pyx_pf_3nlp_2ez_2sent_tokenize(CYTHON_UNUSED PyObject *__pyx_
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "nlp/ez.pyx":51
+    /* "nlp/ez.pyx":55
  * 
  *     if isinstance(str_or_unicode, unicode):
  *         buf = buf.encode("utf-8")             # <<<<<<<<<<<<<<
  * 
  *     if not PyObject_CheckBuffer(buf):
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_buf, __pyx_n_s_encode); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 51; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_buf, __pyx_n_s_encode); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 55; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 51; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 55; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF_SET(__pyx_v_buf, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "nlp/ez.pyx":50
+    /* "nlp/ez.pyx":54
  *     global global_ptb_tok_cfg
  * 
  *     if isinstance(str_or_unicode, unicode):             # <<<<<<<<<<<<<<
@@ -1111,7 +1121,7 @@ static PyObject *__pyx_pf_3nlp_2ez_2sent_tokenize(CYTHON_UNUSED PyObject *__pyx_
  */
   }
 
-  /* "nlp/ez.pyx":53
+  /* "nlp/ez.pyx":57
  *         buf = buf.encode("utf-8")
  * 
  *     if not PyObject_CheckBuffer(buf):             # <<<<<<<<<<<<<<
@@ -1121,20 +1131,20 @@ static PyObject *__pyx_pf_3nlp_2ez_2sent_tokenize(CYTHON_UNUSED PyObject *__pyx_
   __pyx_t_2 = ((!(PyObject_CheckBuffer(__pyx_v_buf) != 0)) != 0);
   if (__pyx_t_2) {
 
-    /* "nlp/ez.pyx":54
+    /* "nlp/ez.pyx":58
  * 
  *     if not PyObject_CheckBuffer(buf):
  *         raise TypeError("argument must follow the buffer protocol")             # <<<<<<<<<<<<<<
  *     cdef BufferDocument doc = BufferDocument();
- *     PyObject_GetBuffer(buf, &(doc._view), PyBUF_SIMPLE);
+ *     cdef Py_buffer _view
  */
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__4, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 54; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__4, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 54; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-    /* "nlp/ez.pyx":53
+    /* "nlp/ez.pyx":57
  *         buf = buf.encode("utf-8")
  * 
  *     if not PyObject_CheckBuffer(buf):             # <<<<<<<<<<<<<<
@@ -1143,56 +1153,68 @@ static PyObject *__pyx_pf_3nlp_2ez_2sent_tokenize(CYTHON_UNUSED PyObject *__pyx_
  */
   }
 
-  /* "nlp/ez.pyx":55
+  /* "nlp/ez.pyx":59
  *     if not PyObject_CheckBuffer(buf):
  *         raise TypeError("argument must follow the buffer protocol")
  *     cdef BufferDocument doc = BufferDocument();             # <<<<<<<<<<<<<<
- *     PyObject_GetBuffer(buf, &(doc._view), PyBUF_SIMPLE);
- * 
+ *     cdef Py_buffer _view
+ *     PyObject_GetBuffer(buf, &_view, PyBUF_SIMPLE);
  */
-  __pyx_t_4 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_3nlp_6libnlp_BufferDocument), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 55; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_3nlp_6libnlp_BufferDocument), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 59; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_v_doc = ((struct __pyx_obj_3nlp_6libnlp_BufferDocument *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "nlp/ez.pyx":56
- *         raise TypeError("argument must follow the buffer protocol")
+  /* "nlp/ez.pyx":61
  *     cdef BufferDocument doc = BufferDocument();
- *     PyObject_GetBuffer(buf, &(doc._view), PyBUF_SIMPLE);             # <<<<<<<<<<<<<<
- * 
- *     cdef void *mem = NL_allocate_mem_size(
+ *     cdef Py_buffer _view
+ *     PyObject_GetBuffer(buf, &_view, PyBUF_SIMPLE);             # <<<<<<<<<<<<<<
+ *     doc._view = _view
+ *     print _view.len
  */
-  __pyx_t_5 = PyObject_GetBuffer(__pyx_v_buf, (&__pyx_v_doc->_view), PyBUF_SIMPLE); if (unlikely(__pyx_t_5 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 56; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = PyObject_GetBuffer(__pyx_v_buf, (&__pyx_v__view), PyBUF_SIMPLE); if (unlikely(__pyx_t_5 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 61; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "nlp/ez.pyx":58
- *     PyObject_GetBuffer(buf, &(doc._view), PyBUF_SIMPLE);
- * 
- *     cdef void *mem = NL_allocate_mem_size(             # <<<<<<<<<<<<<<
- *             memmgr._mgr, sizeof(NL_doc) + sizeof(NL_buffer))
- *     doc._doc = <NL_doc *> mem;
+  /* "nlp/ez.pyx":62
+ *     cdef Py_buffer _view
+ *     PyObject_GetBuffer(buf, &_view, PyBUF_SIMPLE);
+ *     doc._view = _view             # <<<<<<<<<<<<<<
+ *     print _view.len
+ *     #cdef void *mem = NL_allocate_mem_size(
  */
-  __pyx_v_mem = NL_allocate_mem_size(__pyx_v_3nlp_6libnlp_memmgr->_mgr, ((sizeof(NL_doc)) + (sizeof(NL_buffer))));
+  __pyx_v_doc->_view = __pyx_v__view;
 
-  /* "nlp/ez.pyx":60
- *     cdef void *mem = NL_allocate_mem_size(
- *             memmgr._mgr, sizeof(NL_doc) + sizeof(NL_buffer))
- *     doc._doc = <NL_doc *> mem;             # <<<<<<<<<<<<<<
+  /* "nlp/ez.pyx":63
+ *     PyObject_GetBuffer(buf, &_view, PyBUF_SIMPLE);
+ *     doc._view = _view
+ *     print _view.len             # <<<<<<<<<<<<<<
+ *     #cdef void *mem = NL_allocate_mem_size(
+ *     #        memmgr._mgr, sizeof(NL_doc) + sizeof(NL_buffer))
+ */
+  __pyx_t_4 = PyInt_FromSsize_t(__pyx_v__view.len); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 63; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_4);
+  if (__Pyx_PrintOne(0, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 63; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+  /* "nlp/ez.pyx":67
+ *     #        memmgr._mgr, sizeof(NL_doc) + sizeof(NL_buffer))
+ *     #doc._doc = <NL_doc *> mem;
+ *     doc._doc = <NL_doc *> NL_allocate_mem_size(memmgr._mgr, sizeof(NL_doc))             # <<<<<<<<<<<<<<
  *     doc._doc.tokens = NULL
  *     doc._doc.pos_tags = NULL
  */
-  __pyx_v_doc->_doc = ((NL_doc *)__pyx_v_mem);
+  __pyx_v_doc->_doc = ((NL_doc *)NL_allocate_mem_size(__pyx_v_3nlp_6libnlp_memmgr->_mgr, (sizeof(NL_doc))));
 
-  /* "nlp/ez.pyx":61
- *             memmgr._mgr, sizeof(NL_doc) + sizeof(NL_buffer))
- *     doc._doc = <NL_doc *> mem;
+  /* "nlp/ez.pyx":68
+ *     #doc._doc = <NL_doc *> mem;
+ *     doc._doc = <NL_doc *> NL_allocate_mem_size(memmgr._mgr, sizeof(NL_doc))
  *     doc._doc.tokens = NULL             # <<<<<<<<<<<<<<
  *     doc._doc.pos_tags = NULL
  *     doc._doc.ner_tags = NULL
  */
   __pyx_v_doc->_doc->tokens = NULL;
 
-  /* "nlp/ez.pyx":62
- *     doc._doc = <NL_doc *> mem;
+  /* "nlp/ez.pyx":69
+ *     doc._doc = <NL_doc *> NL_allocate_mem_size(memmgr._mgr, sizeof(NL_doc))
  *     doc._doc.tokens = NULL
  *     doc._doc.pos_tags = NULL             # <<<<<<<<<<<<<<
  *     doc._doc.ner_tags = NULL
@@ -1200,7 +1222,7 @@ static PyObject *__pyx_pf_3nlp_2ez_2sent_tokenize(CYTHON_UNUSED PyObject *__pyx_
  */
   __pyx_v_doc->_doc->pos_tags = NULL;
 
-  /* "nlp/ez.pyx":63
+  /* "nlp/ez.pyx":70
  *     doc._doc.tokens = NULL
  *     doc._doc.pos_tags = NULL
  *     doc._doc.ner_tags = NULL             # <<<<<<<<<<<<<<
@@ -1209,35 +1231,35 @@ static PyObject *__pyx_pf_3nlp_2ez_2sent_tokenize(CYTHON_UNUSED PyObject *__pyx_
  */
   __pyx_v_doc->_doc->ner_tags = NULL;
 
-  /* "nlp/ez.pyx":64
+  /* "nlp/ez.pyx":71
  *     doc._doc.pos_tags = NULL
  *     doc._doc.ner_tags = NULL
  *     doc._doc.flags = NULL             # <<<<<<<<<<<<<<
  * 
- *     doc._doc.buffer = <NL_buffer *> mem + sizeof(NL_doc)
+ *     #doc._doc.buffer = <NL_buffer *> mem + sizeof(NL_doc)
  */
   __pyx_v_doc->_doc->flags = NULL;
 
-  /* "nlp/ez.pyx":66
- *     doc._doc.flags = NULL
+  /* "nlp/ez.pyx":74
  * 
- *     doc._doc.buffer = <NL_buffer *> mem + sizeof(NL_doc)             # <<<<<<<<<<<<<<
+ *     #doc._doc.buffer = <NL_buffer *> mem + sizeof(NL_doc)
+ *     doc._doc.buffer = <NL_buffer *> NL_allocate_mem_size(             # <<<<<<<<<<<<<<
+ *             memmgr._mgr, sizeof(NL_buffer))
  *     doc._doc.buffer.bytes = <unsigned char *> doc._view.buf
- *     doc._doc.buffer.size = <size_t> doc._view.len
  */
-  __pyx_v_doc->_doc->buffer = (((NL_buffer *)__pyx_v_mem) + (sizeof(NL_doc)));
+  __pyx_v_doc->_doc->buffer = ((NL_buffer *)NL_allocate_mem_size(__pyx_v_3nlp_6libnlp_memmgr->_mgr, (sizeof(NL_buffer))));
 
-  /* "nlp/ez.pyx":67
- * 
- *     doc._doc.buffer = <NL_buffer *> mem + sizeof(NL_doc)
+  /* "nlp/ez.pyx":76
+ *     doc._doc.buffer = <NL_buffer *> NL_allocate_mem_size(
+ *             memmgr._mgr, sizeof(NL_buffer))
  *     doc._doc.buffer.bytes = <unsigned char *> doc._view.buf             # <<<<<<<<<<<<<<
  *     doc._doc.buffer.size = <size_t> doc._view.len
  *     doc._doc.tokens = NL_tokenize_buf(doc._doc.buffer,
  */
   __pyx_v_doc->_doc->buffer->bytes = ((unsigned char *)__pyx_v_doc->_view.buf);
 
-  /* "nlp/ez.pyx":68
- *     doc._doc.buffer = <NL_buffer *> mem + sizeof(NL_doc)
+  /* "nlp/ez.pyx":77
+ *             memmgr._mgr, sizeof(NL_buffer))
  *     doc._doc.buffer.bytes = <unsigned char *> doc._view.buf
  *     doc._doc.buffer.size = <size_t> doc._view.len             # <<<<<<<<<<<<<<
  *     doc._doc.tokens = NL_tokenize_buf(doc._doc.buffer,
@@ -1245,25 +1267,37 @@ static PyObject *__pyx_pf_3nlp_2ez_2sent_tokenize(CYTHON_UNUSED PyObject *__pyx_
  */
   __pyx_v_doc->_doc->buffer->size = ((size_t)__pyx_v_doc->_view.len);
 
-  /* "nlp/ez.pyx":69
+  /* "nlp/ez.pyx":78
  *     doc._doc.buffer.bytes = <unsigned char *> doc._view.buf
  *     doc._doc.buffer.size = <size_t> doc._view.len
  *     doc._doc.tokens = NL_tokenize_buf(doc._doc.buffer,             # <<<<<<<<<<<<<<
  *         global_ptb_tok_cfg._cfg, memmgr._mgr)
- *     doc._doc.sentences = NL_sentence_tokenize(doc._doc.tokens, memmgr._mgr)
+ *     print (doc._doc.buffer.size)
  */
   __pyx_v_doc->_doc->tokens = NL_tokenize_buf(__pyx_v_doc->_doc->buffer, __pyx_v_3nlp_6libnlp_global_ptb_tok_cfg->_cfg, __pyx_v_3nlp_6libnlp_memmgr->_mgr);
 
-  /* "nlp/ez.pyx":71
+  /* "nlp/ez.pyx":80
  *     doc._doc.tokens = NL_tokenize_buf(doc._doc.buffer,
  *         global_ptb_tok_cfg._cfg, memmgr._mgr)
+ *     print (doc._doc.buffer.size)             # <<<<<<<<<<<<<<
+ *     doc._doc.sentences = NL_sentence_tokenize(doc._doc.tokens, memmgr._mgr)
+ *     return doc
+ */
+  __pyx_t_4 = __Pyx_PyInt_FromSize_t(__pyx_v_doc->_doc->buffer->size); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 80; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_4);
+  if (__Pyx_PrintOne(0, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 80; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+  /* "nlp/ez.pyx":81
+ *         global_ptb_tok_cfg._cfg, memmgr._mgr)
+ *     print (doc._doc.buffer.size)
  *     doc._doc.sentences = NL_sentence_tokenize(doc._doc.tokens, memmgr._mgr)             # <<<<<<<<<<<<<<
  *     return doc
  */
   __pyx_v_doc->_doc->sentences = NL_sentence_tokenize(__pyx_v_doc->_doc->tokens, __pyx_v_3nlp_6libnlp_memmgr->_mgr);
 
-  /* "nlp/ez.pyx":72
- *         global_ptb_tok_cfg._cfg, memmgr._mgr)
+  /* "nlp/ez.pyx":82
+ *     print (doc._doc.buffer.size)
  *     doc._doc.sentences = NL_sentence_tokenize(doc._doc.tokens, memmgr._mgr)
  *     return doc             # <<<<<<<<<<<<<<
  */
@@ -1272,7 +1306,7 @@ static PyObject *__pyx_pf_3nlp_2ez_2sent_tokenize(CYTHON_UNUSED PyObject *__pyx_
   __pyx_r = ((PyObject *)__pyx_v_doc);
   goto __pyx_L0;
 
-  /* "nlp/ez.pyx":45
+  /* "nlp/ez.pyx":49
  *     return doc
  * 
  * def sent_tokenize(object str_or_unicode):             # <<<<<<<<<<<<<<
@@ -1322,15 +1356,18 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_buf, __pyx_k_buf, sizeof(__pyx_k_buf), 0, 0, 1, 1},
   {&__pyx_n_s_doc, __pyx_k_doc, sizeof(__pyx_k_doc), 0, 0, 1, 1},
   {&__pyx_n_s_encode, __pyx_k_encode, sizeof(__pyx_k_encode), 0, 0, 1, 1},
+  {&__pyx_n_s_end, __pyx_k_end, sizeof(__pyx_k_end), 0, 0, 1, 1},
+  {&__pyx_n_s_file, __pyx_k_file, sizeof(__pyx_k_file), 0, 0, 1, 1},
   {&__pyx_kp_s_home_kedz_projects2015_python_n, __pyx_k_home_kedz_projects2015_python_n, sizeof(__pyx_k_home_kedz_projects2015_python_n), 0, 0, 1, 0},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
-  {&__pyx_n_s_mem, __pyx_k_mem, sizeof(__pyx_k_mem), 0, 0, 1, 1},
   {&__pyx_n_s_nlp_ez, __pyx_k_nlp_ez, sizeof(__pyx_k_nlp_ez), 0, 0, 1, 1},
+  {&__pyx_n_s_print, __pyx_k_print, sizeof(__pyx_k_print), 0, 0, 1, 1},
   {&__pyx_n_s_sent_tokenize, __pyx_k_sent_tokenize, sizeof(__pyx_k_sent_tokenize), 0, 0, 1, 1},
   {&__pyx_n_s_str_or_unicode, __pyx_k_str_or_unicode, sizeof(__pyx_k_str_or_unicode), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_n_s_tokenize, __pyx_k_tokenize, sizeof(__pyx_k_tokenize), 0, 0, 1, 1},
   {&__pyx_kp_s_utf_8, __pyx_k_utf_8, sizeof(__pyx_k_utf_8), 0, 0, 1, 0},
+  {&__pyx_n_s_view, __pyx_k_view, sizeof(__pyx_k_view), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
@@ -1360,31 +1397,31 @@ static int __Pyx_InitCachedConstants(void) {
  *     if not PyObject_CheckBuffer(buf):
  *         raise TypeError("argument must follow the buffer protocol")             # <<<<<<<<<<<<<<
  *     doc = BufferDocument();
- *     PyObject_GetBuffer(buf, &(doc._view), PyBUF_SIMPLE);
+ *     cdef Py_buffer _view
  */
   __pyx_tuple__2 = PyTuple_Pack(1, __pyx_kp_s_argument_must_follow_the_buffer); if (unlikely(!__pyx_tuple__2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
-  /* "nlp/ez.pyx":51
+  /* "nlp/ez.pyx":55
  * 
  *     if isinstance(str_or_unicode, unicode):
  *         buf = buf.encode("utf-8")             # <<<<<<<<<<<<<<
  * 
  *     if not PyObject_CheckBuffer(buf):
  */
-  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_utf_8); if (unlikely(!__pyx_tuple__3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 51; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_utf_8); if (unlikely(!__pyx_tuple__3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 55; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
 
-  /* "nlp/ez.pyx":54
+  /* "nlp/ez.pyx":58
  * 
  *     if not PyObject_CheckBuffer(buf):
  *         raise TypeError("argument must follow the buffer protocol")             # <<<<<<<<<<<<<<
  *     cdef BufferDocument doc = BufferDocument();
- *     PyObject_GetBuffer(buf, &(doc._view), PyBUF_SIMPLE);
+ *     cdef Py_buffer _view
  */
-  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_kp_s_argument_must_follow_the_buffer); if (unlikely(!__pyx_tuple__4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 54; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_kp_s_argument_must_follow_the_buffer); if (unlikely(!__pyx_tuple__4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__4);
   __Pyx_GIVEREF(__pyx_tuple__4);
 
@@ -1395,22 +1432,22 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef object buf = str_or_unicode
  *     global memmgr
  */
-  __pyx_tuple__5 = PyTuple_Pack(4, __pyx_n_s_str_or_unicode, __pyx_n_s_buf, __pyx_n_s_doc, __pyx_n_s_mem); if (unlikely(!__pyx_tuple__5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__5 = PyTuple_Pack(4, __pyx_n_s_str_or_unicode, __pyx_n_s_buf, __pyx_n_s_doc, __pyx_n_s_view); if (unlikely(!__pyx_tuple__5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
   __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__5, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_kedz_projects2015_python_n, __pyx_n_s_tokenize, 15, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "nlp/ez.pyx":45
+  /* "nlp/ez.pyx":49
  *     return doc
  * 
  * def sent_tokenize(object str_or_unicode):             # <<<<<<<<<<<<<<
  *     cdef object buf = str_or_unicode
  *     global memmgr
  */
-  __pyx_tuple__7 = PyTuple_Pack(4, __pyx_n_s_str_or_unicode, __pyx_n_s_buf, __pyx_n_s_doc, __pyx_n_s_mem); if (unlikely(!__pyx_tuple__7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__7 = PyTuple_Pack(4, __pyx_n_s_str_or_unicode, __pyx_n_s_buf, __pyx_n_s_doc, __pyx_n_s_view); if (unlikely(!__pyx_tuple__7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 49; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
-  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_kedz_projects2015_python_n, __pyx_n_s_sent_tokenize, 45, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_kedz_projects2015_python_n, __pyx_n_s_sent_tokenize, 49, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 49; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -1541,16 +1578,16 @@ PyMODINIT_FUNC PyInit_ez(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_tokenize, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "nlp/ez.pyx":45
+  /* "nlp/ez.pyx":49
  *     return doc
  * 
  * def sent_tokenize(object str_or_unicode):             # <<<<<<<<<<<<<<
  *     cdef object buf = str_or_unicode
  *     global memmgr
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_3nlp_2ez_3sent_tokenize, NULL, __pyx_n_s_nlp_ez); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_3nlp_2ez_3sent_tokenize, NULL, __pyx_n_s_nlp_ez); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 49; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_sent_tokenize, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_sent_tokenize, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 49; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "nlp/ez.pyx":1
@@ -1984,6 +2021,147 @@ bad:
     Py_XDECREF(py_code);
     Py_XDECREF(py_frame);
 }
+
+#if !CYTHON_COMPILING_IN_PYPY && PY_MAJOR_VERSION < 3
+static PyObject *__Pyx_GetStdout(void) {
+    PyObject *f = PySys_GetObject((char *)"stdout");
+    if (!f) {
+        PyErr_SetString(PyExc_RuntimeError, "lost sys.stdout");
+    }
+    return f;
+}
+static int __Pyx_Print(PyObject* f, PyObject *arg_tuple, int newline) {
+    int i;
+    if (!f) {
+        if (!(f = __Pyx_GetStdout()))
+            return -1;
+    }
+    Py_INCREF(f);
+    for (i=0; i < PyTuple_GET_SIZE(arg_tuple); i++) {
+        PyObject* v;
+        if (PyFile_SoftSpace(f, 1)) {
+            if (PyFile_WriteString(" ", f) < 0)
+                goto error;
+        }
+        v = PyTuple_GET_ITEM(arg_tuple, i);
+        if (PyFile_WriteObject(v, f, Py_PRINT_RAW) < 0)
+            goto error;
+        if (PyString_Check(v)) {
+            char *s = PyString_AsString(v);
+            Py_ssize_t len = PyString_Size(v);
+            if (len > 0) {
+                switch (s[len-1]) {
+                    case ' ': break;
+                    case '\f': case '\r': case '\n': case '\t': case '\v':
+                        PyFile_SoftSpace(f, 0);
+                        break;
+                    default:  break;
+                }
+            }
+        }
+    }
+    if (newline) {
+        if (PyFile_WriteString("\n", f) < 0)
+            goto error;
+        PyFile_SoftSpace(f, 0);
+    }
+    Py_DECREF(f);
+    return 0;
+error:
+    Py_DECREF(f);
+    return -1;
+}
+#else
+static int __Pyx_Print(PyObject* stream, PyObject *arg_tuple, int newline) {
+    PyObject* kwargs = 0;
+    PyObject* result = 0;
+    PyObject* end_string;
+    if (unlikely(!__pyx_print)) {
+        __pyx_print = PyObject_GetAttr(__pyx_b, __pyx_n_s_print);
+        if (!__pyx_print)
+            return -1;
+    }
+    if (stream) {
+        kwargs = PyDict_New();
+        if (unlikely(!kwargs))
+            return -1;
+        if (unlikely(PyDict_SetItem(kwargs, __pyx_n_s_file, stream) < 0))
+            goto bad;
+        if (!newline) {
+            end_string = PyUnicode_FromStringAndSize(" ", 1);
+            if (unlikely(!end_string))
+                goto bad;
+            if (PyDict_SetItem(kwargs, __pyx_n_s_end, end_string) < 0) {
+                Py_DECREF(end_string);
+                goto bad;
+            }
+            Py_DECREF(end_string);
+        }
+    } else if (!newline) {
+        if (unlikely(!__pyx_print_kwargs)) {
+            __pyx_print_kwargs = PyDict_New();
+            if (unlikely(!__pyx_print_kwargs))
+                return -1;
+            end_string = PyUnicode_FromStringAndSize(" ", 1);
+            if (unlikely(!end_string))
+                return -1;
+            if (PyDict_SetItem(__pyx_print_kwargs, __pyx_n_s_end, end_string) < 0) {
+                Py_DECREF(end_string);
+                return -1;
+            }
+            Py_DECREF(end_string);
+        }
+        kwargs = __pyx_print_kwargs;
+    }
+    result = PyObject_Call(__pyx_print, arg_tuple, kwargs);
+    if (unlikely(kwargs) && (kwargs != __pyx_print_kwargs))
+        Py_DECREF(kwargs);
+    if (!result)
+        return -1;
+    Py_DECREF(result);
+    return 0;
+bad:
+    if (kwargs != __pyx_print_kwargs)
+        Py_XDECREF(kwargs);
+    return -1;
+}
+#endif
+
+#if !CYTHON_COMPILING_IN_PYPY && PY_MAJOR_VERSION < 3
+static int __Pyx_PrintOne(PyObject* f, PyObject *o) {
+    if (!f) {
+        if (!(f = __Pyx_GetStdout()))
+            return -1;
+    }
+    Py_INCREF(f);
+    if (PyFile_SoftSpace(f, 0)) {
+        if (PyFile_WriteString(" ", f) < 0)
+            goto error;
+    }
+    if (PyFile_WriteObject(o, f, Py_PRINT_RAW) < 0)
+        goto error;
+    if (PyFile_WriteString("\n", f) < 0)
+        goto error;
+    Py_DECREF(f);
+    return 0;
+error:
+    Py_DECREF(f);
+    return -1;
+    /* the line below is just to avoid C compiler
+     * warnings about unused functions */
+    return __Pyx_Print(f, NULL, 0);
+}
+#else
+static int __Pyx_PrintOne(PyObject* stream, PyObject *o) {
+    int res;
+    PyObject* arg_tuple = PyTuple_Pack(1, o);
+    if (unlikely(!arg_tuple))
+        return -1;
+    res = __Pyx_Print(stream, arg_tuple, 1);
+    Py_DECREF(arg_tuple);
+    return res;
+}
+#endif
 
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
     const long neg_one = (long) -1, const_zero = (long) 0;
