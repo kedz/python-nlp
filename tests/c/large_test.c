@@ -8816,20 +8816,38 @@ subscribe to our email newsletter to hear about new eBooks.";
 int main() {
 
 
-    NL_v_memmgr *mgr = NL_new_v_memmgr(5000);
+    NL_v_memmgr *mgr = NL_new_v_memmgr(2048);
     NL_buffer buffer = {bytes, strlen((char *) bytes)};
     printf ("Buffer length = %lu\n", buffer.size);
     NL_annotations *tokens = NL_tokenize_buf(&buffer, NULL, mgr);
     printf("Num tokens %lu\n", tokens->size);
+   
+    NL_bspan *token = NULL;
+    for (int i =0; i < tokens->size; i++) {
+        token = NL_get_bspan(tokens, i);
+        if (token->data == NULL) {
+            fwrite(token->bytes, 1, token->size, stdout);
+            fwrite("\n", 1, 1, stdout);
+            
+        } else {
+            NL_string *str = token->data;
+            fwrite(str->bytes, 1, str->size, stdout);
+            fwrite("\n", 1, 1, stdout);
+        }
 
+    }
 
-
-    
 
     for (int i=0; i <mgr->max_pools; i++) {
         printf("Pool size %lu has %lu allocs\n", mgr->pools[i]->object_size,
                 mgr->pools[i]->allocs);
     } 
+    NL_deallocate_bspan_annotations(mgr, &tokens);
+    for (int i=0; i <mgr->max_pools; i++) {
+        printf("Pool size %lu has %lu allocs\n", mgr->pools[i]->object_size,
+                mgr->pools[i]->allocs);
+    } 
+
     NL_free_v_memmgr(&mgr);
 
     return 1;

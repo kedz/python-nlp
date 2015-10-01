@@ -105,12 +105,6 @@ error_info **annotations_test2(char **name, size_t *num_errors) {
                 "Found size %lu, but expected 4", span->size);
         }
 
-        if (ann->_list_size != NL_BASE_ANN_LIST_SIZE) {
-            NEW_ERROR(80);
-            sprintf((char *) this_error->msg,
-                "Found _list_size %lu, but expected %d", 
-                ann->_list_size, NL_BASE_ANN_LIST_SIZE);
-        }
 
         NL_deallocate_bspan_annotations(mgr, &ann);
         if (ann != NULL) {
