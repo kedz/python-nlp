@@ -18,10 +18,12 @@ typedef struct NL_buffer {
 
 // A list of annotations on an NL_buffer object.
 typedef struct NL_annotations {
-    void *list;
+    void **_lists;
     size_t size;
     size_t _object_size;
-    size_t _list_size;
+    size_t _num_lists;
+    size_t _max_lists;
+    size_t _current_position;
     NL_flags flags;
 } NL_annotations;
 
