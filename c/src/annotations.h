@@ -8,7 +8,9 @@
 #include "nlp/types.h"
 #include "nlp/mem_manager.h"
 
-#define NL_BASE_ANN_LIST_SIZE 16
+#define NL_BASE_ANN_LIST_SIZE 128
+#define NL_BASE_ANN_LISTS_SIZE 16
+
 
 #define NL_NEW_BUFFER(varname, str_literal)                                   \
     NL_buffer varname = {(unsigned char *) str_literal, strlen(str_literal)}; \
