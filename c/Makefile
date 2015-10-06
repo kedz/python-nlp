@@ -1,15 +1,18 @@
 CC = gcc
-CFLAGS = -g -Wall -shared -fPIC -std=c11 -O9
+CFLAGS = -g -Wall -shared -fPIC -std=c11 #-O9
 INCLUDE = -I../include/
 
 .PHONY: clean ragel
 
-all: obj obj/mem_manager.o obj/annotations.o obj/tokenizer_utils.o \
-	obj/tokenizer.o  obj/tokenizer/whitespace_tokenizer.o \
-	obj/tokenizer/sentence_tokenizer.o
+all: obj obj/MurmurHash3.o obj/mem_manager.o obj/annotations.o \
+	obj/tokenizer_utils.o obj/tokenizer.o  \
+	obj/tokenizer/whitespace_tokenizer.o obj/tokenizer/sentence_tokenizer.o 
 
 obj:
 	mkdir -p obj; mkdir -p obj/tokenizer
+
+obj/MurmurHash3.o: src/MurmurHash3.c
+	$(CC) $(CFLAGS) -c src/MurmurHash3.c -o obj/MurmurHash3.o $(INCLUDE)
 
 obj/mem_manager.o: src/mem_manager.c
 	$(CC) $(CFLAGS) -c src/mem_manager.c -o obj/mem_manager.o $(INCLUDE)

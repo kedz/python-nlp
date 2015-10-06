@@ -1,6 +1,11 @@
 #ifndef H_NL_TYPES
 #define H_NL_TYPES
 
+#include <stdint.h>
+
+typedef uint32_t NL_hash[4];
+#define NL_SIZEOF_HASH sizeof(uint32_t) * 4
+
 typedef unsigned char NL_flags;
 
 #define NL_OWN_DATA 0x01

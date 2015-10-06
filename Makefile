@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g -Wall -shared -fPIC -std=c11 -O9
+CFLAGS = -g -Wall -shared -fPIC -std=c11 #-O9
 
 .PHONY: default all clean c include
 all: lib/nlp.so

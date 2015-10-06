@@ -32,6 +32,11 @@ void MurmurHash3_x86_128 ( const void * key, int len, uint32_t seed, void * out 
 
 void MurmurHash3_x64_128 ( const void * key, int len, uint32_t seed, void * out );
 
+
+#define NL_HASH(buffer, size, mgr, out)                                       \
+    out = NL_allocate_mem_size(mgr, sizeof(uint32_t) * 4);                    \
+    MurmurHash3_x64_128(buffer, size, 1986, out);                             \
+
 //-----------------------------------------------------------------------------
 
 #endif // _MURMURHASH3_H_

@@ -162,7 +162,7 @@ error_info **annotations_test3(char **name, size_t *num_errors) {
 
         NL_NEW_BUFFER(buffer, "This is a test.")
         
-        for (size_t i=0; i < 1000000; i++) {
+        for (size_t i=0; i < 100000; i++) {
             NL_add_bspan(mgr, ann, buffer.bytes, 4, NULL, 0);
             if (ann->size != i + 1) {
                 NEW_ERROR(80);
