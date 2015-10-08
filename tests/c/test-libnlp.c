@@ -6,6 +6,7 @@
 #include "ws_tokenizer_tests.h"
 #include "sent_tok_tests.h"
 #include "murmur_hash_tests.h"
+#include "conll_reader_tests.h"
 
 #define KNRM  "\x1B[0m"
 #define KRED  "\x1B[31m"
@@ -83,4 +84,8 @@ int main(int argc, char *argv[]) {
     MURMUR_HASH_TESTS(murmur_hash_tests);
     run_tests((test_func *) &murmur_hash_tests, NUM_MURMUR_HASH_TESTS, 
             verbose);
+    CONLL_READER_TESTS(conll_reader_tests);
+    run_tests((test_func *) &conll_reader_tests, NUM_CONLL_READER_TESTS, 
+            verbose);
+    
 }

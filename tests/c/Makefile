@@ -6,7 +6,7 @@ LIBS = -L../../lib -lnlp -lm
 		   sent_tok_tests.c ptb_inputs_test.c ws_tokenizer_tests.c
 TEST_SRC = memmgr_test.c tokenizer_utils_tests.c tokenizer_tests.c \
 		   ws_tokenizer_tests.c ptb_inputs_test.c sent_tok_tests.c \
-		   annotations_tests.c murmur_hash_tests.c
+		   annotations_tests.c murmur_hash_tests.c conll_reader_tests.c
 
 
 all: test-libnlp sizes large_test
