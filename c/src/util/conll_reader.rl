@@ -37,6 +37,17 @@ NL_doc *NL_read_conll_buffer(NL_buffer *buffer, NL_v_memmgr *mgr) {
 
     %% write exec;
 
+    // If the last line is not newline terminated we have to grab the last
+    // pos tag.
+    if (tokens->size - 1 == pos->size) {
+        NL_add_bspan(mgr, pos, ts, pe - ts, NULL, 0);
+    }
+
+    if (sent_start != tokens->size) {
+        NL_add_sspan(
+            mgr, sents, sent_start, tokens->size - sent_start, NULL, 0);
+    }
+    
     NL_doc *doc = NL_allocate_mem_size(mgr, sizeof(NL_doc));
     doc->buffer = buffer;
     doc->tokens = tokens;

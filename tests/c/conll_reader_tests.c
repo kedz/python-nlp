@@ -138,7 +138,7 @@ resolution  NN\n\
                 sprintf(
                     (char *) this_error->msg, 
                     "doc->sentences->size is %lu, expected %lu",
-                    doc->sentences->size, num_gold);
+                    doc->sentences->size, num_gold_sents);
             } else {
                 for (size_t i=0; i < num_gold_sents; i++) {
                     NL_sspan *span = NL_get_sspan(doc->sentences, i);
@@ -302,7 +302,7 @@ resolution  NN\n\
                 sprintf(
                     (char *) this_error->msg, 
                     "doc->sentences->size is %lu, expected %lu",
-                    doc->sentences->size, num_gold);
+                    doc->sentences->size, num_gold_sents);
             } else {
                 for (size_t i=0; i < num_gold_sents; i++) {
                     NL_sspan *span = NL_get_sspan(doc->sentences, i);
@@ -466,7 +466,7 @@ resolution  NN\n\
                 sprintf(
                     (char *) this_error->msg, 
                     "doc->sentences->size is %lu, expected %lu",
-                    doc->sentences->size, num_gold);
+                    doc->sentences->size, num_gold_sents);
             } else {
                 for (size_t i=0; i < num_gold_sents; i++) {
                     NL_sspan *span = NL_get_sspan(doc->sentences, i);
