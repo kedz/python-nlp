@@ -5,11 +5,20 @@ INCLUDE = -I../include/
 .PHONY: clean ragel
 
 all: obj obj/MurmurHash3.o obj/mem_manager.o obj/annotations.o \
-	obj/tokenizer_utils.o obj/tokenizer.o  \
-	obj/tokenizer/whitespace_tokenizer.o obj/tokenizer/sentence_tokenizer.o 
+	tokenizer util
 
 obj:
-	mkdir -p obj; mkdir -p obj/tokenizer
+	mkdir -p obj; mkdir -p obj/tokenizer; mkdir -p obj/util;
+
+util: obj/util/conll_reader.o
+
+obj/util/conll_reader.o: src/util/conll_reader.c
+	$(CC) $(CFLAGS) -c src/util/conll_reader.c -o obj/util/conll_reader.o \
+		$(INCLUDE)
+
+src/util/conll_reader.c: src/util/conll_reader.rl
+	cd src/util; ragel conll_reader.rl
+
 
 obj/MurmurHash3.o: src/MurmurHash3.c
 	$(CC) $(CFLAGS) -c src/MurmurHash3.c -o obj/MurmurHash3.o $(INCLUDE)
@@ -31,6 +40,9 @@ src/tokenizer.c: src/tokenizer.rl
 
 src/tokenizer/whitespace_tokenizer.c: src/tokenizer/whitespace_tokenizer.rl
 	cd src/tokenizer; ragel whitespace_tokenizer.rl
+
+tokenizer: obj/tokenizer_utils.o obj/tokenizer.o \
+	obj/tokenizer/whitespace_tokenizer.o obj/tokenizer/sentence_tokenizer.o
 
 obj/tokenizer_utils.o: src/tokenizer_utils.c
 	$(CC) $(CFLAGS) -c src/tokenizer_utils.c -o obj/tokenizer_utils.o $(INCLUDE)
