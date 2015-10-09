@@ -65,4 +65,13 @@ typedef struct NL_doc {
     unsigned char *flags;
 } NL_doc;
 
+
+typedef struct NL_vocab {
+    NL_string **_table;
+    size_t *_ids;
+    size_t size;
+    size_t _table_prime_index;
+    NL_flags flags;
+} NL_vocab;
+
 #endif
