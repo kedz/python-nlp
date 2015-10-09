@@ -5,7 +5,7 @@ INCLUDE = -I../include/
 .PHONY: clean ragel
 
 all: obj obj/MurmurHash3.o obj/mem_manager.o obj/annotations.o \
-	tokenizer util
+	tokenizer util obj/vocab.o
 
 obj:
 	mkdir -p obj; mkdir -p obj/tokenizer; mkdir -p obj/util;
@@ -28,6 +28,10 @@ obj/mem_manager.o: src/mem_manager.c
 
 obj/annotations.o: src/annotations.c
 	$(CC) $(CFLAGS) -c src/annotations.c -o obj/annotations.o $(INCLUDE)
+
+obj/vocab.o: src/vocab.c
+	$(CC) $(CFLAGS) -c src/vocab.c -o obj/vocab.o $(INCLUDE)
+
 
 ragel: src/tokenizer_utils.c src/tokenizer.c \
 	src/tokenizer/whitespace_tokenizer.c
